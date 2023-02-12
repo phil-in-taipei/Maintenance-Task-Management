@@ -28,7 +28,8 @@ public class UserPrincipal implements UserDetails {
     @OneToOne(cascade = CascadeType.PERSIST, optional = false)
     private UserMeta userMeta;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    // note: had to add cascade
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(name = "user_authority_join_table",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id")
