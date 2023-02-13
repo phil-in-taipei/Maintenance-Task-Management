@@ -15,12 +15,18 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeRequests(auth -> auth
-                        .antMatchers("/js/**", "/css/**", "/img/**", "/webjars/**").permitAll()
+                        .antMatchers("/", "/login", "/js/**", "/css/**",
+                                "/img/**", "/webjars/**").permitAll()
                         //.antMatchers("/admin").hasRole("ADMIN")
                         //.antMatchers("/maintenance").hasRole("MAINTENANCE")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
-                .formLogin();
+                .formLogin(login -> login
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/landing"))
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/"));
         return http.build();
     }
     @Bean

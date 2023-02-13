@@ -14,11 +14,16 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+
     @GetMapping("/")
-    public String homePage(Authentication authentication, Model model) {
+    public String homePage() {
+        return "index";
+    }
+    @GetMapping("/landing")
+    public String landingPage(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the user: " + user);
         model.addAttribute("user", user);
-        return "index";
+        return "landing";
     }
 }
