@@ -25,6 +25,7 @@ public class UserRegistration {
                 ", age=" + age +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", passwordConfirmation='" + passwordConfirmation + '\'' +
                 '}';
     }
 
@@ -35,4 +36,6 @@ public class UserRegistration {
     private String username;
 
     private String password; // later have 2 passwords for confirmation ?
+
+    private String passwordConfirmation;
 }

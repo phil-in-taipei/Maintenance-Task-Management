@@ -19,7 +19,7 @@
     <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
         <h1>Welcome!</h1>
         <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
-        This content is only shown to customers.
+        This content is only shown to maintenance schedulers.
     </div>
     <div>
         <span sec:authorize="isAuthenticated()">

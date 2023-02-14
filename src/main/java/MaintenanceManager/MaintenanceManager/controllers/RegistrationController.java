@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Objects;
+
 @Controller
 public class RegistrationController {
 
@@ -26,9 +28,14 @@ public class RegistrationController {
                                      Model model) {
         System.out.println("*****************Submitting User Registration Data ************************");
         System.out.println(userRegistration.toString());
+        if (!Objects.equals(userRegistration.getPassword(), userRegistration.getPasswordConfirmation())) {
+            model.addAttribute("errorMsg", "The passwords do not match!");
+            return "register-failure";
+        }
         UserPrincipal createdUser = userDetailsService.createNewUser(userRegistration);
         System.out.println("**********************Created User****************************************");
         if (createdUser == null) {
+            model.addAttribute("errorMsg", "There was error creating your account");
             return "register-failure";
         }
         System.out.println(createdUser.toString());
