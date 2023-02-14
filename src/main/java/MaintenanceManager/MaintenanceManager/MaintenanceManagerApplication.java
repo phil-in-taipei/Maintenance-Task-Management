@@ -56,15 +56,15 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 					.build();
 			userPrincipalRepo.saveAll(
 					Arrays.asList(
-							new UserPrincipal("MAIN1", passwordEncoder.encode("testpassword"),
+							new UserPrincipal("MAIN1",
+									passwordEncoder.encode("testpassword"),
 									Arrays.asList(userAuth, mainAuth), main1),
-							new UserPrincipal("ADMIN", passwordEncoder.encode("testpassword"),
+							new UserPrincipal("ADMIN",
+									passwordEncoder.encode("testpassword"),
 									Arrays.asList(adminAuth, userAuth), admin)
 					)
 			);
 		}
-
-
 	}
 
 }
