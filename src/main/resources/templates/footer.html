@@ -1,0 +1,18 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+</head>
+<th:block th:fragment="footer">
+    <footer>
+        <div class="container">
+        <span sec:authorize="isAuthenticated()">
+                Logged in user: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
+            <!--<span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span> -->
+                <a th:if="${#httpServletRequest.remoteUser !=null}" th:href="@{/logout}">Sign Out</a>
+                </span>
+        </div>
+    </footer>
+</th:block>
+</body>
+</html>

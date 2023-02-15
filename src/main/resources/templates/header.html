@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+<body>
+<th:block th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" sec:authorize="!isAuthenticated()" th:href="@{/}">
+                Maintenance Manager
+            </a>
+            <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/landing}">
+                Maintenance Manager
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/}" class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a th:href="@{/landing}" class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="nav-link active" aria-current="page" href="#">Login</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/register}" class="nav-link active" aria-current="page" href="#">Register</a>
+                    </li>
+                    <!--<li sec:authorize="hasRole('ROLE_ADMIN')" class="active">
+                        <a th:href="@{/admin}" class="nav-link active" aria-current="page" href="#">Admin</a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_MAINTENANCE')" class="active">
+                        <a th:href="@{/customer}" class="nav-link active"
+                           aria-current="page" href="#">Tasks</a>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+</th:block>
+</body>
+</html>

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Register Failure</title>
 </head>
 <body>
-<div>
+<div layout:fragment="content" th:remove="tag">
     <h2>Sorry, the registration did not succeed!</h2>
     <h3 th:text="${errorMsg}"></h3>
 </div>
