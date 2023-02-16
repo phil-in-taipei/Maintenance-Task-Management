@@ -3,6 +3,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -27,5 +28,20 @@ public class MaintenanceTask {
     @ManyToOne(optional = false)
     @JoinColumn
     private UserPrincipal user;
+
+    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
+    private TaskStatusHistory taskStatusHistory;
+
+    public MaintenanceTask(
+            String taskName, String description,
+            LocalDate date, UserPrincipal user) {
+        this.taskName = taskName;
+        this.description = description;
+        this.date = date;
+        this.user = user;
+        this.taskStatusHistory = new TaskStatusHistory(
+                TaskStatusEnum.PENDING, LocalDateTime.now(),  LocalDateTime.now()
+        );
+    }
 
 }

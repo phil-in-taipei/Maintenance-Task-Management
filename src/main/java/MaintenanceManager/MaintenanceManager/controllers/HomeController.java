@@ -1,5 +1,7 @@
 package MaintenanceManager.MaintenanceManager.controllers;
+import MaintenanceManager.MaintenanceManager.models.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.UserPrincipal;
+import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +17,21 @@ import java.util.List;
 @Controller
 public class HomeController {
 
+    @Autowired
+    MaintenanceTaskService maintenanceTaskService;
+
     @GetMapping("/")
     public String homePage() {
         return "index";
     }
+
     @GetMapping("/landing")
     public String landingPage(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the user: " + user);
+        List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasks(user.getId());
+        System.out.println("These are the user's tasks: " + maintenanceTasks.toString());
+        model.addAttribute("dailyTasks", maintenanceTasks);
         model.addAttribute("user", user);
         return "landing";
     }
