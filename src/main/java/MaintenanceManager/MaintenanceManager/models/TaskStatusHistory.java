@@ -17,7 +17,7 @@ public class TaskStatusHistory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING) // possibly move to main table
     @Column(nullable = false)
     private TaskStatusEnum status;
 
@@ -30,11 +30,15 @@ public class TaskStatusHistory {
     @UpdateTimestamp
     private LocalDateTime updatedDateTime;
 
+    @Column(nullable = false)
+    private Integer timesModified;
+
     TaskStatusHistory(
             TaskStatusEnum status, LocalDateTime createdDateTime,
             LocalDateTime updatedDateTime) {
         this.status = status;
         this.createdDateTime = createdDateTime;
         this.updatedDateTime = updatedDateTime;
+        this.timesModified = 1;
     };
 }

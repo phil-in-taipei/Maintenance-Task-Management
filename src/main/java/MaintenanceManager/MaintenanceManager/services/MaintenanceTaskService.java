@@ -16,4 +16,10 @@ public class MaintenanceTaskService {
     public List<MaintenanceTask> getAllUserTasks(Long userId) {
         return maintenanceTaskRepo.findAllByUserId(userId);
     }
+
+    @Transactional
+    public MaintenanceTask saveTask(MaintenanceTask task)
+            throws IllegalArgumentException {
+        return maintenanceTaskRepo.save(task);
+    }
 }
