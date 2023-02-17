@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.models;
+package MaintenanceManager.MaintenanceManager.models.tasks;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

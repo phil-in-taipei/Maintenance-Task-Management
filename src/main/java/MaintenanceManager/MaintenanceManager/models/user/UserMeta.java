@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.models;
+package MaintenanceManager.MaintenanceManager.models.user;
 import lombok.*;
 
 import javax.persistence.*;

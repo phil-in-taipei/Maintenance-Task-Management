@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.models;
+package MaintenanceManager.MaintenanceManager.models.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;

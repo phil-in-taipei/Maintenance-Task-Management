@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.models;
+package MaintenanceManager.MaintenanceManager.models.tasks;
 
 public enum TaskStatusEnum {
     PENDING,

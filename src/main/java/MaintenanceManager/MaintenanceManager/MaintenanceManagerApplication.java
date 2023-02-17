@@ -1,9 +1,9 @@
 package MaintenanceManager.MaintenanceManager;
 
-import MaintenanceManager.MaintenanceManager.models.Authority;
-import MaintenanceManager.MaintenanceManager.models.AuthorityEnum;
-import MaintenanceManager.MaintenanceManager.models.UserMeta;
-import MaintenanceManager.MaintenanceManager.models.UserPrincipal;
+import MaintenanceManager.MaintenanceManager.models.user.Authority;
+import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
+import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
+import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.repositories.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.UserPrincipalRepo;
 import org.springframework.boot.SpringApplication;
@@ -14,7 +14,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
-import java.util.Collections;
 
 @SpringBootApplication
 public class MaintenanceManagerApplication implements CommandLineRunner {

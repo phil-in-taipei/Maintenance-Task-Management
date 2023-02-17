@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.models;
+package MaintenanceManager.MaintenanceManager.models.user;
 
 public enum AuthorityEnum {
     ROLE_USER,

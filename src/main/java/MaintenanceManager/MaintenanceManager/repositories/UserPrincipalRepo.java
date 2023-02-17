@@ -1,6 +1,6 @@
 package MaintenanceManager.MaintenanceManager.repositories;
 
-import MaintenanceManager.MaintenanceManager.models.UserPrincipal;
+import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

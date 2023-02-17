@@ -1,4 +1,5 @@
-package MaintenanceManager.MaintenanceManager.models;
+package MaintenanceManager.MaintenanceManager.models.tasks;
+import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

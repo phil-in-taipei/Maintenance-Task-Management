@@ -1,6 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers;
-import MaintenanceManager.MaintenanceManager.models.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.models.UserRegistration;
+import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
+import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
 import MaintenanceManager.MaintenanceManager.services.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

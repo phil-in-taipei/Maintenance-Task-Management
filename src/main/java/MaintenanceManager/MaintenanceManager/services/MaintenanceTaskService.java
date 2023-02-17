@@ -1,6 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services;
-import MaintenanceManager.MaintenanceManager.models.MaintenanceTask;
-import MaintenanceManager.MaintenanceManager.models.TaskStatusEnum;
+import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
+import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
 //import MaintenanceManager.MaintenanceManager.models.TaskStatusHistory;
 import MaintenanceManager.MaintenanceManager.repositories.MaintenanceTaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MaintenanceTaskService {
