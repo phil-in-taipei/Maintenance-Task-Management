@@ -1,3 +1,4 @@
+/*
 package MaintenanceManager.MaintenanceManager.models;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,7 +18,7 @@ public class TaskStatusHistory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Enumerated(EnumType.STRING) // possibly move to main table
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TaskStatusEnum status;
 
@@ -42,3 +43,4 @@ public class TaskStatusHistory {
         this.timesModified = 1;
     };
 }
+*/

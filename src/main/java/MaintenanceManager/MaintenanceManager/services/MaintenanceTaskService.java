@@ -1,7 +1,7 @@
 package MaintenanceManager.MaintenanceManager.services;
 import MaintenanceManager.MaintenanceManager.models.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.TaskStatusEnum;
-import MaintenanceManager.MaintenanceManager.models.TaskStatusHistory;
+//import MaintenanceManager.MaintenanceManager.models.TaskStatusHistory;
 import MaintenanceManager.MaintenanceManager.repositories.MaintenanceTaskRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,19 +17,22 @@ public class MaintenanceTaskService {
     MaintenanceTaskRepo maintenanceTaskRepo;
 
     public List<MaintenanceTask> getAllUserTasks(Long userId) {
+
         return maintenanceTaskRepo.findAllByUserId(userId);
     }
 
     @Transactional
-    public MaintenanceTask saveTask(MaintenanceTask task)
+    public void saveTask(MaintenanceTask task) //MaintenanceTask
             throws IllegalArgumentException {
-        return maintenanceTaskRepo.save(task);
+        maintenanceTaskRepo.save(task);
+        //return maintenanceTaskRepo.save(task);
     }
 
     @Transactional
     public  void confirmTaskCompletion(MaintenanceTask task) //MaintenanceTask
             throws IllegalArgumentException {
-        task.getTaskStatusHistory().setStatus(TaskStatusEnum.COMPLETED);
+                 task.setStatus(TaskStatusEnum.COMPLETED);
+        //task.getTaskStatusHistory().setStatus(TaskStatusEnum.COMPLETED);
         //return maintenanceTaskRepo.save(task);
     }
 

@@ -103,11 +103,15 @@ public class MaintenanceTaskController {
             try {
                 LocalDate newDate = LocalDate.parse(taskRescheduleForm.getDate());
                 updatedTask.setDate(newDate);
-                updatedTask.getTaskStatusHistory().setStatus(TaskStatusEnum.DEFERRED);
-                updatedTask.getTaskStatusHistory().setComments(taskRescheduleForm.getComments());
-                updatedTask.getTaskStatusHistory().setUpdatedDateTime(LocalDateTime.now());
-                updatedTask.getTaskStatusHistory().setTimesModified(
-                        updatedTask.getTaskStatusHistory().getTimesModified() + 1);
+                updatedTask.setStatus(TaskStatusEnum.DEFERRED);
+                updatedTask.setComments(taskRescheduleForm.getComments());
+                updatedTask.setUpdatedDateTime(LocalDateTime.now());
+                updatedTask.setTimesModified(updatedTask.getTimesModified() + 1);
+                //updatedTask.getTaskStatusHistory().setStatus(TaskStatusEnum.DEFERRED);
+                //updatedTask.getTaskStatusHistory().setComments(taskRescheduleForm.getComments());
+                //updatedTask.getTaskStatusHistory().setUpdatedDateTime(LocalDateTime.now());
+                //updatedTask.getTaskStatusHistory().setTimesModified(
+                //        updatedTask.getTaskStatusHistory().getTimesModified() + 1);
                 maintenanceTaskService.saveTask(updatedTask);
             } catch (IllegalArgumentException e) {
                 model.addAttribute(

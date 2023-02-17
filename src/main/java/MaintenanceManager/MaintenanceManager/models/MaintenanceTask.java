@@ -1,5 +1,7 @@
 package MaintenanceManager.MaintenanceManager.models;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -29,8 +31,23 @@ public class MaintenanceTask {
     @JoinColumn
     private UserPrincipal user;
 
-    @OneToOne(cascade = CascadeType.PERSIST, optional = false)
-    private TaskStatusHistory taskStatusHistory;
+    //@OneToOne(cascade = CascadeType.PERSIST, optional = false)
+    //private TaskStatusHistory taskStatusHistory;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TaskStatusEnum status;
+
+    @Column(nullable = true)
+    private String comments;
+
+    @CreationTimestamp
+    private LocalDateTime createdDateTime;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedDateTime;
+
+    @Column(nullable = false)
+    private Integer timesModified;
 
     public MaintenanceTask(
             String taskName, String description,
@@ -39,9 +56,13 @@ public class MaintenanceTask {
         this.description = description;
         this.date = date;
         this.user = user;
-        this.taskStatusHistory = new TaskStatusHistory(
-                TaskStatusEnum.PENDING, LocalDateTime.now(),  LocalDateTime.now()
-        );
+        this.status = TaskStatusEnum.PENDING;
+        this.createdDateTime = LocalDateTime.now();
+        this.updatedDateTime = LocalDateTime.now();
+        this.timesModified = 1;
+        //this.taskStatusHistory = new TaskStatusHistory(
+        //        TaskStatusEnum.PENDING, LocalDateTime.now(),  LocalDateTime.now()
+        //);
     }
 
 }

@@ -32,7 +32,8 @@
                 <td th:text="${task.taskName}"></td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.date}"></td>
-                <td th:text="${task.taskStatusHistory.status}"></td>
+                <!--<td th:text="${task.taskStatusHistory.status}"></td> -->
+                <td th:text="${task.status}"></td>
                 <td>
                     <a th:href="@{'/confirm-task-completion/' + ${task.id}}">Confirm!</a>
                 </td>
