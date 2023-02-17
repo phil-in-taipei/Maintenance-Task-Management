@@ -22,6 +22,8 @@
                 <th>Description</th>
                 <th>Date</th>
                 <th>Status</th>
+                <th>Confirm Completion</th>
+                <th>Reschedule</th>
             </tr>
             </thead>
             <tbody>
@@ -31,6 +33,13 @@
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.date}"></td>
                 <td th:text="${task.taskStatusHistory.status}"></td>
+                <td>
+                    <a th:href="@{'/confirm-task-completion/' + ${task.id}}">Confirm!</a>
+                </td>
+                <td>
+                    <a th:href="@{'/reschedule-task/' + ${task.id}}">Reschedule!</a>
+                </td>
+
             </tr>
             </tbody>
         </table>
