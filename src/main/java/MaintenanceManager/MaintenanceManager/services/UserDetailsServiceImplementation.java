@@ -1,7 +1,7 @@
 package MaintenanceManager.MaintenanceManager.services;
 import MaintenanceManager.MaintenanceManager.models.user.*;
-import MaintenanceManager.MaintenanceManager.repositories.UserPrincipalRepo;
-import MaintenanceManager.MaintenanceManager.repositories.UserMetaRepo;
+import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
+import MaintenanceManager.MaintenanceManager.repositories.user.UserMetaRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

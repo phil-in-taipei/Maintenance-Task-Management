@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.repositories;
+package MaintenanceManager.MaintenanceManager.repositories.user;
 
 import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
