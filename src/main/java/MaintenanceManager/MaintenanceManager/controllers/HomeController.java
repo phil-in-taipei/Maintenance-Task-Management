@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
+import MaintenanceManager.MaintenanceManager.models.tasks.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,8 @@ public class HomeController {
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
                 user.getId(), LocalDate.now());
         System.out.println("These are the user's tasks: " + maintenanceTasks.toString());
+        SearchTasksByDate searchTasksByDate = new SearchTasksByDate();
+        model.addAttribute("searchTasksByDate", searchTasksByDate);
         model.addAttribute("uncompletedTasks", uncompletedTasks);
         model.addAttribute("dailyTasks", maintenanceTasks);
         model.addAttribute("user", user);

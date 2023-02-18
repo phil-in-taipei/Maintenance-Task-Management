@@ -1,9 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers;
 
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTaskReschedule;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTaskSubmit;
-import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
+import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +54,26 @@ public class MaintenanceTaskController {
         return mav;
     }
 
+    @PostMapping("/search-tasks-by-date")
+    public String searchTasksByDate(
+            @ModelAttribute("rescheduledTask")
+            SearchTasksByDate searchTasksByDate,
+            Model model, Authentication authentication) {
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        LocalDate queryDate = LocalDate.parse(searchTasksByDate.getDate());
+        System.out.println("This is the query date: " + queryDate);
+        List<MaintenanceTask> tasks = maintenanceTaskService.getAllUserTasksByDate(user.getId(), queryDate);
+        System.out.println(tasks.toString());
+        model.addAttribute("tasks", tasks);
+        LocalDate dayBefore = queryDate.minusDays(1);
+        LocalDate dayAfter = queryDate.plusDays(1);
+        model.addAttribute("dayAfter", dayAfter.toString());
+        model.addAttribute("dayBefore", dayBefore.toString());
+        model.addAttribute("date", queryDate.toString()); //searchTasksByDate.getDate()
+        model.addAttribute("user", user);
+        return "tasks-by-date";
+    }
+
     @PostMapping("/tasks")
     public String saveNewTask(
             @ModelAttribute("task")
@@ -87,6 +104,25 @@ public class MaintenanceTaskController {
         model.addAttribute("tasks", tasks);
         model.addAttribute("user", user);
         return "tasks";
+    }
+
+    @GetMapping("tasks-by-date/{date}")
+    public String showUserTasksByDate (
+            @PathVariable(name = "date") String date,
+            Authentication authentication, Model model) {
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        LocalDate queryDate = LocalDate.parse(date);
+        System.out.println("This is the query date: " + queryDate);
+        List<MaintenanceTask> tasks = maintenanceTaskService.getAllUserTasksByDate(user.getId(), queryDate);
+        System.out.println(tasks.toString());
+        LocalDate dayBefore = queryDate.minusDays(1);
+        LocalDate dayAfter = queryDate.plusDays(1);
+        model.addAttribute("dayAfter", dayAfter.toString());
+        model.addAttribute("dayBefore", dayBefore.toString());
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("date", queryDate);
+        model.addAttribute("user", user);
+        return "tasks-by-date";
     }
 
     @PostMapping("/submit-reschedule-task-form/{taskId}")
