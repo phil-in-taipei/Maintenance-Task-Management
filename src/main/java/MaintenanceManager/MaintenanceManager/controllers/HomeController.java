@@ -2,7 +2,9 @@ package MaintenanceManager.MaintenanceManager.controllers;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
+import MaintenanceManager.MaintenanceManager.models.weather.AccuweatherResponse;
 import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
+import MaintenanceManager.MaintenanceManager.services.WeatherApiService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,9 @@ public class HomeController {
 
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
+
+    @Autowired
+    WeatherApiService weatherApiService;
 
     @GetMapping("/")
     public String homePage() {
@@ -39,5 +44,16 @@ public class HomeController {
         model.addAttribute("dailyTasks", maintenanceTasks);
         model.addAttribute("user", user);
         return "landing";
+    }
+
+    @GetMapping("/forecast")
+    public String testApiForecast(Authentication authentication, Model model) {
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        System.out.println("This is the user: " + user);
+        //List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasks(user.getId());
+        AccuweatherResponse weather = weatherApiService.getDailyForecast();
+        model.addAttribute("user", user);
+        model.addAttribute("weather", weather);
+        return "test-forecast";
     }
 }
