@@ -8,9 +8,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class ForecastItem {
+
+    @JsonProperty("Date")
     private String Date;
 
+    @JsonProperty("Temperature")
     private Temperature Temperature;
 
+    @JsonProperty("Day")
     private Day Day;
 }

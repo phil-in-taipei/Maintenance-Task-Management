@@ -8,5 +8,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Minimum {
+
+    @JsonProperty("Value")
     public double Value;
+
+    @Override
+    public String toString() {
+        return "Minimum{" +
+                "Value=" + Value +
+                '}';
+    }
 }

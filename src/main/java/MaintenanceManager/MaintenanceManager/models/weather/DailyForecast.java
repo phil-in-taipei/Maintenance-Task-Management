@@ -7,20 +7,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DailyForecasts {
+public class DailyForecast {
 
+    @JsonProperty("Date")
     private String Date;
 
+    @JsonProperty("Temperature")
     private Temperature Temperature;
 
+    @JsonProperty("Day")
     private Day Day;
 
     @Override
     public String toString() {
         return "DailyForecasts{" +
                 "Date='" + Date + '\'' +
-                ", Temperature=" + Temperature +
-                ", Day=" + Day +
+                ", Temperature=" + Temperature.toString() +
+                ", Day=" + Day.toString() +
                 '}';
     }
 }

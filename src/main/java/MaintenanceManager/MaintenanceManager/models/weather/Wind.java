@@ -8,5 +8,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Wind {
+
+    @JsonProperty("Speed")
     private Speed Speed;
+
+    @Override
+    public String toString() {
+        return "Wind{" +
+                "Speed=" + Speed +
+                '}';
+    }
 }

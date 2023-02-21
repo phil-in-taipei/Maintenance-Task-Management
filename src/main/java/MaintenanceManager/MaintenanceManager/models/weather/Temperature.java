@@ -9,7 +9,17 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Temperature {
 
+    @JsonProperty("Minimum")
     public Minimum Minimum;
 
+    @JsonProperty("Maximum")
     public Maximum Maximum;
+
+    @Override
+    public String toString() {
+        return "Temperature{" +
+                "Minimum=" + Minimum.toString() +
+                ", Maximum=" + Maximum.toString() +
+                '}';
+    }
 }

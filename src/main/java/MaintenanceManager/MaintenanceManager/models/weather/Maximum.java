@@ -9,5 +9,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Maximum {
 
+    @Override
+    public String toString() {
+        return "Maximum{" +
+                "Value=" + Value +
+                '}';
+    }
+
+    @JsonProperty("Value")
     public double Value;
 }
