@@ -1,11 +1,17 @@
 package MaintenanceManager.MaintenanceManager.services;
 import MaintenanceManager.MaintenanceManager.models.weather.AccuweatherResponse;
+import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class WeatherApiService {
@@ -21,7 +27,7 @@ public class WeatherApiService {
     @Autowired
     RestTemplate restTemplate;
 
-    public AccuweatherResponse getDailyForecast() {
+    public AccuweatherResponse fetchDailyForecastEntity() {
         String apiCallUrl = dailyForecastUrl + locationKey + "?apikey=" + apikey + "&details=true&metric=true";
         System.out.println("**************Calling api url: " + apiCallUrl + "  **********************");
         ResponseEntity<AccuweatherResponse> responseEntity =
@@ -29,7 +35,7 @@ public class WeatherApiService {
                         apiCallUrl,
                         AccuweatherResponse.class // note: previous sample had uri variables number
                 );
-        //DailyForecasts results = new DailyForecasts();
+        System.out.println("*************API Call Time: " + LocalDateTime.now() + "*************************");
         if (responseEntity.getStatusCode().equals(HttpStatus.OK) && responseEntity.getBody() != null) {
             AccuweatherResponse accuweatherResponse = responseEntity.getBody();
             System.out.println("******************************This is the api response********************");
@@ -40,6 +46,15 @@ public class WeatherApiService {
             System.out.println(responseEntity.getStatusCode());
             return new AccuweatherResponse();
         }
+    }
+
+    @Cacheable(
+            value = "dailyWeatherCache",
+            key = "#dateString")
+    public List<DailyForecast> getDailyWeatherForecastData(String dateString) {
+        System.out.println("*************Cached Method called at: " + dateString + "*****************");
+        List<DailyForecast> dailyForecasts = fetchDailyForecastEntity().getDailyForecasts();
+        return dailyForecasts;
     }
 
     // sample url:

@@ -3,11 +3,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class DailyForecast {
+public class DailyForecast implements Serializable{
+
+    private static final long serialVersionUID = 645945833607401129L;
 
     @JsonProperty("Date")
     private String Date;

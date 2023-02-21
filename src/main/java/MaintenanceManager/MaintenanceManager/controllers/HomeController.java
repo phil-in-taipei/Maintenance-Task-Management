@@ -3,6 +3,7 @@ import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.weather.AccuweatherResponse;
+import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.WeatherApiService;
 import org.springframework.stereotype.Controller;
@@ -50,10 +51,11 @@ public class HomeController {
     public String testApiForecast(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the user: " + user);
-        //List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasks(user.getId());
-        AccuweatherResponse weather = weatherApiService.getDailyForecast();
+        //AccuweatherResponse weather = weatherApiService.fetchDailyForecastEntity();
+        List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
         model.addAttribute("user", user);
-        model.addAttribute("weather", weather.getDailyForecasts());
+        //model.addAttribute("weather", weather.getDailyForecasts());
+        model.addAttribute("weather", weather);
         return "test-forecast";
     }
 }
