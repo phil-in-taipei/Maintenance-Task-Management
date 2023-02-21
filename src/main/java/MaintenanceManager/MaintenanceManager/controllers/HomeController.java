@@ -53,7 +53,7 @@ public class HomeController {
         //List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasks(user.getId());
         AccuweatherResponse weather = weatherApiService.getDailyForecast();
         model.addAttribute("user", user);
-        model.addAttribute("weather", weather);
+        model.addAttribute("weather", weather.getDailyForecasts());
         return "test-forecast";
     }
 }

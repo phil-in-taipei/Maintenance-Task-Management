@@ -13,12 +13,16 @@
         <div class="mt-4 p-5 rounded">
             <div class="p-3 rounded-lg m-2">
                 <div class="row">
-                    <h2>Today's Forecast</h2>
+                    <h2 th:text="'Weather Forecast: ' + ${weather[0].Day.IconPhrase}"></h2>
                 </div>
                 <hr />
                 <div class="row">
-                    <h3 th:text="${user.username}"></h3>
-                    <h3 th:text="${weather.DailyForecasts[0].Date}"></h3>
+                    <h3 th:text="'User: ' + ${user.username}"></h3>
+                    <h3 th:text="'Date: ' + ${weather[0].Date}"></h3>
+                    <h3 th:text="'Temperature: ' + ${weather[0].Temperature.Minimum.Value} + ' -- ' + ${weather[0].Temperature.Maximum.Value}"></h3>
+                    <h3 th:text="'Wind: ' + ${weather[0].Day.Wind.Speed.Value}"></h3>
+                    <h3 th:text="'Chance of Rain: ' + ${weather[0].Day.RainProbability} + '%'"></h3>
+                    <h5 th:text="${weather[0].Day.LongPhrase}"></h5>
                 </div>
                 <hr />
             </div>
