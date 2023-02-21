@@ -34,16 +34,18 @@ public class HomeController {
     public String landingPage(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the user: " + user);
-        //List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasks(user.getId());
         List<MaintenanceTask> uncompletedTasks = maintenanceTaskService.getAllUncompletedPastUserTasks(user.getId());
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
                 user.getId(), LocalDate.now());
         System.out.println("These are the user's tasks: " + maintenanceTasks.toString());
         SearchTasksByDate searchTasksByDate = new SearchTasksByDate();
+        Integer chanceOfRain = weatherApiService.getRainProbability(LocalDate.now().toString());
+        System.out.println("*************This is the chance of rain in landing: " + chanceOfRain + "%************");
         model.addAttribute("searchTasksByDate", searchTasksByDate);
         model.addAttribute("uncompletedTasks", uncompletedTasks);
         model.addAttribute("dailyTasks", maintenanceTasks);
         model.addAttribute("user", user);
+        model.addAttribute("chanceOfRain", chanceOfRain);
         return "landing";
     }
 
@@ -51,7 +53,6 @@ public class HomeController {
     public String testApiForecast(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the user: " + user);
-        //AccuweatherResponse weather = weatherApiService.fetchDailyForecastEntity();
         List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
         model.addAttribute("user", user);
         //model.addAttribute("weather", weather.getDailyForecasts());

@@ -53,10 +53,16 @@ public class WeatherApiService {
             key = "#dateString")
     public List<DailyForecast> getDailyWeatherForecastData(String dateString) {
         System.out.println("*************Cached Method called at: " + dateString + "*****************");
-        List<DailyForecast> dailyForecasts = fetchDailyForecastEntity().getDailyForecasts();
-        return dailyForecasts;
+        return fetchDailyForecastEntity().getDailyForecasts();
     }
 
-    // sample url:
-    // http://dataservice.accuweather.com/forecasts/v1/daily/1day/315078?apikey=rebeahan1SXadwRERpnbQqAkGzUULepP&details=true&metric=true
+    @Cacheable(
+            value = "dailyChanceOfRainCache",
+            key = "#dateString")
+    public Integer getRainProbability(String dateString) {
+        List<DailyForecast> dailyForecasts = getDailyWeatherForecastData(dateString);
+        Integer chanceOfRain = dailyForecasts.get(0).getDay().getRainProbability();
+        return chanceOfRain;
+    }
+
 }

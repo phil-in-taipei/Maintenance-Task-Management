@@ -20,6 +20,7 @@
         </div>
         <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
             <h1>Welcome!</h1>
+            <h2 th:text="'Chance of rain: ' + ${chanceOfRain} + '%'"></h2>
             <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
             This content is only shown to maintenance schedulers
             <div align="center">
