@@ -7,6 +7,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Entity
+//@Table(uniqueConstraints=
+//           @UniqueConstraint(columnNames = {"quarter", "year", "monthlyTaskScheduler"}))
 @Getter
 @Setter
 @Builder
