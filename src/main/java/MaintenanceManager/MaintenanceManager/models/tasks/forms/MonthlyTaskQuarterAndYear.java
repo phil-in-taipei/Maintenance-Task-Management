@@ -6,8 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MonthlyTaskSubmit {
-    private String monthlyTaskName;
-    private String description;
-    private Integer dayOfMonth;
+public class MonthlyTaskQuarterAndYear {
+    private String quarter;
+    private Integer year;
 }

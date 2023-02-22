@@ -1,7 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskSubmit;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyTaskQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.MonthlyTaskSchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,6 +17,25 @@ public class MonthlyTaskSchedulerController {
 
     @Autowired
     MonthlyTaskSchedulingService monthlyTaskSchedulingService;
+
+
+    @PostMapping("/apply-monthly-schedulers")
+    public String searchTasksByDate(
+            @ModelAttribute("monthlyTaskQuarterAndYear")
+            MonthlyTaskQuarterAndYear monthlyTaskQuarterAndYear,
+            Model model, Authentication authentication) {
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        System.out.println("This is the quarter: " + monthlyTaskQuarterAndYear.getQuarter());
+        System.out.println("This is the year: " + monthlyTaskQuarterAndYear.getYear());
+        List<MonthlyTaskScheduler> monthlyTasks =
+                monthlyTaskSchedulingService.getAllUsersMonthlyTaskSchedulers(user.getId());
+        System.out.println(monthlyTasks.toString());
+        model.addAttribute("monthlyTasks", monthlyTasks);
+        model.addAttribute("user", user);
+        model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
+        model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
+        return "apply-monthly-schedulers";
+    }
 
     @GetMapping("/create-monthly-task-scheduler")
     public String showSubmitTaskFormPage(Model model) {
@@ -54,6 +70,7 @@ public class MonthlyTaskSchedulerController {
                 monthlyTaskSchedulingService.getAllUsersMonthlyTaskSchedulers(user.getId());
         model.addAttribute("monthlyTasks", monthlyTasks);
         model.addAttribute("user", user);
+        model.addAttribute("monthlyTaskQuarterAndYear", new MonthlyTaskQuarterAndYear());
         return "monthly-task-schedulers";
     }
 }
