@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.models.tasks;
+package MaintenanceManager.MaintenanceManager.models.tasks.forms;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

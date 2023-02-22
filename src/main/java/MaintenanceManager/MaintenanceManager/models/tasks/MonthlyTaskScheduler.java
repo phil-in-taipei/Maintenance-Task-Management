@@ -27,4 +27,14 @@ public class MonthlyTaskScheduler {
     @ManyToOne(optional = false)
     @JoinColumn
     private UserPrincipal user;
+
+    @Override
+    public String toString() {
+        return "MonthlyTaskScheduler{" +
+                "id=" + id +
+                ", Monthly Task Name='" + monthlyTaskName + '\'' +
+                ", Description='" + description + '\'' +
+                ", Day Of Month=" + dayOfMonth +
+                '}';
+    }
 }

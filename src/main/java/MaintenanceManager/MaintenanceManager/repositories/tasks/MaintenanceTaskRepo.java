@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface MaintenanceTaskRepo extends JpaRepository<MaintenanceTask, Long>{
+public interface MaintenanceTaskRepo extends JpaRepository<MaintenanceTask, Long> {
     List<MaintenanceTask> findAllByUserId(Long id);
 
     List<MaintenanceTask> findByStatusIsNotAndDateBefore(TaskStatusEnum status, LocalDate date);

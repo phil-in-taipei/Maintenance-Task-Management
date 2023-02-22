@@ -1,8 +1,7 @@
 package MaintenanceManager.MaintenanceManager.controllers;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
-import MaintenanceManager.MaintenanceManager.models.tasks.SearchTasksByDate;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.models.weather.AccuweatherResponse;
 import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.WeatherApiService;
