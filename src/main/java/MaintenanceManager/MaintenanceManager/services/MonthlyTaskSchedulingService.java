@@ -16,7 +16,6 @@ public class MonthlyTaskSchedulingService {
     MonthlyTaskSchedulerRepo monthlyTaskSchedulerRepo;
 
     public List<MonthlyTaskScheduler> getAllUsersMonthlyTaskSchedulers(Long userId) {
-
         return monthlyTaskSchedulerRepo.findAllByUserId(userId);
     }
 

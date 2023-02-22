@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <title>User's Task</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div align="center">
+        <h1>User's Monthly Task Schedulers</h1>
+        <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
+        <br/><br/>
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Day of Month</th>
+                <!--<th>Confirm Completion</th>
+                <th>Reschedule</th> -->
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${monthlyTasks}">
+                <td th:text="${task.id}"></td>
+                <td th:text="${task.monthlyTaskName}"></td>
+                <td th:text="${task.description}"></td>
+                <td th:text="${task.dayOfMonth}"></td>
+                <!--<td>
+                    <a th:href="@{'/confirm-task-completion/' + ${task.id}}">Confirm!</a>
+                </td>
+                <td>
+                    <a th:href="@{'/reschedule-task/' + ${task.id}}">Reschedule!</a>
+                </td> -->
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

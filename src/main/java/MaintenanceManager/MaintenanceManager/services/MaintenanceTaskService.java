@@ -33,14 +33,12 @@ public class MaintenanceTaskService {
     public void saveTask(MaintenanceTask task) //MaintenanceTask
             throws IllegalArgumentException {
         maintenanceTaskRepo.save(task);
-        //return maintenanceTaskRepo.save(task);
     }
 
     @Transactional
-    public  void confirmTaskCompletion(MaintenanceTask task)
+    public void confirmTaskCompletion(MaintenanceTask task)
             throws IllegalArgumentException {
                  task.setStatus(TaskStatusEnum.COMPLETED);
-        //task.getTaskStatusHistory().setStatus(TaskStatusEnum.COMPLETED);
         maintenanceTaskRepo.save(task);
     }
 

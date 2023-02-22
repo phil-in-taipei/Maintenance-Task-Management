@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <title>Create Task</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="mt-4 p-5 rounded">
+            <div class="p-3 rounded-lg m-2">
+                <h1>Create Monthly Task Scheduler</h1>
+                <form action="#" th:action="@{/monthly-tasks}" method="post" th:object="${monthlyTaskScheduler}">
+                    <hr />
+                    <div class="form-control">
+                        <label>Task Name</label>
+                        <div>
+                            <input type="text" id="taskName" class="form-control" th:field="*{monthlyTaskName}" required>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-control">
+                        <label>Description</label>
+                        <div>
+                            <input type="text" id="description" class="form-control" th:field="*{description}" required>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-control">
+                        <label>Day of Month</label>
+                        <div>
+                            <input type="number" id="dayOfMonth" min="1" max="31"
+                                   class="form-control" th:field="*{dayOfMonth}" required>
+                        </div>
+                    </div>
+                    <hr />
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="Submit"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
