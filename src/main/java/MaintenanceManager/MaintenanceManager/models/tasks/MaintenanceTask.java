@@ -32,8 +32,6 @@ public class MaintenanceTask {
     @JoinColumn
     private UserPrincipal user;
 
-    //@OneToOne(cascade = CascadeType.PERSIST, optional = false)
-    //private TaskStatusHistory taskStatusHistory;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TaskStatusEnum status;
@@ -50,6 +48,15 @@ public class MaintenanceTask {
     @Column(nullable = false)
     private Integer timesModified;
 
+    @Column(nullable = false)
+    private Boolean noRainOnly;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            optional = true
+    )
+    private IntervalTaskGroup intervalTaskGroup;
+
     public MaintenanceTask(
             String taskName, String description,
             LocalDate date, UserPrincipal user) {
@@ -60,10 +67,25 @@ public class MaintenanceTask {
         this.status = TaskStatusEnum.PENDING;
         this.createdDateTime = LocalDateTime.now();
         this.updatedDateTime = LocalDateTime.now();
+        this.noRainOnly = false;
         this.timesModified = 1;
-        //this.taskStatusHistory = new TaskStatusHistory(
-        //        TaskStatusEnum.PENDING, LocalDateTime.now(),  LocalDateTime.now()
-        //);
+    }
+
+    public MaintenanceTask(
+            String taskName, String description,
+            LocalDate date, UserPrincipal user,
+            Boolean noRainOnly,
+            IntervalTaskGroup intervalTaskGroup) {
+        this.taskName = taskName;
+        this.description = description;
+        this.date = date;
+        this.user = user;
+        this.status = TaskStatusEnum.PENDING;
+        this.createdDateTime = LocalDateTime.now();
+        this.updatedDateTime = LocalDateTime.now();
+        this.noRainOnly = noRainOnly;
+        this.timesModified = 1;
+        this.intervalTaskGroup = intervalTaskGroup;
     }
 
 }
