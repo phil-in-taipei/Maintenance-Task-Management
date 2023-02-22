@@ -47,5 +47,6 @@ public class MonthlyTaskSchedulingService {
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getMonthlySchedulingDatesByQuarter(year, quarter, dayOfMonth);
         System.out.println(datesToScheduleTasks.toString());
+        // next: pass to method that iterates through list and saves the tasks for each date
     }
 }
