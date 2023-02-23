@@ -21,6 +21,26 @@
           <h3 th:text="'Quarter: ' + ${quarter}"></h3>
           <h3 th:text="'Year: ' + ${year}"></h3>
         </div>
+        <div class="row"> <!-- <a th:href="@{'/reschedule-task/' + ${task.id}}">Reschedule!</a> -->
+          <form action="#"
+                th:action="@{'/submit-quarterly-monthly-tasks-scheduled/' + ${quarter} + '/' + ${year}}"
+                method="post" th:object="${qMonthlyTask}">
+            <hr />
+            <div class="form-control">
+              <label>Monthly Task</label>
+              <div>
+                <select class="form-select" th:name="monthlyTaskScheduler">
+                  <option th:if="${monthlyTasks.isEmpty()}">None Available</option>
+                  <option th:each="task : ${monthlyTasks}" th:value="${task.id}" th:text="${task.toString()}"></option>
+                </select>
+              </div>
+            </div>
+            <hr />
+            <div>
+              <input class="btn btn-primary" type="submit" value="Submit"/>
+            </div>
+          </form>
+        </div>
         <hr />
       </div>
     </div>

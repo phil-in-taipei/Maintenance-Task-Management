@@ -23,6 +23,16 @@ public class MonthlyTaskAppliedQuarterly {
     @Column(nullable = false)
     private QuarterlySchedulingEnum quarter;
 
+    @Override
+    public String toString() {
+        return "MonthlyTaskAppliedQuarterly{" +
+                "id=" + id +
+                ", quarter=" + quarter +
+                ", year=" + year +
+                ", monthlyTaskScheduler=" + monthlyTaskScheduler +
+                '}';
+    }
+
     @Column(nullable = false)
     @NotNull(message = "A Year must be provided")
     @Min(

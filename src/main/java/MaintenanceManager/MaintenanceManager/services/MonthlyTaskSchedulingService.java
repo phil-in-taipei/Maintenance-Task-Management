@@ -24,8 +24,15 @@ public class MonthlyTaskSchedulingService {
     @Autowired
     GenerateDatesService generateDatesService;
 
+    @Autowired
+    MaintenanceTaskService maintenanceTaskService;
+
     public List<MonthlyTaskScheduler> getAllUsersMonthlyTaskSchedulers(Long userId) {
         return monthlyTaskSchedulerRepo.findAllByUserId(userId);
+    }
+
+    public List<MonthlyTaskAppliedQuarterly> getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
+        return monthlyTaskAppliedQuarterlyRepo.findAllByMonthlyTaskScheduler_UserId(userId);
     }
 
     @Transactional
@@ -37,16 +44,32 @@ public class MonthlyTaskSchedulingService {
     @Transactional
     public void saveMonthlyTaskAppliedQuarterly(MonthlyTaskAppliedQuarterly monthlyTaskAppliedQuarterly)
             throws IllegalArgumentException {
-        //MonthlyTaskAppliedQuarterly newObj = monthlyTaskAppliedQuarterlyRepo.save(monthlyTaskAppliedQuarterly);
-        //Integer year = newObj.getYear();
-        //QuarterlySchedulingEnum quarter = newObj.getQuarter();
-        //Integer dayOfMonth = newObj.getMonthlyTaskScheduler().getDayOfMonth();
+        System.out.println("*****************Now saving qMonthly task in service*****************************");
+        System.out.println(monthlyTaskAppliedQuarterly.toString());
         Integer year = monthlyTaskAppliedQuarterly.getYear();
         QuarterlySchedulingEnum quarter = monthlyTaskAppliedQuarterly.getQuarter();
         Integer dayOfMonth = monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getDayOfMonth();
+        System.out.println("******************Now generating dates to save single tasks****************");
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getMonthlySchedulingDatesByQuarter(year, quarter, dayOfMonth);
         System.out.println(datesToScheduleTasks.toString());
-        // next: pass to method that iterates through list and saves the tasks for each date
+        System.out.println("******************Will save the following single tasks****************");
+        for (LocalDate date : datesToScheduleTasks) {
+            System.out.println(
+                    "Task Name: " + monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getMonthlyTaskName() +
+                    "; Description: " + monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getDescription() +
+                    "; Local date: " + date +
+                    "; User: " + monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getUser()
+            );
+            maintenanceTaskService.saveTask(
+                    new MaintenanceTask(
+                            monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getMonthlyTaskName(),
+                            monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getDescription(),
+                            date, monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getUser()
+                            )
+            );
+        }
+        System.out.println("********************Will now save the qMonthly task************************");
+        monthlyTaskAppliedQuarterlyRepo.save(monthlyTaskAppliedQuarterly);
     }
 }

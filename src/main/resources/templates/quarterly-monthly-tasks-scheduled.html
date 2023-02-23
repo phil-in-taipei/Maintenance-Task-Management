@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User's Monthly Quarterly Tasks</title>
+</head>
+<body>
+<div>
+    <table border="1" cellpadding="10">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Quarter</th>
+            <th>Year</th>
+            <th>Monthly Scheduler</th>
+            <!--<th>Confirm Completion</th>
+            <th>Reschedule</th> -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="task : ${qMonthlyTasks}">
+            <td th:text="${task.id}"></td>
+            <td th:text="${task.quarter}"></td>
+            <td th:text="${task.year}"></td>
+            <td th:text="${task.monthlyTaskScheduler.toString()}"></td>
+            <!--<td>
+                <a th:href="@{'/confirm-task-completion/' + ${task.id}}">Confirm!</a>
+            </td>
+            <td>
+                <a th:href="@{'/reschedule-task/' + ${task.id}}">Reschedule!</a>
+            </td> -->
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+</div>
+
+</body>
+</html>

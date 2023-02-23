@@ -1,5 +1,7 @@
 package MaintenanceManager.MaintenanceManager.controllers;
+import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
+import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyTaskQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.MonthlyTaskSchedulingService;
@@ -34,6 +36,10 @@ public class MonthlyTaskSchedulerController {
         model.addAttribute("user", user);
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
+        MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
+        //qMonthlyTask.setYear(monthlyTaskQuarterAndYear.getYear());
+        //qMonthlyTask.setQuarter(QuarterlySchedulingEnum.valueOf(
+        //        monthlyTaskQuarterAndYear.getQuarter()));
         return "apply-monthly-schedulers";
     }
 
@@ -72,5 +78,37 @@ public class MonthlyTaskSchedulerController {
         model.addAttribute("user", user);
         model.addAttribute("monthlyTaskQuarterAndYear", new MonthlyTaskQuarterAndYear());
         return "monthly-task-schedulers";
+    }
+
+    @GetMapping("/quarterly-monthly-tasks-scheduled")
+    public String showAllUserQuarterlyMonthlyTasks(Authentication authentication, Model model) {
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        List<MonthlyTaskAppliedQuarterly> qMonthlyTasks =
+                monthlyTaskSchedulingService.getAllUsersMonthlyTasksAppliedQuarterly(user.getId());
+        model.addAttribute("monthlyTasks", qMonthlyTasks);
+        model.addAttribute("user", user);
+        return "quarterly-monthly-tasks-scheduled";
+    }
+
+    @PostMapping("/submit-quarterly-monthly-tasks-scheduled/{quarter}/{year}")
+    public String saveNewQuarterlyMonthlyTask(
+            @ModelAttribute("qMonthlyTask")
+            MonthlyTaskAppliedQuarterly qMonthlyTask, Model model,
+            @PathVariable(name = "quarter") String quarter,
+            @PathVariable(name = "year") Integer year,
+            Authentication authentication) {
+        try {
+            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            qMonthlyTask.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));
+            qMonthlyTask.setYear(year);
+            monthlyTaskSchedulingService.saveMonthlyTaskAppliedQuarterly(qMonthlyTask);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute(
+                    "message",
+                    "Could not save monthly task scheduler, "
+                            + e.getMessage());
+            return "error";
+        }
+        return "redirect:/quarterly-monthly-tasks-scheduled";
     }
 }
