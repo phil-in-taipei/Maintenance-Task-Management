@@ -6,6 +6,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
+import MaintenanceManager.MaintenanceManager.services.GenerateDatesService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,13 @@ import org.springframework.web.client.RestTemplate;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.Arrays;
 
 @SpringBootApplication
 public class MaintenanceManagerApplication implements CommandLineRunner {
+
+	@Autowired
+	GenerateDatesService generateDatesService;
 
 	@Autowired
 	private AuthorityRepo authorityRepo;
@@ -43,55 +45,16 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
+		System.out.println("--------------------------------------------------------------------------------");
+		generateDatesService.getWeeklySchedulingDatesByQuarter();
+		System.out.println("--------------------------------------------------------------------------------");
+
+
 		Authority userAuth = Authority.builder().authority(AuthorityEnum.ROLE_USER).build();
 		Authority adminAuth = Authority.builder().authority(AuthorityEnum.ROLE_ADMIN).build();
 		Authority mainAuth = Authority.builder().authority(AuthorityEnum.ROLE_MAINTENANCE).build();
 
-		LocalDate ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*************First day of the year: " + ld + "***************************");
-		System.out.println("*********************************First Sunday of the year: " +
-				ld.with(DayOfWeek.SUNDAY) + "******************************");
-		ld = LocalDate.of(2023, 1, 2);
-		System.out.println("*********************************First Monday of the year: " +
-				ld.with(DayOfWeek.MONDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Tuesday of the year: " +
-				ld.with(DayOfWeek.TUESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Wednesday of the year: " +
-				ld.with(DayOfWeek.WEDNESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Thursday of the year: " +
-				ld.with(DayOfWeek.THURSDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Friday of the year: " +
-				ld.with(DayOfWeek.FRIDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Saturday of the year: " +
-				ld.with(DayOfWeek.SATURDAY) + "******************************");
-		System.out.println("*************************************************************");
-		LocalDate ldQ2 = LocalDate.of(2023, 4, 1);
-		System.out.println("*************First day of the year: " + ld + "***************************");
-		System.out.println("*********************************First Sunday of the year: " +
-				ldQ2.with(DayOfWeek.SUNDAY) + "******************************");
-		ldQ2 = LocalDate.of(2023, 4, 2);
-		System.out.println("*********************************First Monday of the Q: " +
-				ldQ2.with(DayOfWeek.MONDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Tuesday of the Q: " +
-				ldQ2.with(DayOfWeek.TUESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Wednesday of the Q: " +
-				ldQ2.with(DayOfWeek.WEDNESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Thursday of the Q: " +
-				ldQ2.with(DayOfWeek.THURSDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Friday of the Q: " +
-				ldQ2.with(DayOfWeek.FRIDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Saturday of the Q: " +
-				ldQ2.with(DayOfWeek.SATURDAY) + "******************************");
 		if (authorityRepo.findAll().isEmpty()) {
 			authorityRepo.saveAll(Arrays.asList(userAuth, adminAuth, mainAuth));
 		}
