@@ -85,7 +85,10 @@ public class MonthlyTaskSchedulerController {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         List<MonthlyTaskAppliedQuarterly> qMonthlyTasks =
                 monthlyTaskSchedulingService.getAllUsersMonthlyTasksAppliedQuarterly(user.getId());
-        model.addAttribute("monthlyTasks", qMonthlyTasks);
+        System.out.println(
+                "**********************************These are the qMonthly tasks for the user: " +
+                        qMonthlyTasks.toString() + "***********************************");
+        model.addAttribute("qMonthlyTasks", qMonthlyTasks);
         model.addAttribute("user", user);
         return "quarterly-monthly-tasks-scheduled";
     }
