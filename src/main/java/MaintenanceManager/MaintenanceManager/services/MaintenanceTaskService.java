@@ -25,8 +25,8 @@ public class MaintenanceTaskService {
     }
 
     public List<MaintenanceTask> getAllUncompletedPastUserTasks(Long userId) {
-        return maintenanceTaskRepo.findByStatusIsNotAndDateBefore(
-                TaskStatusEnum.COMPLETED, LocalDate.now());
+        return maintenanceTaskRepo.findByStatusIsNotAndDateBeforeAndUserId(
+                TaskStatusEnum.COMPLETED, LocalDate.now(), userId);
     }
 
     @Transactional

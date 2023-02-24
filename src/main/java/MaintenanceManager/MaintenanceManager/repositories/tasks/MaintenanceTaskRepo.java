@@ -12,7 +12,7 @@ import java.util.List;
 public interface MaintenanceTaskRepo extends JpaRepository<MaintenanceTask, Long> {
     List<MaintenanceTask> findAllByUserId(Long id);
 
-    List<MaintenanceTask> findByStatusIsNotAndDateBefore(TaskStatusEnum status, LocalDate date);
+    List<MaintenanceTask> findByStatusIsNotAndDateBeforeAndUserId(TaskStatusEnum status, LocalDate date, Long userId);
 
     List<MaintenanceTask> findAllByUserIdAndDate(Long id, LocalDate date);
 }
