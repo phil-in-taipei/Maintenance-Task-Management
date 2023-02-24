@@ -1,4 +1,6 @@
 package MaintenanceManager.MaintenanceManager;
+import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
+import java.time.LocalDate;
 
 import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
@@ -18,7 +20,9 @@ import org.springframework.web.client.RestTemplate;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.DayOfWeek;
 import java.util.Arrays;
+import java.util.List;
 
 @SpringBootApplication
 public class MaintenanceManagerApplication implements CommandLineRunner {
@@ -47,7 +51,21 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		System.out.println("--------------------------------------------------------------------------------");
-		generateDatesService.getWeeklySchedulingDatesByQuarter();
+		List<LocalDate> dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
+				DayOfWeek.WEDNESDAY, 2023, QuarterlySchedulingEnum.Q1);
+		System.out.println(dates.toString());
+
+		dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
+				DayOfWeek.FRIDAY, 2023, QuarterlySchedulingEnum.Q2);
+		System.out.println(dates.toString());
+
+		dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
+				DayOfWeek.SUNDAY, 2023, QuarterlySchedulingEnum.Q3);
+		System.out.println(dates.toString());
+
+		dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
+				DayOfWeek.MONDAY, 2023, QuarterlySchedulingEnum.Q4);
+		System.out.println(dates.toString());
 		System.out.println("--------------------------------------------------------------------------------");
 
 

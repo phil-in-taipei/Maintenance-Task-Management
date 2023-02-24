@@ -43,42 +43,58 @@ public class GenerateDatesService {
        return dates;
    }
 
-    public void getWeeklySchedulingDatesByQuarter() { // List<LocalDate>
-       System.out.println("*************Testing getting first day of quarter********************");
-       System.out.println("Quarter 1, Wednesday, 2023");
-       System.out.println("This is the first date of the quarter: " +
-               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.WEDNESDAY, 2023, QuarterlySchedulingEnum.Q1)
-       );
-
-
-       System.out.println("*************Testing getting first day of quarter********************");
-       System.out.println("Quarter 2, Monday, 2023");
-       System.out.println("This is the first date of the quarter: " +
-               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.MONDAY, 2023, QuarterlySchedulingEnum.Q2)
-       );
-
-
-
-       System.out.println("*************Testing getting first day of quarter********************");
-       System.out.println("Quarter 3, Friday, 2023");
-       System.out.println("This is the first date of the quarter: " +
-               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.FRIDAY, 2023, QuarterlySchedulingEnum.Q3)
-       );
-
-
-       System.out.println("*************Testing getting first day of quarter********************");
-       System.out.println("Quarter 4, Thursday, 2023");
-       System.out.println("This is the first date of the quarter: " +
-               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.THURSDAY, 2023, QuarterlySchedulingEnum.Q4)
-       );
-
+    public List<LocalDate> getWeeklySchedulingDatesByQuarter(
+            DayOfWeek dayofWeek, Integer year,
+            QuarterlySchedulingEnum quarter) {
+        List<LocalDate> dates = new ArrayList<>();
+        System.out.println("Quarter: " + quarter + "; Day: " + dayofWeek + "; Year + " + year);
+        LocalDate dateInQuarter = getFirstDayOfWeekByYearAndQuarter(
+                dayofWeek, year, quarter);
+        switch (quarter) {
+            case Q1:
+                int Q21stMonth = 4;
+                while (dateInQuarter.getMonthValue() < Q21stMonth) {
+                    System.out.println(dateInQuarter);
+                    dates.add(dateInQuarter);
+                    dateInQuarter = dateInQuarter.plusWeeks(1);
+                }
+                break;
+            case Q2:
+                System.out.println("Quarter 2");
+                int Q31stMonth = 7;
+                while (dateInQuarter.getMonthValue() < Q31stMonth) {
+                    System.out.println(dateInQuarter);
+                    dates.add(dateInQuarter);
+                    dateInQuarter = dateInQuarter.plusWeeks(1);
+                }
+                break;
+            case Q3:
+                System.out.println("Quarter 3");
+                int Q41stMonth = 10;
+                while (dateInQuarter.getMonthValue() < Q41stMonth) {
+                    System.out.println(dateInQuarter);
+                    dates.add(dateInQuarter);
+                    dateInQuarter = dateInQuarter.plusWeeks(1);
+                }
+                break;
+            default:
+                System.out.println("Quarter 4");
+                int nextYearValue = year + 1;
+                while (dateInQuarter.getYear() < nextYearValue) {
+                    System.out.println(dateInQuarter);
+                    dates.add(dateInQuarter);
+                    dateInQuarter = dateInQuarter.plusWeeks(1);
+                }
+                break;
+        }
+        return dates;
     }
 
     public LocalDate getFirstDayOfWeekByYearAndQuarter(
             DayOfWeek dayofWeek, Integer year,
             QuarterlySchedulingEnum quarter
     ) {
-       LocalDate firstDayOfQuarter = LocalDate.of(year, 1, 1);
+       LocalDate firstDayOfQuarter;
         switch (quarter) {
             case Q1:
                 System.out.println("Quarter 1");
@@ -87,7 +103,7 @@ public class GenerateDatesService {
                 System.out.println("Date before adjustment check: " + ldQ1);
                 if (ldQ1.getMonthValue() == 12
                         && ldQ1.getYear() < year) {
-                    ldQ1 =  ldQ1.with(dayofWeek).plusWeeks(1);
+                    ldQ1 =  ldQ1.plusWeeks(1);
                 }
                 firstDayOfQuarter = ldQ1;
                 break;
