@@ -8,14 +8,14 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(uniqueConstraints=
-           @UniqueConstraint(columnNames =
-                   {"quarter", "year", "monthly_task_scheduler_id"}))
+          @UniqueConstraint(columnNames =
+                  {"quarter", "year", "weekly_task_scheduler_id"}))
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MonthlyTaskAppliedQuarterly {
+public class WeeklyTaskAppliedQuarterly {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -37,15 +37,15 @@ public class MonthlyTaskAppliedQuarterly {
     private Integer year;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
-    private MonthlyTaskScheduler monthlyTaskScheduler;
+    private WeeklyTaskScheduler weeklyTaskScheduler;
 
     @Override
     public String toString() {
-        return "MonthlyTaskAppliedQuarterly{" +
+        return "WeeklyTaskAppliedQuarterly{" +
                 "id=" + id +
                 ", quarter=" + quarter +
                 ", year=" + year +
-                ", monthlyTaskScheduler=" + monthlyTaskScheduler +
+                ", weeklyTaskScheduler=" + weeklyTaskScheduler +
                 '}';
     }
 }
