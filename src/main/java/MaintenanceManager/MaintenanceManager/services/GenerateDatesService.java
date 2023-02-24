@@ -5,6 +5,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -43,107 +44,86 @@ public class GenerateDatesService {
    }
 
     public void getWeeklySchedulingDatesByQuarter() { // List<LocalDate>
-        //int quarter = 2;
-        //DayOfWeek dayOfWeek = DayOfWeek.SUNDAY;
-        LocalDate ldQ1 = LocalDate.of(2023, 1, 1);
-        System.out.println("*********************************First Sunday of Quarter 1: " +
-                ldQ1.with(DayOfWeek.SUNDAY) + "******************************");
-        System.out.println("*********************************First Saturday of Quarter 1: " +
-                ldQ1.with(DayOfWeek.SATURDAY) + "******************************");
-
-        if (ldQ1.with(DayOfWeek.SATURDAY).getMonthValue() == 12
-                && ldQ1.with(DayOfWeek.SATURDAY).getYear() < ldQ1.getYear()) {
-            System.out.println("********************That value is for the previous month/year******************************");
-            System.out.println("********************Should be: " + ldQ1.with(DayOfWeek.SATURDAY).plusWeeks(1) +
-                    "****************************");
-        }
-
-        LocalDate ldQ2 = LocalDate.of(2023, 4, 1);
-        System.out.println("*********************************First Sunday of Quarter 2: " +
-                ldQ2.with(DayOfWeek.SUNDAY) + "******************************");
-        System.out.println("*********************************First Monday of Quarter 2: " +
-                ldQ2.with(DayOfWeek.MONDAY) + "******************************");
-
-        if (ldQ2.with(DayOfWeek.MONDAY).getMonthValue() < 4) {
-            System.out.println("********************That value is for the previous month******************************");
-            System.out.println("********************Should be: " + ldQ2.with(DayOfWeek.MONDAY).plusWeeks(1) +
-                    "****************************");
-        }
+       System.out.println("*************Testing getting first day of quarter********************");
+       System.out.println("Quarter 1, Wednesday, 2023");
+       System.out.println("This is the first date of the quarter: " +
+               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.WEDNESDAY, 2023, QuarterlySchedulingEnum.Q1)
+       );
 
 
-        LocalDate ldQ3 = LocalDate.of(2023, 7, 1);
-        System.out.println("*********************************First Sunday of Quarter 3: " +
-                ldQ3.with(DayOfWeek.SUNDAY) + "******************************");
-        System.out.println("*********************************First Wednesday of Quarter 3: " +
-                ldQ3.with(DayOfWeek.WEDNESDAY) + "******************************");
-
-        if (ldQ3.with(DayOfWeek.WEDNESDAY).getMonthValue() < 7) {
-            System.out.println("********************That value is for the previous month******************************");
-            System.out.println("********************Should be: " + ldQ3.with(DayOfWeek.WEDNESDAY).plusWeeks(1) +
-                    "****************************");
-        }
+       System.out.println("*************Testing getting first day of quarter********************");
+       System.out.println("Quarter 2, Monday, 2023");
+       System.out.println("This is the first date of the quarter: " +
+               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.MONDAY, 2023, QuarterlySchedulingEnum.Q2)
+       );
 
 
-        LocalDate ldQ4 = LocalDate.of(2023, 10, 1);
-        System.out.println("*********************************First Sunday of Quarter 4: " +
-                ldQ4.with(DayOfWeek.SUNDAY) + "******************************");
-        System.out.println("*********************************First Friday of  Quarter 4: " +
-                ldQ4.with(DayOfWeek.FRIDAY) + "******************************");
 
-        if (ldQ4.with(DayOfWeek.FRIDAY).getMonthValue() < 10) {
-            System.out.println("********************That value is for the previous month******************************");
-            System.out.println("********************Should be: " + ldQ4.with(DayOfWeek.FRIDAY).plusWeeks(1) +
-                    "****************************");
-        }
+       System.out.println("*************Testing getting first day of quarter********************");
+       System.out.println("Quarter 3, Friday, 2023");
+       System.out.println("This is the first date of the quarter: " +
+               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.FRIDAY, 2023, QuarterlySchedulingEnum.Q3)
+       );
+
+
+       System.out.println("*************Testing getting first day of quarter********************");
+       System.out.println("Quarter 4, Thursday, 2023");
+       System.out.println("This is the first date of the quarter: " +
+               getFirstDayOfWeekByYearAndQuarter(DayOfWeek.THURSDAY, 2023, QuarterlySchedulingEnum.Q4)
+       );
+
     }
 
-    /*
+    public LocalDate getFirstDayOfWeekByYearAndQuarter(
+            DayOfWeek dayofWeek, Integer year,
+            QuarterlySchedulingEnum quarter
+    ) {
+       LocalDate firstDayOfQuarter = LocalDate.of(year, 1, 1);
+        switch (quarter) {
+            case Q1:
+                System.out.println("Quarter 1");
+                LocalDate ldQ1 = LocalDate.of(year, 1, 1);
+                ldQ1 = ldQ1.with(dayofWeek);
+                System.out.println("Date before adjustment check: " + ldQ1);
+                if (ldQ1.getMonthValue() == 12
+                        && ldQ1.getYear() < year) {
+                    ldQ1 =  ldQ1.with(dayofWeek).plusWeeks(1);
+                }
+                firstDayOfQuarter = ldQ1;
+                break;
+            case Q2:
+                System.out.println("Quarter 2");
+                LocalDate ldQ2 = LocalDate.of(year, 4, 1);
+                ldQ2 = ldQ2.with(dayofWeek);
+                System.out.println("Date before adjustment check: " + ldQ2);
+                if (ldQ2.getMonthValue() < 4) {
+                    ldQ2 = ldQ2.plusWeeks(1);
+                }
+                firstDayOfQuarter = ldQ2;
+                break;
+            case Q3:
+                System.out.println("Quarter 3");
+                LocalDate ldQ3 = LocalDate.of(year, 7, 1);
+                ldQ3 = ldQ3.with(dayofWeek);
+                System.out.println("Date before adjustment check: " + ldQ3);
+                if (ldQ3.getMonthValue() < 7) {
+                    ldQ3 = ldQ3.plusWeeks(1);
+                }
+                firstDayOfQuarter = ldQ3;
+                break;
+            default:
+                System.out.println("Quarter 4");
+                LocalDate ldQ4 = LocalDate.of(year, 10, 1);
+                ldQ4 = ldQ4.with(dayofWeek);
+                System.out.println("Date before adjustment check: " + ldQ4);
+                if (ldQ4.with(dayofWeek).getMonthValue() < 10) {
+                    ldQ4 = ldQ4.plusWeeks(1);
+                }
+                firstDayOfQuarter = ldQ4;
+                break;
 
-    		LocalDate ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*************First day of the year: " + ld + "***************************");
-		System.out.println("*********************************First Sunday of the year: " +
-				ld.with(DayOfWeek.SUNDAY) + "******************************");
-		ld = LocalDate.of(2023, 1, 2);
-		System.out.println("*********************************First Monday of the year: " +
-				ld.with(DayOfWeek.MONDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Tuesday of the year: " +
-				ld.with(DayOfWeek.TUESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Wednesday of the year: " +
-				ld.with(DayOfWeek.WEDNESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Thursday of the year: " +
-				ld.with(DayOfWeek.THURSDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Friday of the year: " +
-				ld.with(DayOfWeek.FRIDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Saturday of the year: " +
-				ld.with(DayOfWeek.SATURDAY) + "******************************");
-		System.out.println("*************************************************************");
-		LocalDate ldQ2 = LocalDate.of(2023, 4, 1);
-		System.out.println("*************First day of the year: " + ld + "***************************");
-		System.out.println("*********************************First Sunday of the year: " +
-				ldQ2.with(DayOfWeek.SUNDAY) + "******************************");
-		ldQ2 = LocalDate.of(2023, 4, 2);
-		System.out.println("*********************************First Monday of the Q: " +
-				ldQ2.with(DayOfWeek.MONDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Tuesday of the Q: " +
-				ldQ2.with(DayOfWeek.TUESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Wednesday of the Q: " +
-				ldQ2.with(DayOfWeek.WEDNESDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Thursday of the Q: " +
-				ldQ2.with(DayOfWeek.THURSDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Friday of the Q: " +
-				ldQ2.with(DayOfWeek.FRIDAY) + "******************************");
-		//ld = LocalDate.of(2023, 1, 1);
-		System.out.println("*********************************First Saturday of the Q: " +
-				ldQ2.with(DayOfWeek.SATURDAY) + "******************************");
-     */
+        }
+        return firstDayOfQuarter;
+    }
 
 }
