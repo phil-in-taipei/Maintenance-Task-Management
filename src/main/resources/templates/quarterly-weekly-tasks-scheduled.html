@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>User's Weekly Quarterly Tasks</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div align="center">
+        <div>
+            <table border="1" cellpadding="10">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Quarter</th>
+                    <th>Year</th>
+                    <th>Weekly Scheduler</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${qWeeklyTasks}">
+                    <td th:text="${task.id}"></td>
+                    <td th:text="${task.quarter}"></td>
+                    <td th:text="${task.year}"></td>
+                    <td th:text="${task.weeklyTaskScheduler.toString()}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

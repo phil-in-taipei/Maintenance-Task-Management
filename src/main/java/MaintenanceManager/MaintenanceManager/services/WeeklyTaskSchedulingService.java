@@ -1,12 +1,12 @@
 package MaintenanceManager.MaintenanceManager.services;
-import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskAppliedQuarterly;
-import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskScheduler;
+import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskSchedulerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -40,5 +40,36 @@ public class WeeklyTaskSchedulingService {
         weeklyTaskSchedulerRepo.save(weeklyTaskScheduler);
     }
 
-
+    @Transactional
+    public void saveWeeklyTaskAppliedQuarterly(WeeklyTaskAppliedQuarterly weeklyTaskAppliedQuarterly)
+            throws IllegalArgumentException {
+        System.out.println("*****************Now saving qWeekly task in service*****************************");
+        System.out.println(weeklyTaskAppliedQuarterly.toString());
+        Integer year = weeklyTaskAppliedQuarterly.getYear();
+        QuarterlySchedulingEnum quarter = weeklyTaskAppliedQuarterly.getQuarter();
+        DayOfWeek dayOfWeek = weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDayOfWeek();
+        System.out.println("******************Now generating dates to save single tasks****************");
+        List<LocalDate> datesToScheduleTasks =
+                generateDatesService.getWeeklySchedulingDatesByQuarter( dayOfWeek, year, quarter);
+        System.out.println(datesToScheduleTasks.toString());
+        System.out.println("******************Will save the following single tasks****************");
+        // refactor to MaintenanceTaskService for handling batches
+        for (LocalDate date : datesToScheduleTasks) {
+            System.out.println(
+                    "Task Name: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName() +
+                            "; Description: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDescription() +
+                            "; Local date: " + date +
+                            "; User: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser()
+            );
+            maintenanceTaskService.saveTask(
+                    new MaintenanceTask(
+                            weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName(),
+                            weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDescription(),
+                            date, weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser()
+                    )
+            );
+        }
+        System.out.println("********************Will now save the qMonthly task************************");
+        weeklyTaskAppliedQuarterlyRepo.save(weeklyTaskAppliedQuarterly);
+    }
 }

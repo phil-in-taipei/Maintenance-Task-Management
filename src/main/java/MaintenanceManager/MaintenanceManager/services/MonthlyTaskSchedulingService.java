@@ -55,6 +55,7 @@ public class MonthlyTaskSchedulingService {
                 generateDatesService.getMonthlySchedulingDatesByQuarter(year, quarter, dayOfMonth);
         System.out.println(datesToScheduleTasks.toString());
         System.out.println("******************Will save the following single tasks****************");
+        // refactor to method for batch handling in MaintenanceTaskService
         for (LocalDate date : datesToScheduleTasks) {
             System.out.println(
                     "Task Name: " + monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getMonthlyTaskName() +

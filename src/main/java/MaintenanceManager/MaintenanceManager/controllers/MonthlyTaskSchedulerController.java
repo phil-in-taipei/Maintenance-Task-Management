@@ -37,9 +37,6 @@ public class MonthlyTaskSchedulerController {
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
         MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
-        //qMonthlyTask.setYear(monthlyTaskQuarterAndYear.getYear());
-        //qMonthlyTask.setQuarter(QuarterlySchedulingEnum.valueOf(
-        //        monthlyTaskQuarterAndYear.getQuarter()));
         return "apply-monthly-schedulers";
     }
 
