@@ -22,7 +22,7 @@ public class MonthlyTaskSchedulerController {
 
 
     @PostMapping("/apply-monthly-schedulers")
-    public String searchTasksByDate(
+    public String showApplyMonthlySchedulerFormPage(
             @ModelAttribute("monthlyTaskQuarterAndYear")
             MonthlyTaskQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
@@ -44,7 +44,7 @@ public class MonthlyTaskSchedulerController {
     }
 
     @GetMapping("/create-monthly-task-scheduler")
-    public String showSubmitTaskFormPage(Model model) {
+    public String showCreateMonthlyTaskFormPage(Model model) {
         MonthlyTaskScheduler monthlyTaskScheduler = new MonthlyTaskScheduler();
         model.addAttribute("monthlyTaskScheduler", monthlyTaskScheduler);
         return "create-monthly-task-scheduler";
@@ -70,7 +70,7 @@ public class MonthlyTaskSchedulerController {
     }
 
     @GetMapping("/monthly-tasks")
-    public String showAllUserTasks(Authentication authentication, Model model) {
+    public String showAllUserMonthlyTasks(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         List<MonthlyTaskScheduler> monthlyTasks =
                 monthlyTaskSchedulingService.getAllUsersMonthlyTaskSchedulers(user.getId());

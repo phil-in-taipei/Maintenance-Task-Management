@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.models.tasks;
+import java.time.DayOfWeek;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import lombok.*;
 
@@ -22,7 +23,7 @@ public class WeeklyTaskScheduler {
     private String description;
 
     @Column(nullable = false)
-    private Integer dayOfWeek;
+    private DayOfWeek dayOfWeek;
 
     @ManyToOne(optional = false)
     @JoinColumn
