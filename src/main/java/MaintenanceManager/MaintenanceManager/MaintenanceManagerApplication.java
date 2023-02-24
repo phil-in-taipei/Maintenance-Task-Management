@@ -51,6 +51,11 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 
 		System.out.println("--------------------------------------------------------------------------------");
+
+		/*
+				List<LocalDate> dates = generateDatesService.getIntervalSchedulingDatesByQuarter(
+				10, 2024, QuarterlySchedulingEnum.Q4);
+		System.out.println(dates.toString());
 		List<LocalDate> dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
 				DayOfWeek.WEDNESDAY, 2023, QuarterlySchedulingEnum.Q1);
 		System.out.println(dates.toString());
@@ -65,7 +70,7 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 
 		dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
 				DayOfWeek.MONDAY, 2023, QuarterlySchedulingEnum.Q4);
-		System.out.println(dates.toString());
+		System.out.println(dates.toString()); */
 		System.out.println("--------------------------------------------------------------------------------");
 
 
