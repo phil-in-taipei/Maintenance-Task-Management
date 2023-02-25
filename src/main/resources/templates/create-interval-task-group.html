@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <title>Create Interval Task Group</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="mt-4 p-5 rounded">
+            <div class="p-3 rounded-lg m-2">
+                <h1>Create Interval Task Group</h1>
+                <form action="#" th:action="@{/interval-task-groups}" method="post" th:object="${intervalTaskGroup}">
+                    <hr />
+                    <div class="form-control">
+                        <label>Task Group Name</label>
+                        <div>
+                            <input type="text" id="taskName" class="form-control" th:field="*{taskGroupName}" required>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="form-control">
+                        <label>Interval Between Tasks (Days)</label>
+                        <div>
+                            <input type="number" id="dayOfMonth" min="1" max="45"
+                                   class="form-control" th:field="*{intervalInDays}" required>
+                        </div>
+                    </div>
+                    <hr />
+                    <div>
+                        <input class="btn btn-primary" type="submit" value="Submit"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
