@@ -22,4 +22,14 @@ public class IntervalTask {
 
     @Column(nullable = false)
     private Boolean noRainOnly;
+
+    @Override
+    public String toString() {
+        return "IntervalTask{" +
+                "id=" + id +
+                ", intervalTaskName='" + intervalTaskName + '\'' +
+                ", description='" + description + '\'' +
+               // ", noRainOnly=" + noRainOnly +
+                '}';
+    }
 }

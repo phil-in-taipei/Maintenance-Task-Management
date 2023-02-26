@@ -51,6 +51,7 @@
                 <th>ID</th>
                 <th>Name</th>
                 <th>Interval In Days</th>
+                <th>Tasks</th>
             </tr>
             </thead>
             <tbody>
@@ -58,6 +59,9 @@
                 <td th:text="${task.id}"></td>
                 <td th:text="${task.taskGroupName}"></td>
                 <td th:text="${task.intervalInDays}"></td>
+                <td>
+                    <a th:href="@{'/interval-task-group/' + ${task.id}}">Go to Tasks</a>
+                </td>
             </tr>
             </tbody>
         </table>

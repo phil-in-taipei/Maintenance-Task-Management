@@ -1,10 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
 <head>
+    <title>User's Task</title>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
+<div layout:fragment="content" th:remove="tag">
+    <div align="center">
+        <h1>Interval Task Group</h1>
+        <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
+        <h3 th:text="${intervalTaskGroup.taskGroupName} + ' (' + ${intervalTaskGroup.intervalInDays} + ')'"></h3>
+        <br/><a th:href="@{'/create-interval-task/' + ${intervalTaskGroup.id}}">Add New Task to Group</a><br/>
+        <br/><br/>
+        <table border="1" cellpadding="10">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Rain Restriction</th>
+                <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="task : ${intervalTaskGroup.getIntervalTasks()}">
+                <td th:text="${task.id}"></td>
+                <td th:text="${task.intervalTaskName}"></td>
+                <td th:text="${task.description}"></td>
+                <td th:text="${task.noRainOnly}"></td>
+                <td>
+                    <a th:href="@{'/delete-interval-task/' + ${task.id} + '/' + ${intervalTaskGroup.id}}">Remove</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

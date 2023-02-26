@@ -30,9 +30,20 @@ public class IntervalTaskGroup {
     private Set<MaintenanceTask> maintenanceTasks;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "iTG_id")
+    @JoinColumn(name = "interval_task_group_id")
     private List<IntervalTask> intervalTasks;
 
     @Column(nullable = false)
     private int intervalInDays;
+
+    @Override
+    public String toString() {
+        return "IntervalTaskGroup{" +
+                "id=" + id +
+                ", taskGroupName='" + taskGroupName + '\'' +
+                ", maintenanceTasks=" + maintenanceTasks +
+                ", intervalTasks=" + intervalTasks +
+                ", intervalInDays=" + intervalInDays +
+                '}';
+    }
 }
