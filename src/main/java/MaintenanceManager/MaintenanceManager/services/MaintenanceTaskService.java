@@ -24,6 +24,10 @@ public class MaintenanceTaskService {
         return maintenanceTaskRepo.findAllByUserIdAndDate(userId, date);
     }
 
+    public List<MaintenanceTask> getAllUserTasksByIntervalTaskGroup(Long userId, Long iTgId) {
+        return maintenanceTaskRepo.findAllByUserIdAndIntervalTaskGroupId(userId, iTgId);
+    }
+
     public List<MaintenanceTask> getAllUncompletedPastUserTasks(Long userId) {
         return maintenanceTaskRepo.findByStatusIsNotAndDateBeforeAndUserId(
                 TaskStatusEnum.COMPLETED, LocalDate.now(), userId);

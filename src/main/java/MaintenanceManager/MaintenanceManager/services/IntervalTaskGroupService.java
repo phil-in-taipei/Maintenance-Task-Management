@@ -1,6 +1,7 @@
 package MaintenanceManager.MaintenanceManager.services;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroupAppliedQuarterly;
+import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskGroupRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class IntervalTaskGroupService {
     public List<IntervalTaskGroupAppliedQuarterly>
         getAllUsersIntervalTaskGroupsAppliedQuarterly(Long userId) {
         return intervalTaskAppliedQuarterlyRepo.findAllByIntervalTaskGroup_TaskGroupOwnerId(userId);
+    }
+
+    public IntervalTaskGroup getIntervalTaskGroup(Long id) {
+        return intervalTaskGroupRepo.findById(id)
+                .orElse(null);
     }
 
     @Transactional

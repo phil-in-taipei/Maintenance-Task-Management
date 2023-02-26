@@ -5,6 +5,7 @@ import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskR
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskSubmit;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
+import MaintenanceManager.MaintenanceManager.services.IntervalTaskGroupService;
 import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,9 @@ public class MaintenanceTaskController {
 
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
+
+    @Autowired
+    IntervalTaskGroupService intervalTaskGroupService;
 
     @RequestMapping("/confirm-task-completion/{taskId}")
     public String confirmTaskCompletion(@PathVariable(name = "taskId") Long taskId) {
@@ -149,11 +153,6 @@ public class MaintenanceTaskController {
                 updatedTask.setComments(taskRescheduleForm.getComments());
                 updatedTask.setUpdatedDateTime(LocalDateTime.now());
                 updatedTask.setTimesModified(updatedTask.getTimesModified() + 1);
-                //updatedTask.getTaskStatusHistory().setStatus(TaskStatusEnum.DEFERRED);
-                //updatedTask.getTaskStatusHistory().setComments(taskRescheduleForm.getComments());
-                //updatedTask.getTaskStatusHistory().setUpdatedDateTime(LocalDateTime.now());
-                //updatedTask.getTaskStatusHistory().setTimesModified(
-                //        updatedTask.getTaskStatusHistory().getTimesModified() + 1);
                 maintenanceTaskService.saveTask(updatedTask);
             } catch (IllegalArgumentException e) {
                 model.addAttribute(

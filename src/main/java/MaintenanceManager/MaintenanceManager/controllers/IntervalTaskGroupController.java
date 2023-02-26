@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,5 +57,25 @@ public class IntervalTaskGroupController {
         model.addAttribute("intervalTaskQuarterAndYear",
                 new IntervalTaskQuarterAndYear());
         return "interval-task-groups";
+    }
+
+    @GetMapping("/interval-task-group{taskGroupId}")
+    public ModelAndView showIntervalTaskGroup(
+            @PathVariable(name = "taskGroupId") Long taskGroupId,
+            Authentication authentication) {
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        ModelAndView mav = new ModelAndView("interval-task-group");
+        IntervalTaskGroup intervalTaskGroup =
+                intervalTaskGroupService.getIntervalTaskGroup(taskGroupId);
+        if (intervalTaskGroup == null) {
+            mav.setViewName("error");
+            mav.addObject("message",
+                    "Interval Task Group with id "
+                            + taskGroupId + " does not exist."
+            );
+        } else {
+            mav.addObject("intervalTaskGroup", intervalTaskGroup);
+        }
+        return mav;
     }
 }

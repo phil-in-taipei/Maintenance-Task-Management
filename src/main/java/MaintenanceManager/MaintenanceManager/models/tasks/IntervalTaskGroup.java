@@ -3,6 +3,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,8 +25,13 @@ public class IntervalTaskGroup {
     @JoinColumn
     private UserPrincipal taskGroupOwner;
 
+    // (probably can delete field below)
     @OneToMany(mappedBy = "intervalTaskGroup")
     private Set<MaintenanceTask> maintenanceTasks;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "iTG_id")
+    private List<IntervalTask> intervalTasks;
 
     @Column(nullable = false)
     private int intervalInDays;

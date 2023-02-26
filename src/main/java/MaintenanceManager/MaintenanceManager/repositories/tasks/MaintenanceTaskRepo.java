@@ -15,4 +15,7 @@ public interface MaintenanceTaskRepo extends JpaRepository<MaintenanceTask, Long
     List<MaintenanceTask> findByStatusIsNotAndDateBeforeAndUserId(TaskStatusEnum status, LocalDate date, Long userId);
 
     List<MaintenanceTask> findAllByUserIdAndDate(Long id, LocalDate date);
+
+    // modify to after date
+    List<MaintenanceTask> findAllByUserIdAndIntervalTaskGroupId(Long userId, Long iTgId);
 }
