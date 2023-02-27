@@ -41,8 +41,8 @@ public class IntervalTaskGroup {
         return "IntervalTaskGroup{" +
                 "id=" + id +
                 ", taskGroupName='" + taskGroupName + '\'' +
-                ", maintenanceTasks=" + maintenanceTasks +
-                ", intervalTasks=" + intervalTasks +
+               // ", maintenanceTasks=" + maintenanceTasks +
+                //", intervalTasks=" + intervalTasks +
                 ", intervalInDays=" + intervalInDays +
                 '}';
     }

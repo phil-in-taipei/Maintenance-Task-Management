@@ -23,7 +23,7 @@ public class GenerateDatesService {
             case Q1:
                 int Q21stMonth = 4;
                 while (dateInQuarter.getMonthValue() < Q21stMonth) {
-                    System.out.println(dateInQuarter);
+                    //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
                     dateInQuarter = dateInQuarter.plusDays(interval);
                 }
@@ -32,7 +32,7 @@ public class GenerateDatesService {
                 System.out.println("Quarter 2");
                 int Q31stMonth = 7;
                 while (dateInQuarter.getMonthValue() < Q31stMonth) {
-                    System.out.println(dateInQuarter);
+                    //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
                     dateInQuarter = dateInQuarter.plusDays(interval);
                 }
@@ -41,7 +41,7 @@ public class GenerateDatesService {
                 System.out.println("Quarter 3");
                 int Q41stMonth = 10;
                 while (dateInQuarter.getMonthValue() < Q41stMonth) {
-                    System.out.println(dateInQuarter);
+                    //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
                     dateInQuarter = dateInQuarter.plusDays(interval);
                 }
@@ -50,7 +50,7 @@ public class GenerateDatesService {
                 System.out.println("Quarter 4");
                 int nextYearValue = year + 1;
                 while (dateInQuarter.getYear() < nextYearValue) {
-                    System.out.println(dateInQuarter);
+                    //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
                     dateInQuarter = dateInQuarter.plusDays(interval);
                 }

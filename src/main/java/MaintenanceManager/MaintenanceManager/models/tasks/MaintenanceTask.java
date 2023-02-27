@@ -88,4 +88,21 @@ public class MaintenanceTask {
         this.intervalTaskGroup = intervalTaskGroup;
     }
 
+    @Override
+    public String toString() {
+        return "MaintenanceTask{" +
+                "id=" + id +
+                ", taskName='" + taskName + '\'' +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", user=" + user.getUsername() +
+                ", status=" + status +
+                ", comments='" + comments + '\'' +
+                ", createdDateTime=" + createdDateTime +
+                ", updatedDateTime=" + updatedDateTime +
+                ", timesModified=" + timesModified +
+                ", noRainOnly=" + noRainOnly +
+                ", intervalTaskGroup=" + intervalTaskGroup +
+                '}';
+    }
 }

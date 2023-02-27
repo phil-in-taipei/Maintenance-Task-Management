@@ -1,10 +1,8 @@
 package MaintenanceManager.MaintenanceManager.controllers;
-import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTask;
-import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
-import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
+import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.IntervalTaskQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskSubmit;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyTaskQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.IntervalTaskGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,25 @@ public class IntervalTaskGroupController {
     @Autowired
     IntervalTaskGroupService intervalTaskGroupService;
 
+    @PostMapping("/apply-interval-task-group-schedulers")
+    public String showApplyITGSchedulerFormPage(
+            @ModelAttribute("monthlyTaskQuarterAndYear")
+            MonthlyTaskQuarterAndYear monthlyTaskQuarterAndYear,
+            Model model, Authentication authentication) {
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        System.out.println("This is the quarter: " + monthlyTaskQuarterAndYear.getQuarter());
+        System.out.println("This is the year: " + monthlyTaskQuarterAndYear.getYear());
+        List<IntervalTaskGroup> intervalTaskGroups =
+                intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getId());
+        System.out.println(intervalTaskGroups.toString());
+        model.addAttribute("intervalTaskGroups", intervalTaskGroups);
+        model.addAttribute("user", user);
+        model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
+        model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
+        IntervalTaskGroupAppliedQuarterly qITG = new IntervalTaskGroupAppliedQuarterly();
+        model.addAttribute("qITG", qITG);
+        return "apply-interval-task-group-schedulers";
+    }
 
     @GetMapping("/create-interval-task-group")
     public String showCreateIntervalTaskGroupFormPage(Model model) {
@@ -138,5 +155,43 @@ public class IntervalTaskGroupController {
             mav.addObject("user", user);
         }
         return mav;
+    }
+
+    @GetMapping("/quarterly-interval-task-groups-scheduled")
+    public String showAllUserQuarterlyIntervalTaskGroups(
+            Authentication authentication, Model model) {
+        System.out.println(
+                "**********************************Controller method to get qITGs for the user***********************************");
+        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        List<IntervalTaskGroupAppliedQuarterly> qITG =
+                intervalTaskGroupService.getAllUsersIntervalTaskGroupsAppliedQuarterly(user.getId());
+        //System.out.println(
+        //        "**********************************These are the qITGs for the user: " +
+        //                qITG.toString() + "***********************************");
+        model.addAttribute("qITG", qITG);
+        model.addAttribute("user", user);
+        return "quarterly-interval-task-groups-scheduled";
+    }
+
+    @PostMapping("/submit-quarterly-interval-task-group-scheduled/{quarter}/{year}")
+    public String saveNewQuarterlyIntervalTaskGroup(
+            @ModelAttribute("qITG")
+            IntervalTaskGroupAppliedQuarterly qITG, Model model,
+            @PathVariable(name = "quarter") String quarter,
+            @PathVariable(name = "year") Integer year,
+            Authentication authentication) {
+        try {
+            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            qITG.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));
+            qITG.setYear(year);
+            intervalTaskGroupService.saveIntervalTaskGroupAppliedQuarterly(qITG);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute(
+                    "message",
+                    "Could not save interval task group scheduler, "
+                            + e.getMessage());
+            return "error";
+        }
+        return "redirect:/quarterly-interval-task-groups-scheduled";
     }
 }

@@ -9,6 +9,7 @@ import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskRepo
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -64,5 +65,51 @@ public class IntervalTaskGroupService {
     public void saveIntervalTaskGroup(IntervalTaskGroup intervalTaskGroup)
             throws IllegalArgumentException {
         intervalTaskGroupRepo.save(intervalTaskGroup);
+    }
+
+    @Transactional
+    public void saveIntervalTaskGroupAppliedQuarterly(
+            IntervalTaskGroupAppliedQuarterly intervalTaskGroupAppliedQuarterly)
+            throws IllegalArgumentException {
+        System.out.println("*****************Now preparing to save qITG in service*****************************");
+        System.out.println(intervalTaskGroupAppliedQuarterly.toString());
+        System.out.println(intervalTaskGroupAppliedQuarterly.getQuarter());
+        System.out.println(intervalTaskGroupAppliedQuarterly.getYear());
+        List<IntervalTask> intervalTasks = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup().getIntervalTasks();
+        int lengthOfIntervalTasks = intervalTasks.size();
+        int lastIndexInIntervalTaskList = lengthOfIntervalTasks - 1;
+        System.out.println("*****************Interval Tasks/length " +  lengthOfIntervalTasks + " ********************");
+        System.out.println(intervalTasks.toString());
+        List<LocalDate> schedulingDates =
+                generateDatesService.getIntervalSchedulingDatesByQuarter(
+                       intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup().getIntervalInDays(),
+                        intervalTaskGroupAppliedQuarterly.getYear(), intervalTaskGroupAppliedQuarterly.getQuarter()
+                );
+        int lengthOfDates = schedulingDates.size();
+        System.out.println("*****************Dates/length " +  lengthOfDates +" *****************************");
+        System.out.println(schedulingDates.toString());
+
+        System.out.println("****************Now iterating through dates/tasks and matching them***********");
+        int indexOfIntervalTaskList = 0;
+        for (LocalDate date : schedulingDates) {
+            System.out.println(date + ": " + intervalTasks.get(indexOfIntervalTaskList).toString());
+            IntervalTask intervalTask = intervalTasks.get(indexOfIntervalTaskList);
+            IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup();
+            MaintenanceTask maintenanceTask = new MaintenanceTask(
+                    intervalTask.getIntervalTaskName(), intervalTask.getDescription(),
+                    date, intervalTaskGroup.getTaskGroupOwner(), intervalTask.getNoRainOnly(),
+                    intervalTaskGroup
+            );
+            System.out.println("*****************Maintenance task to be saved*******************");
+            System.out.println(maintenanceTask.toString());
+            maintenanceTaskService.saveTask(maintenanceTask);
+            if (indexOfIntervalTaskList == lastIndexInIntervalTaskList) {
+                indexOfIntervalTaskList = 0;
+            } else {
+                indexOfIntervalTaskList++;
+            }
+        }
+        System.out.println("*****************Now saving qITG object*******************");
+        intervalTaskAppliedQuarterlyRepo.save(intervalTaskGroupAppliedQuarterly);
     }
 }
