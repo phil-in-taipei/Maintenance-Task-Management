@@ -22,6 +22,7 @@ public class MaintenanceTask {
     @Column(nullable = false)
     private String taskName;
 
+    // get rid of this field
     @Column(nullable = false)
     private String description;
 

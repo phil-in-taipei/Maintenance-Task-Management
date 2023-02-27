@@ -25,7 +25,9 @@ public class IntervalTaskGroup {
     @JoinColumn
     private UserPrincipal taskGroupOwner;
 
-    // (probably can delete field below)
+    // for query about the weather condition and rescheduling
+    // by switching with a possible later one in the same
+    // interval task group (probably switch to just one way through maintenance task)
     @OneToMany(mappedBy = "intervalTaskGroup")
     private Set<MaintenanceTask> maintenanceTasks;
 

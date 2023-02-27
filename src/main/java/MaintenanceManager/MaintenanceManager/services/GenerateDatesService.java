@@ -5,7 +5,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,11 +16,13 @@ public class GenerateDatesService {
             QuarterlySchedulingEnum quarter) {
         List<LocalDate> dates = new ArrayList<>();
         System.out.println("Quarter: " + quarter + "; Interval: " + interval + "; Year + " + year);
+        // gets the starting date (randomly generated according to interval task) and
+        // then adds a date to the ArrayList every n-th day (interval)
         LocalDate dateInQuarter = getFirstDateForIntervalTaskByYearAndQuarter(
                 interval, year, quarter);
         switch (quarter) {
             case Q1:
-                int Q21stMonth = 4;
+                int Q21stMonth = 4; // month value when dates cease to be generated
                 while (dateInQuarter.getMonthValue() < Q21stMonth) {
                     //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
@@ -30,7 +31,7 @@ public class GenerateDatesService {
                 break;
             case Q2:
                 System.out.println("Quarter 2");
-                int Q31stMonth = 7;
+                int Q31stMonth = 7; // month value when dates cease to be generated
                 while (dateInQuarter.getMonthValue() < Q31stMonth) {
                     //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
@@ -39,7 +40,7 @@ public class GenerateDatesService {
                 break;
             case Q3:
                 System.out.println("Quarter 3");
-                int Q41stMonth = 10;
+                int Q41stMonth = 10; // month value when dates cease to be generated
                 while (dateInQuarter.getMonthValue() < Q41stMonth) {
                     //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
@@ -48,7 +49,7 @@ public class GenerateDatesService {
                 break;
             default:
                 System.out.println("Quarter 4");
-                int nextYearValue = year + 1;
+                int nextYearValue = year + 1; // year value when dates cease to be generated
                 while (dateInQuarter.getYear() < nextYearValue) {
                     //System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
@@ -61,6 +62,7 @@ public class GenerateDatesService {
 
    public List<LocalDate> getMonthlySchedulingDatesByQuarter(
            Integer year, QuarterlySchedulingEnum quarter, Integer dayOfMonth) {
+        // this adds the dates to an ArrayList (one per month at the desired day of month)
        List<LocalDate> dates = new ArrayList<>();
        switch (quarter) {
            case Q1:
@@ -96,6 +98,8 @@ public class GenerateDatesService {
             QuarterlySchedulingEnum quarter) {
         List<LocalDate> dates = new ArrayList<>();
         System.out.println("Quarter: " + quarter + "; Day: " + dayofWeek + "; Year + " + year);
+        // dateInQuarter first gets the starting point LocalDate, and then is continually modified
+        // to be one week later and added to the ArrayList until the date is in the next quarter
         LocalDate dateInQuarter = getFirstDayOfWeekByYearAndQuarter(
                 dayofWeek, year, quarter);
         switch (quarter) {
@@ -141,7 +145,9 @@ public class GenerateDatesService {
     public LocalDate getFirstDayOfWeekByYearAndQuarter(
             DayOfWeek dayofWeek, Integer year,
             QuarterlySchedulingEnum quarter
-    ) {
+    ) { // for each quarter getting the LocalDate by day of week often produces a date from
+        // the prior month, so each quarter has an if block to determine if this has happened
+        // and if so calibrates the date to be one week later -- in the desired year/quarter
        LocalDate firstDayOfQuarter;
         switch (quarter) {
             case Q1:
@@ -192,7 +198,10 @@ public class GenerateDatesService {
 
     public LocalDate getFirstDateForIntervalTaskByYearAndQuarter(
             Integer interval, Integer year, QuarterlySchedulingEnum quarter
-    ) {
+    ) { // this gets a random day of the week depending on how many days the interval
+        // if the interval is below 7, it gets a random day within the nth day of the week
+        // corresponding to the interval. If the interval is over 7, it just picks a random day
+        // from 1 to 7
         DayOfWeek[] possibleDaysToBegin = new DayOfWeek[]{
                 DayOfWeek.SUNDAY, DayOfWeek.MONDAY,
                 DayOfWeek.TUESDAY, DayOfWeek.WEDNESDAY,
