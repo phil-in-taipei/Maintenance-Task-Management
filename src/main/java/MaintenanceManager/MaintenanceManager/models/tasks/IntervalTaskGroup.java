@@ -48,4 +48,9 @@ public class IntervalTaskGroup {
                 ", intervalInDays=" + intervalInDays +
                 '}';
     }
+
+    public String templateSelector() {
+        return taskGroupName + " " + "(Every " +
+                intervalInDays + " days)";
+    }
 }

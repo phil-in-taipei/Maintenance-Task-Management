@@ -31,7 +31,7 @@
                             <div>
                                 <select class="form-select" th:name="intervalTaskGroup">
                                     <option th:if="${intervalTaskGroups.isEmpty()}">None Available</option>
-                                    <option th:each="task : ${intervalTaskGroups}" th:value="${task.id}" th:text="${task.toString()}"></option>
+                                    <option th:each="task : ${intervalTaskGroups}" th:value="${task.id}" th:text="${task.templateSelector()}"></option>
                                 </select>
                             </div>
                         </div>

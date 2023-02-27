@@ -1,5 +1,8 @@
 package MaintenanceManager.MaintenanceManager.models.tasks;
 import java.time.DayOfWeek;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import lombok.*;
 
@@ -38,5 +41,12 @@ public class WeeklyTaskScheduler {
                 ", dayOfWeek=" + dayOfWeek +
                 ", user=" + user +
                 '}';
+    }
+
+    public String templateSelector() {
+        String dayOfWeekStr = dayOfWeek
+                .getDisplayName(TextStyle.FULL,
+                        Locale.getDefault());
+        return weeklyTaskName + " (every " + dayOfWeekStr + ")";
     }
 }

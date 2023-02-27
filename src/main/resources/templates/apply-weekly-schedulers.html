@@ -31,7 +31,7 @@
                             <div>
                                 <select class="form-select" th:name="weeklyTaskScheduler">
                                     <option th:if="${weeklyTasks.isEmpty()}">None Available</option>
-                                    <option th:each="task : ${weeklyTasks}" th:value="${task.id}" th:text="${task.toString()}"></option>
+                                    <option th:each="task : ${weeklyTasks}" th:value="${task.id}" th:text="${task.templateSelector()}"></option>
                                 </select>
                             </div>
                         </div>

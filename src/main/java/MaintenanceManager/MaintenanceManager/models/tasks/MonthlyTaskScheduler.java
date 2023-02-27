@@ -1,6 +1,7 @@
 package MaintenanceManager.MaintenanceManager.models.tasks;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import lombok.*;
+import java.util.ArrayList;
 
 import javax.persistence.*;
 
@@ -18,6 +19,7 @@ public class MonthlyTaskScheduler {
     @Column(nullable = false)
     private String monthlyTaskName;
 
+    // get rid of this field
     @Column(nullable = false)
     private String description;
 
@@ -33,8 +35,18 @@ public class MonthlyTaskScheduler {
         return "MonthlyTaskScheduler{" +
                 "id=" + id +
                 ", Monthly Task Name='" + monthlyTaskName + '\'' +
-                ", Description='" + description + '\'' +
+                //", Description='" + description + '\'' +
                 ", Day Of Month=" + dayOfMonth +
                 '}';
+    }
+
+    public String templateSelector() {
+        String ordinalNumber = "th";
+        if (dayOfMonth == 1 || dayOfMonth == 21 || dayOfMonth == 31) {
+            ordinalNumber = "st";
+        } if (dayOfMonth == 3 || dayOfMonth == 23) {
+            ordinalNumber = "rd";
+        }
+        return monthlyTaskName + ": " + dayOfMonth + ordinalNumber +" day of month ";
     }
 }
