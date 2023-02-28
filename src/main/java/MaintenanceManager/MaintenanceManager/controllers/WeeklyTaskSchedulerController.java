@@ -1,7 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyTaskQuarterAndYear;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.WeeklyTaskQuarterAndYear;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.WeeklyTaskSchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 @Controller
 public class WeeklyTaskSchedulerController {
@@ -23,7 +20,7 @@ public class WeeklyTaskSchedulerController {
     @PostMapping("/apply-weekly-schedulers")
     public String showApplyWeeklySchedulerFormPage(
             @ModelAttribute("weeklyTaskQuarterAndYear")
-            WeeklyTaskQuarterAndYear weeklyTaskQuarterAndYear,
+            SearchQuarterAndYear weeklyTaskQuarterAndYear,
             Model model, Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the quarter: " + weeklyTaskQuarterAndYear.getQuarter());
@@ -76,7 +73,7 @@ public class WeeklyTaskSchedulerController {
 
         model.addAttribute("weeklyTasks", weeklyTasks);
         model.addAttribute("user", user);
-        model.addAttribute("weeklyTaskQuarterAndYear", new WeeklyTaskQuarterAndYear());
+        model.addAttribute("weeklyTaskQuarterAndYear", new SearchQuarterAndYear());
         return "weekly-task-schedulers";
     }
 

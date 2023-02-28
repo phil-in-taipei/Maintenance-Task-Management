@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class WeeklyTaskQuarterAndYear {
+public class SearchQuarterAndYear {
     private String quarter;
     private Integer year;
 }

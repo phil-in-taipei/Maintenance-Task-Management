@@ -2,7 +2,7 @@ package MaintenanceManager.MaintenanceManager.controllers;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyTaskQuarterAndYear;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.MonthlyTaskSchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 @Controller
 public class MonthlyTaskSchedulerController {
@@ -24,7 +22,7 @@ public class MonthlyTaskSchedulerController {
     @PostMapping("/apply-monthly-schedulers")
     public String showApplyMonthlySchedulerFormPage(
             @ModelAttribute("monthlyTaskQuarterAndYear")
-            MonthlyTaskQuarterAndYear monthlyTaskQuarterAndYear,
+            SearchQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the quarter: " + monthlyTaskQuarterAndYear.getQuarter());
@@ -74,7 +72,7 @@ public class MonthlyTaskSchedulerController {
                 monthlyTaskSchedulingService.getAllUsersMonthlyTaskSchedulers(user.getId());
         model.addAttribute("monthlyTasks", monthlyTasks);
         model.addAttribute("user", user);
-        model.addAttribute("monthlyTaskQuarterAndYear", new MonthlyTaskQuarterAndYear());
+        model.addAttribute("monthlyTaskQuarterAndYear", new SearchQuarterAndYear());
         return "monthly-task-schedulers";
     }
 

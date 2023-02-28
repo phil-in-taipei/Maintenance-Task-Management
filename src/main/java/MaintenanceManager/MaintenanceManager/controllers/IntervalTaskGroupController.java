@@ -1,8 +1,7 @@
 package MaintenanceManager.MaintenanceManager.controllers;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.IntervalTaskQuarterAndYear;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskSubmit;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyTaskQuarterAndYear;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.IntervalTaskGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 @Controller
 public class IntervalTaskGroupController {
@@ -24,7 +21,7 @@ public class IntervalTaskGroupController {
     @PostMapping("/apply-interval-task-group-schedulers")
     public String showApplyITGSchedulerFormPage(
             @ModelAttribute("monthlyTaskQuarterAndYear")
-            MonthlyTaskQuarterAndYear monthlyTaskQuarterAndYear,
+            SearchQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the quarter: " + monthlyTaskQuarterAndYear.getQuarter());
