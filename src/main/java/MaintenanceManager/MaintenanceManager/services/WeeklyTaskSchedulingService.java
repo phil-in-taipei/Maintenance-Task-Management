@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -52,8 +53,8 @@ public class WeeklyTaskSchedulingService {
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getWeeklySchedulingDatesByQuarter( dayOfWeek, year, quarter);
         System.out.println(datesToScheduleTasks.toString());
-        System.out.println("******************Will save the following single tasks****************");
-        // refactor to MaintenanceTaskService for handling batches
+        System.out.println("******************Will generate the following single tasks and add to list****************");
+        List<MaintenanceTask> tasks = new ArrayList<>();
         for (LocalDate date : datesToScheduleTasks) {
             System.out.println(
                     "Task Name: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName() +
@@ -61,6 +62,7 @@ public class WeeklyTaskSchedulingService {
                             "; Local date: " + date +
                             "; User: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser()
             );
+            /*
             maintenanceTaskService.saveTask(
                     new MaintenanceTask(
                             weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName(),
@@ -68,7 +70,16 @@ public class WeeklyTaskSchedulingService {
                             date, weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser()
                     )
             );
+             */
+            MaintenanceTask task = new MaintenanceTask(
+                    weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName(),
+                    weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDescription(),
+                    date, weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser()
+            );
+            tasks.add(task);
         }
+        System.out.println("********************Will now save the batch of tasks************************");
+        maintenanceTaskService.saveBatchOfTasks(tasks);
         System.out.println("********************Will now save the qMonthly task************************");
         weeklyTaskAppliedQuarterlyRepo.save(weeklyTaskAppliedQuarterly);
     }

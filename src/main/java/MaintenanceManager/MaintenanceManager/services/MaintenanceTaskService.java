@@ -33,8 +33,15 @@ public class MaintenanceTaskService {
                 TaskStatusEnum.COMPLETED, LocalDate.now(), userId);
     }
 
+
     @Transactional
-    public void saveTask(MaintenanceTask task) //MaintenanceTask
+    public void saveBatchOfTasks(List<MaintenanceTask> tasks)
+            throws IllegalArgumentException {
+        maintenanceTaskRepo.saveAll(tasks);
+    }
+
+    @Transactional
+    public void saveTask(MaintenanceTask task)
             throws IllegalArgumentException {
         maintenanceTaskRepo.save(task);
     }

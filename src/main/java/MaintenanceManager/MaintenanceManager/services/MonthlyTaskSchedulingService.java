@@ -3,7 +3,6 @@ import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
-import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -54,8 +54,9 @@ public class MonthlyTaskSchedulingService {
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getMonthlySchedulingDatesByQuarter(year, quarter, dayOfMonth);
         System.out.println(datesToScheduleTasks.toString());
-        System.out.println("******************Will save the following single tasks****************");
+        System.out.println("******************Will generate the following single tasks and put in List****************");
         // refactor to method for batch handling in MaintenanceTaskService
+        List<MaintenanceTask> tasks = new ArrayList<>();
         for (LocalDate date : datesToScheduleTasks) {
             System.out.println(
                     "Task Name: " + monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getMonthlyTaskName() +
@@ -63,14 +64,15 @@ public class MonthlyTaskSchedulingService {
                     "; Local date: " + date +
                     "; User: " + monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getUser()
             );
-            maintenanceTaskService.saveTask(
-                    new MaintenanceTask(
-                            monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getMonthlyTaskName(),
-                            monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getDescription(),
-                            date, monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getUser()
-                            )
+            MaintenanceTask task = new MaintenanceTask(
+                    monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getMonthlyTaskName(),
+                    monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getDescription(),
+                    date, monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getUser()
             );
+            tasks.add(task);
         }
+        System.out.println("********************Batch Save tasks in list************************");
+        maintenanceTaskService.saveBatchOfTasks(tasks);
         System.out.println("********************Will now save the qMonthly task************************");
         monthlyTaskAppliedQuarterlyRepo.save(monthlyTaskAppliedQuarterly);
     }

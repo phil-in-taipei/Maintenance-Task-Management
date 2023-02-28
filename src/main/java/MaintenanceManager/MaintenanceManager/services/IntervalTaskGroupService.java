@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -89,7 +90,10 @@ public class IntervalTaskGroupService {
         System.out.println("*****************Dates/length " +  lengthOfDates +" *****************************");
         System.out.println(schedulingDates.toString());
 
+
+        List<MaintenanceTask> tasks = new ArrayList<>();
         System.out.println("****************Now iterating through dates/tasks and matching them***********");
+        System.out.println("****************While adding the tasks to a List***********");
         int indexOfIntervalTaskList = 0;
         for (LocalDate date : schedulingDates) {
             System.out.println(date + ": " + intervalTasks.get(indexOfIntervalTaskList).toString());
@@ -100,15 +104,18 @@ public class IntervalTaskGroupService {
                     date, intervalTaskGroup.getTaskGroupOwner(), intervalTask.getNoRainOnly(),
                     intervalTaskGroup
             );
-            System.out.println("*****************Maintenance task to be saved*******************");
+            System.out.println("*****************Maintenance task to be added*******************");
             System.out.println(maintenanceTask.toString());
-            maintenanceTaskService.saveTask(maintenanceTask);
+            //maintenanceTaskService.saveTask(maintenanceTask);
+            tasks.add(maintenanceTask);
             if (indexOfIntervalTaskList == lastIndexInIntervalTaskList) {
                 indexOfIntervalTaskList = 0;
             } else {
                 indexOfIntervalTaskList++;
             }
         }
+        System.out.println("*****************Now saving batch of tasks*******************");
+        maintenanceTaskService.saveBatchOfTasks(tasks);
         System.out.println("*****************Now saving qITG object*******************");
         intervalTaskAppliedQuarterlyRepo.save(intervalTaskGroupAppliedQuarterly);
     }
