@@ -1,10 +1,10 @@
-package MaintenanceManager.MaintenanceManager.controllers;
+package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.services.MonthlyTaskSchedulingService;
+import MaintenanceManager.MaintenanceManager.services.tasks.MonthlyTaskSchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

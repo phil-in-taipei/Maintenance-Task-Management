@@ -1,14 +1,15 @@
-package MaintenanceManager.MaintenanceManager.services;
+package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskSchedulerRepo;
+import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
+import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
+import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateTaskBatchesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

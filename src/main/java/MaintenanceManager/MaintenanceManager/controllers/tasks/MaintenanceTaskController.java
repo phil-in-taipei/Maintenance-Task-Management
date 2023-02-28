@@ -1,12 +1,12 @@
-package MaintenanceManager.MaintenanceManager.controllers;
+package MaintenanceManager.MaintenanceManager.controllers.tasks;
 
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskReschedule;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskSubmit;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.services.IntervalTaskGroupService;
-import MaintenanceManager.MaintenanceManager.services.MaintenanceTaskService;
+import MaintenanceManager.MaintenanceManager.services.tasks.IntervalTaskGroupService;
+import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;

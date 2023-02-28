@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.services;
+package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;

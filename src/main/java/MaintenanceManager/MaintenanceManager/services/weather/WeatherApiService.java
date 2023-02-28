@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.services;
+package MaintenanceManager.MaintenanceManager.services.weather;
 import MaintenanceManager.MaintenanceManager.models.weather.AccuweatherResponse;
 import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import org.springframework.cache.annotation.Cacheable;

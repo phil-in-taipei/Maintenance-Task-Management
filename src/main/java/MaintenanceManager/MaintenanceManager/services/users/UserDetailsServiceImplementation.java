@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.services;
+package MaintenanceManager.MaintenanceManager.services.users;
 import MaintenanceManager.MaintenanceManager.models.user.*;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserMetaRepo;

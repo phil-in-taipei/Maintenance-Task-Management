@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.services;
+package MaintenanceManager.MaintenanceManager.services.utiltities;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;

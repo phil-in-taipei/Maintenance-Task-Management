@@ -1,9 +1,8 @@
-package MaintenanceManager.MaintenanceManager.controllers;
+package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.IntervalTaskQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.services.IntervalTaskGroupService;
+import MaintenanceManager.MaintenanceManager.services.tasks.IntervalTaskGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -104,7 +103,7 @@ public class IntervalTaskGroupController {
         model.addAttribute("intervalTaskGroups", intervalTaskGroups);
         model.addAttribute("user", user);
         model.addAttribute("intervalTaskQuarterAndYear",
-                new IntervalTaskQuarterAndYear());
+                new SearchQuarterAndYear());
         return "interval-task-groups";
     }
 

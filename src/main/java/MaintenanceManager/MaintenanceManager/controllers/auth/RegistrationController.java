@@ -1,7 +1,7 @@
-package MaintenanceManager.MaintenanceManager.controllers;
+package MaintenanceManager.MaintenanceManager.controllers.auth;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
-import MaintenanceManager.MaintenanceManager.services.UserDetailsServiceImplementation;
+import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

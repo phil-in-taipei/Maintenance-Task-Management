@@ -1,6 +1,4 @@
 package MaintenanceManager.MaintenanceManager;
-import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
-import java.time.LocalDate;
 
 import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
@@ -8,7 +6,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
-import MaintenanceManager.MaintenanceManager.services.GenerateDatesService;
+import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.DayOfWeek;
 import java.util.Arrays;
-import java.util.List;
 
 @SpringBootApplication
 public class MaintenanceManagerApplication implements CommandLineRunner {

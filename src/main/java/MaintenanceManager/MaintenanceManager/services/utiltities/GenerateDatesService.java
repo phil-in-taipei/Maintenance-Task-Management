@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.services;
+package MaintenanceManager.MaintenanceManager.services.utiltities;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
