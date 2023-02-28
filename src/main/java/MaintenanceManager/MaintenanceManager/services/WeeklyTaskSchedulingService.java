@@ -59,22 +59,7 @@ public class WeeklyTaskSchedulingService {
                 );
         System.out.println(datesToScheduleTasks.toString());
         System.out.println("******************Will generate the following single tasks and add to list****************");
-        /*
-        List<MaintenanceTask> tasks = new ArrayList<>();
-        for (LocalDate date : datesToScheduleTasks) {
-            System.out.println(
-                    "Task Name: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName() +
-                            "; Description: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDescription() +
-                            "; Local date: " + date +
-                            "; User: " + weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser()
-            );
-            MaintenanceTask task = new MaintenanceTask(
-                    weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName(),
-                    weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDescription(),
-                    date, weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser()
-            );
-            tasks.add(task);
-        } */
+
         List<MaintenanceTask> batchOfTasks = generateTaskBatchesService.generateRecurringTasksByDateList(
                 weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName(),
                 weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDescription(),

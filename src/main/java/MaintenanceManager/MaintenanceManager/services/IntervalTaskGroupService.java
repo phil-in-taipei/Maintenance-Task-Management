@@ -31,6 +31,9 @@ public class IntervalTaskGroupService {
     GenerateDatesService generateDatesService;
 
     @Autowired
+    GenerateTaskBatchesService generateTaskBatchesService;
+
+    @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
     public List<IntervalTaskGroup> getAllUsersIntervalTaskGroups(Long userId) {
@@ -76,46 +79,20 @@ public class IntervalTaskGroupService {
         System.out.println(intervalTaskGroupAppliedQuarterly.toString());
         System.out.println(intervalTaskGroupAppliedQuarterly.getQuarter());
         System.out.println(intervalTaskGroupAppliedQuarterly.getYear());
-        List<IntervalTask> intervalTasks = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup().getIntervalTasks();
-        int lengthOfIntervalTasks = intervalTasks.size();
-        int lastIndexInIntervalTaskList = lengthOfIntervalTasks - 1;
-        System.out.println("*****************Interval Tasks/length " +  lengthOfIntervalTasks + " ********************");
-        System.out.println(intervalTasks.toString());
+
         List<LocalDate> schedulingDates =
                 generateDatesService.getIntervalSchedulingDatesByQuarter(
                        intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup().getIntervalInDays(),
                         intervalTaskGroupAppliedQuarterly.getYear(), intervalTaskGroupAppliedQuarterly.getQuarter()
                 );
-        int lengthOfDates = schedulingDates.size();
-        System.out.println("*****************Dates/length " +  lengthOfDates +" *****************************");
-        System.out.println(schedulingDates.toString());
+        IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup();
+        List<MaintenanceTask> batchOfTasks =
+                generateTaskBatchesService.generateTaskBatchByDateListAndIntervalTaskList(
+                    intervalTaskGroup, schedulingDates
+                );
 
-
-        List<MaintenanceTask> tasks = new ArrayList<>();
-        System.out.println("****************Now iterating through dates/tasks and matching them***********");
-        System.out.println("****************While adding the tasks to a List***********");
-        int indexOfIntervalTaskList = 0;
-        for (LocalDate date : schedulingDates) {
-            System.out.println(date + ": " + intervalTasks.get(indexOfIntervalTaskList).toString());
-            IntervalTask intervalTask = intervalTasks.get(indexOfIntervalTaskList);
-            IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup();
-            MaintenanceTask maintenanceTask = new MaintenanceTask(
-                    intervalTask.getIntervalTaskName(), intervalTask.getDescription(),
-                    date, intervalTaskGroup.getTaskGroupOwner(), intervalTask.getNoRainOnly(),
-                    intervalTaskGroup
-            );
-            System.out.println("*****************Maintenance task to be added*******************");
-            System.out.println(maintenanceTask.toString());
-            //maintenanceTaskService.saveTask(maintenanceTask);
-            tasks.add(maintenanceTask);
-            if (indexOfIntervalTaskList == lastIndexInIntervalTaskList) {
-                indexOfIntervalTaskList = 0;
-            } else {
-                indexOfIntervalTaskList++;
-            }
-        }
         System.out.println("*****************Now saving batch of tasks*******************");
-        maintenanceTaskService.saveBatchOfTasks(tasks);
+        maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
         System.out.println("*****************Now saving qITG object*******************");
         intervalTaskAppliedQuarterlyRepo.save(intervalTaskGroupAppliedQuarterly);
     }
