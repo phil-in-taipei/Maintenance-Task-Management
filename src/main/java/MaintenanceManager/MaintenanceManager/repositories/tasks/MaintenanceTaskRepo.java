@@ -11,7 +11,8 @@ import java.util.List;
 @Repository
 public interface MaintenanceTaskRepo extends JpaRepository<MaintenanceTask, Long> {
     List<MaintenanceTask> findAllByUserIdOrderByDateAsc(Long id);
-
+    List<MaintenanceTask> findAllByUserIdAndDateBetweenOrderByDateAsc(
+            Long id, LocalDate firstDate, LocalDate lastDate);
     List<MaintenanceTask> findByStatusIsNotAndDateBeforeAndUserId(TaskStatusEnum status, LocalDate date, Long userId);
 
     List<MaintenanceTask> findAllByUserIdAndDate(Long id, LocalDate date);

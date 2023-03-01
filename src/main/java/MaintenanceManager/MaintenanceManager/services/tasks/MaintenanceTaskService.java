@@ -19,6 +19,13 @@ public class MaintenanceTaskService {
         return maintenanceTaskRepo.findAllByUserIdOrderByDateAsc(userId);
     }
 
+    public List<MaintenanceTask> getAllUserTasksInDateRange(
+            Long userId, LocalDate firstDate, LocalDate lastDate) {
+
+        return maintenanceTaskRepo
+                .findAllByUserIdAndDateBetweenOrderByDateAsc(userId, firstDate, lastDate);
+    }
+
     public List<MaintenanceTask> getAllUserTasksByDate(Long userId, LocalDate date) {
 
         return maintenanceTaskRepo.findAllByUserIdAndDate(userId, date);
