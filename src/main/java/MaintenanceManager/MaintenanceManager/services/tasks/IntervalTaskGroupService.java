@@ -42,7 +42,9 @@ public class IntervalTaskGroupService {
 
     public List<IntervalTaskGroupAppliedQuarterly>
         getAllUsersIntervalTaskGroupsAppliedQuarterly(Long userId) {
-        return intervalTaskAppliedQuarterlyRepo.findAllByIntervalTaskGroup_TaskGroupOwnerId(userId);
+        return intervalTaskAppliedQuarterlyRepo
+                .findAllByIntervalTaskGroup_TaskGroupOwnerIdOrderByYearAscQuarterAsc(
+                        userId);
     }
 
     public IntervalTask getIntervalTask(Long id) {

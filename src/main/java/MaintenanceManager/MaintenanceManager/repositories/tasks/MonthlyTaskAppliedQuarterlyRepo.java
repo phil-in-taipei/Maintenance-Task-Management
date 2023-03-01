@@ -9,5 +9,7 @@ import java.util.List;
 @Repository
 public interface MonthlyTaskAppliedQuarterlyRepo
         extends JpaRepository<MonthlyTaskAppliedQuarterly, Long> {
-    List<MonthlyTaskAppliedQuarterly> findAllByMonthlyTaskScheduler_UserId(Long userId);
+    List<MonthlyTaskAppliedQuarterly>
+        findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
+                Long userId);
 }

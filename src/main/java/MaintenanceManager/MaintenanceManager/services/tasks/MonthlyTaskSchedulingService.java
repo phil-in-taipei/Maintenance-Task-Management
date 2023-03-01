@@ -37,7 +37,9 @@ public class MonthlyTaskSchedulingService {
     }
 
     public List<MonthlyTaskAppliedQuarterly> getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
-        return monthlyTaskAppliedQuarterlyRepo.findAllByMonthlyTaskScheduler_UserId(userId);
+        return monthlyTaskAppliedQuarterlyRepo
+                .findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
+                        userId);
     }
 
     @Transactional

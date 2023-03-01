@@ -8,5 +8,7 @@ import java.util.List;
 @Repository
 public interface IntervalTaskAppliedQuarterlyRepo
         extends JpaRepository<IntervalTaskGroupAppliedQuarterly, Long> {
-    List<IntervalTaskGroupAppliedQuarterly> findAllByIntervalTaskGroup_TaskGroupOwnerId(Long userId);
+    List<IntervalTaskGroupAppliedQuarterly>
+        findAllByIntervalTaskGroup_TaskGroupOwnerIdOrderByYearAscQuarterAsc(
+                Long userId);
 }
