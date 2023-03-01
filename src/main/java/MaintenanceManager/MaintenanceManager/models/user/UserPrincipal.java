@@ -23,7 +23,7 @@ public class UserPrincipal implements UserDetails {
         return "UserPrincipal{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                //", password='" + password + '\'' +
                 ", userMeta=" + userMeta.toString() +
                 ", authorities=" + authorities +
                 ", accountNonExpired=" + accountNonExpired +

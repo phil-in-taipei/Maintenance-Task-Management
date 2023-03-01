@@ -5,6 +5,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.weather.WeatherApiService;
+import MaintenanceManager.MaintenanceManager.services.weather.WeatherDataService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,9 @@ public class HomeController {
     @Autowired
     WeatherApiService weatherApiService;
 
+    @Autowired
+    WeatherDataService weatherDataService;
+
     @GetMapping("/")
     public String homePage() {
         return "index";
@@ -38,7 +42,7 @@ public class HomeController {
                 user.getId(), LocalDate.now());
         System.out.println("These are the user's tasks: " + maintenanceTasks.toString());
         SearchTasksByDate searchTasksByDate = new SearchTasksByDate();
-        Integer chanceOfRain = weatherApiService.getRainProbability(LocalDate.now().toString());
+        Integer chanceOfRain = weatherDataService.getRainProbability(LocalDate.now().toString());
         System.out.println("*************This is the chance of rain in landing: " + chanceOfRain + "%************");
         model.addAttribute("searchTasksByDate", searchTasksByDate);
         model.addAttribute("uncompletedTasks", uncompletedTasks);

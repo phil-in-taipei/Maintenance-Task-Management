@@ -56,13 +56,4 @@ public class WeatherApiService {
         return fetchDailyForecastEntity().getDailyForecasts();
     }
 
-    @Cacheable(
-            value = "dailyChanceOfRainCache",
-            key = "#dateString")
-    public Integer getRainProbability(String dateString) {
-        List<DailyForecast> dailyForecasts = getDailyWeatherForecastData(dateString);
-        Integer chanceOfRain = dailyForecasts.get(0).getDay().getRainProbability();
-        return chanceOfRain;
-    }
-
 }
