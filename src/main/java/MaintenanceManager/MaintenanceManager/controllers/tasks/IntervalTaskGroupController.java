@@ -34,14 +34,14 @@ public class IntervalTaskGroupController {
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
         IntervalTaskGroupAppliedQuarterly qITG = new IntervalTaskGroupAppliedQuarterly();
         model.addAttribute("qITG", qITG);
-        return "apply-interval-task-group-schedulers";
+        return "tasks/apply-interval-task-group-schedulers";
     }
 
     @GetMapping("/create-interval-task-group")
     public String showCreateIntervalTaskGroupFormPage(Model model) {
         IntervalTaskGroup intervalTaskGroup = new IntervalTaskGroup();
         model.addAttribute("intervalTaskGroup", intervalTaskGroup);
-        return "create-interval-task-group";
+        return "tasks/create-interval-task-group";
     }
 
     @GetMapping("/create-interval-task/{taskGroupId}")
@@ -52,7 +52,7 @@ public class IntervalTaskGroupController {
         System.out.println("This is the task group id: " + taskGroupId);
         model.addAttribute("intervalTask", new IntervalTask());
         model.addAttribute("taskGroupId", taskGroupId);
-        return "create-interval-task";
+        return "tasks/create-interval-task";
     }
 
     @RequestMapping("/delete-interval-task/{intervalTaskId}/{taskGroupId}")
@@ -64,13 +64,15 @@ public class IntervalTaskGroupController {
             Model model) {
         if (intervalTaskGroupService.getIntervalTask(intervalTaskId) == null) {
             model.addAttribute("message",
-                    "Cannot delete, interval task with id " + intervalTaskId + " does not exist.");
-            return "error";
+                    "Cannot delete, interval task with id " +
+                            intervalTaskId + " does not exist.");
+            return "error/error";
         }
         if (intervalTaskGroupService.getIntervalTaskGroup(taskGroupId) == null) {
             model.addAttribute("message",
-                    "Cannot delete, interval task group with id " + taskGroupId + " does not exist.");
-            return "error";
+                    "Cannot delete, interval task group with id " +
+                            taskGroupId + " does not exist.");
+            return "error/error";
         }
         intervalTaskGroupService.deleteIntervalTask(intervalTaskId);
         return "redirect:/interval-task-group/" + taskGroupId;
@@ -104,7 +106,7 @@ public class IntervalTaskGroupController {
         model.addAttribute("user", user);
         model.addAttribute("intervalTaskQuarterAndYear",
                 new SearchQuarterAndYear());
-        return "interval-task-groups";
+        return "tasks/interval-task-groups";
     }
 
     @PostMapping("/interval-task-group/{taskGroupId}")
@@ -126,7 +128,7 @@ public class IntervalTaskGroupController {
                     "message",
                     "Could not save interval task, "
                             + e.getMessage());
-            return "error";
+            return "error/error";
         }
         return "redirect:/interval-task-groups";
     }
@@ -136,7 +138,7 @@ public class IntervalTaskGroupController {
             @PathVariable(name = "taskGroupId") Long taskGroupId,
             Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        ModelAndView mav = new ModelAndView("interval-task-group");
+        ModelAndView mav = new ModelAndView("tasks/interval-task-group");
         IntervalTaskGroup intervalTaskGroup =
                 intervalTaskGroupService.getIntervalTaskGroup(taskGroupId);
         System.out.println("This is the interval task group: " + intervalTaskGroup);
@@ -166,7 +168,7 @@ public class IntervalTaskGroupController {
         //                qITG.toString() + "***********************************");
         model.addAttribute("qITG", qITG);
         model.addAttribute("user", user);
-        return "quarterly-interval-task-groups-scheduled";
+        return "tasks/quarterly-interval-task-groups-scheduled";
     }
 
     @PostMapping("/submit-quarterly-interval-task-group-scheduled/{quarter}/{year}")
@@ -186,7 +188,7 @@ public class IntervalTaskGroupController {
                     "message",
                     "Could not save interval task group scheduler, "
                             + e.getMessage());
-            return "error";
+            return "error/error";
         }
         return "redirect:/quarterly-interval-task-groups-scheduled";
     }

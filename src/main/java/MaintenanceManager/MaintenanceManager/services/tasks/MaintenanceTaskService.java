@@ -16,7 +16,7 @@ public class MaintenanceTaskService {
 
     public List<MaintenanceTask> getAllUserTasks(Long userId) {
 
-        return maintenanceTaskRepo.findAllByUserId(userId);
+        return maintenanceTaskRepo.findAllByUserIdOrderByDateAsc(userId);
     }
 
     public List<MaintenanceTask> getAllUserTasksByDate(Long userId, LocalDate date) {

@@ -34,7 +34,7 @@ public class WeeklyTaskSchedulerController {
         model.addAttribute("year", weeklyTaskQuarterAndYear.getYear());
         WeeklyTaskAppliedQuarterly qWeeklyTask = new WeeklyTaskAppliedQuarterly();
         model.addAttribute("qWeeklyTask", qWeeklyTask);
-        return "apply-weekly-schedulers";
+        return "tasks/apply-weekly-schedulers";
     }
 
     @GetMapping("/create-weekly-task-scheduler")
@@ -43,7 +43,7 @@ public class WeeklyTaskSchedulerController {
         DayOfWeek[] daysOfWeekOptions = DayOfWeek.values();
         model.addAttribute("daysOfWeekOptions", daysOfWeekOptions);
         model.addAttribute("weeklyTaskScheduler", weeklyTaskScheduler);
-        return "create-weekly-task-scheduler";
+        return "tasks/create-weekly-task-scheduler";
     }
 
     @PostMapping("/weekly-tasks")
@@ -60,7 +60,7 @@ public class WeeklyTaskSchedulerController {
                     "message",
                     "Could not save weekly task scheduler, "
                             + e.getMessage());
-            return "error";
+            return "error/error";
         }
         return "redirect:/weekly-tasks";
     }
@@ -74,7 +74,7 @@ public class WeeklyTaskSchedulerController {
         model.addAttribute("weeklyTasks", weeklyTasks);
         model.addAttribute("user", user);
         model.addAttribute("weeklyTaskQuarterAndYear", new SearchQuarterAndYear());
-        return "weekly-task-schedulers";
+        return "tasks/weekly-task-schedulers";
     }
 
     @GetMapping("/quarterly-weekly-tasks-scheduled")
@@ -87,7 +87,7 @@ public class WeeklyTaskSchedulerController {
                         qWeeklyTasks.toString() + "***********************************");
         model.addAttribute("qWeeklyTasks", qWeeklyTasks);
         model.addAttribute("user", user);
-        return "quarterly-weekly-tasks-scheduled";
+        return "tasks/quarterly-weekly-tasks-scheduled";
     }
 
     @PostMapping("/submit-quarterly-weekly-tasks-scheduled/{quarter}/{year}")
@@ -107,7 +107,7 @@ public class WeeklyTaskSchedulerController {
                     "message",
                     "Could not save weekly task scheduler, "
                             + e.getMessage());
-            return "error";
+            return "error/error";
         }
         return "redirect:/quarterly-weekly-tasks-scheduled";
     }
