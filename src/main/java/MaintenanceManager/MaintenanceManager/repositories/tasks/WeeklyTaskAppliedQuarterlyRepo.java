@@ -8,5 +8,7 @@ import java.util.List;
 @Repository
 public interface WeeklyTaskAppliedQuarterlyRepo
         extends JpaRepository<WeeklyTaskAppliedQuarterly, Long> {
-    List<WeeklyTaskAppliedQuarterly> findAllByWeeklyTaskScheduler_UserId(Long userId);
+    List<WeeklyTaskAppliedQuarterly>
+        findAllByWeeklyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
+            Long userId);
 }

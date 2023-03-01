@@ -31,12 +31,13 @@ public class WeeklyTaskSchedulingService {
     MaintenanceTaskService maintenanceTaskService;
 
     public List<WeeklyTaskScheduler> getAllUsersWeeklyTaskSchedulers(Long userId) {
-        return weeklyTaskSchedulerRepo.findAllByUserId(userId);
+        return weeklyTaskSchedulerRepo.findAllByUserIdOrderByDayOfWeekAsc(userId);
     }
 
     public List<WeeklyTaskAppliedQuarterly>
         getAllUsersWeeklyTasksAppliedQuarterly(Long userId) {
-        return weeklyTaskAppliedQuarterlyRepo.findAllByWeeklyTaskScheduler_UserId(userId);
+        return weeklyTaskAppliedQuarterlyRepo
+                .findAllByWeeklyTaskScheduler_UserIdOrderByYearAscQuarterAsc(userId);
     }
 
     @Transactional

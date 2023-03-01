@@ -33,7 +33,7 @@ public class MonthlyTaskSchedulingService {
     MaintenanceTaskService maintenanceTaskService;
 
     public List<MonthlyTaskScheduler> getAllUsersMonthlyTaskSchedulers(Long userId) {
-        return monthlyTaskSchedulerRepo.findAllByUserId(userId);
+        return monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(userId);
     }
 
     public List<MonthlyTaskAppliedQuarterly> getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
