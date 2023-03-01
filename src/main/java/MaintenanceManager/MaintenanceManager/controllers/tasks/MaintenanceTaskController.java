@@ -40,15 +40,15 @@ public class MaintenanceTaskController {
     public String showSubmitTaskFormPage(Model model) {
         MaintenanceTaskSubmit maintenanceTask = new MaintenanceTaskSubmit();
         model.addAttribute("maintenanceTask", maintenanceTask);
-        return "create-single-task";
+        return "tasks/create-single-task";
     }
 
     @GetMapping("/reschedule-task/{taskId}")
     public ModelAndView showEditTaskPage(@PathVariable(name = "taskId") Long taskId) {
-        ModelAndView mav = new ModelAndView("reschedule-task");
+        ModelAndView mav = new ModelAndView("tasks/reschedule-task");
         MaintenanceTask originalTask = maintenanceTaskService.getMaintenanceTask(taskId);
         if (originalTask == null) {
-            mav.setViewName("error");
+            mav.setViewName("error/error");
             mav.addObject("message",
                     "Task with id "
                             + taskId + " does not exist."
@@ -78,7 +78,7 @@ public class MaintenanceTaskController {
         model.addAttribute("dayBefore", dayBefore.toString());
         model.addAttribute("date", queryDate.toString()); //searchTasksByDate.getDate()
         model.addAttribute("user", user);
-        return "tasks-by-date";
+        return "tasks/tasks-by-date";
     }
 
     @PostMapping("/tasks")
@@ -99,7 +99,7 @@ public class MaintenanceTaskController {
                     "message",
                     "Could not save task, "
                             + e.getMessage());
-            return "error";
+            return "error/error";
         }
         return "redirect:/tasks";
     }
@@ -110,7 +110,7 @@ public class MaintenanceTaskController {
         List<MaintenanceTask> tasks = maintenanceTaskService.getAllUserTasks(user.getId());
         model.addAttribute("tasks", tasks);
         model.addAttribute("user", user);
-        return "tasks";
+        return "tasks/tasks";
     }
 
     @GetMapping("tasks-by-date/{date}")
@@ -129,7 +129,7 @@ public class MaintenanceTaskController {
         model.addAttribute("tasks", tasks);
         model.addAttribute("date", queryDate);
         model.addAttribute("user", user);
-        return "tasks-by-date";
+        return "tasks/tasks-by-date";
     }
 
     @PostMapping("/submit-reschedule-task-form/{taskId}")
@@ -144,7 +144,7 @@ public class MaintenanceTaskController {
         if (updatedTask == null) {
             model.addAttribute("message",
                     "Cannot update, task does not exist!");
-            return "error";
+            return "error/error";
         } else {
             try {
                 LocalDate newDate = LocalDate.parse(taskRescheduleForm.getDate());
@@ -159,7 +159,7 @@ public class MaintenanceTaskController {
                         "message",
                         "Could not update task, "
                                 + e.getMessage());
-                return "error";
+                return "error/error";
             }
         }
         return "redirect:/tasks";

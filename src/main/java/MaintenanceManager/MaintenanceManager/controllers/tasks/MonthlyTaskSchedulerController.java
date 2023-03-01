@@ -36,14 +36,14 @@ public class MonthlyTaskSchedulerController {
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
         MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
         model.addAttribute("qMonthlyTask", qMonthlyTask);
-        return "apply-monthly-schedulers";
+        return "tasks/apply-monthly-schedulers";
     }
 
     @GetMapping("/create-monthly-task-scheduler")
     public String showCreateMonthlyTaskFormPage(Model model) {
         MonthlyTaskScheduler monthlyTaskScheduler = new MonthlyTaskScheduler();
         model.addAttribute("monthlyTaskScheduler", monthlyTaskScheduler);
-        return "create-monthly-task-scheduler";
+        return "tasks/create-monthly-task-scheduler";
     }
 
     @PostMapping("/monthly-tasks")
@@ -60,7 +60,7 @@ public class MonthlyTaskSchedulerController {
                     "message",
                     "Could not save monthly task scheduler, "
                             + e.getMessage());
-            return "error";
+            return "error/error";
         }
         return "redirect:/monthly-tasks";
     }
@@ -73,7 +73,7 @@ public class MonthlyTaskSchedulerController {
         model.addAttribute("monthlyTasks", monthlyTasks);
         model.addAttribute("user", user);
         model.addAttribute("monthlyTaskQuarterAndYear", new SearchQuarterAndYear());
-        return "monthly-task-schedulers";
+        return "tasks/monthly-task-schedulers";
     }
 
     @GetMapping("/quarterly-monthly-tasks-scheduled")
@@ -86,7 +86,7 @@ public class MonthlyTaskSchedulerController {
                         qMonthlyTasks.toString() + "***********************************");
         model.addAttribute("qMonthlyTasks", qMonthlyTasks);
         model.addAttribute("user", user);
-        return "quarterly-monthly-tasks-scheduled";
+        return "tasks/quarterly-monthly-tasks-scheduled";
     }
 
     @PostMapping("/submit-quarterly-monthly-tasks-scheduled/{quarter}/{year}")
@@ -106,7 +106,7 @@ public class MonthlyTaskSchedulerController {
                     "message",
                     "Could not save monthly task scheduler, "
                             + e.getMessage());
-            return "error";
+            return "tasks/error";
         }
         return "redirect:/quarterly-monthly-tasks-scheduled";
     }

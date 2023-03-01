@@ -46,30 +46,6 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		System.out.println("--------------------------------------------------------------------------------");
-
-		/*
-				List<LocalDate> dates = generateDatesService.getIntervalSchedulingDatesByQuarter(
-				10, 2024, QuarterlySchedulingEnum.Q4);
-		System.out.println(dates.toString());
-		List<LocalDate> dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
-				DayOfWeek.WEDNESDAY, 2023, QuarterlySchedulingEnum.Q1);
-		System.out.println(dates.toString());
-
-		dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
-				DayOfWeek.FRIDAY, 2023, QuarterlySchedulingEnum.Q2);
-		System.out.println(dates.toString());
-
-		dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
-				DayOfWeek.SUNDAY, 2023, QuarterlySchedulingEnum.Q3);
-		System.out.println(dates.toString());
-
-		dates = generateDatesService.getWeeklySchedulingDatesByQuarter(
-				DayOfWeek.MONDAY, 2023, QuarterlySchedulingEnum.Q4);
-		System.out.println(dates.toString()); */
-		System.out.println("--------------------------------------------------------------------------------");
-
-
 		Authority userAuth = Authority.builder().authority(AuthorityEnum.ROLE_USER).build();
 		Authority adminAuth = Authority.builder().authority(AuthorityEnum.ROLE_ADMIN).build();
 		Authority mainAuth = Authority.builder().authority(AuthorityEnum.ROLE_MAINTENANCE).build();

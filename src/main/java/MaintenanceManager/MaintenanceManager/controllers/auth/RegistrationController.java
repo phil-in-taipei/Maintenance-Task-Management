@@ -20,7 +20,7 @@ public class RegistrationController {
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("userRegistration", new UserRegistration());
-        return "register";
+        return "auth/register";
     }
 
     @PostMapping("/register")
@@ -30,7 +30,7 @@ public class RegistrationController {
         System.out.println(userRegistration.toString());
         if (!Objects.equals(userRegistration.getPassword(), userRegistration.getPasswordConfirmation())) {
             model.addAttribute("errorMsg", "The passwords do not match!");
-            return "register-failure";
+            return "auth/register-failure";
         }
         UserPrincipal createdUser = userDetailsService.createNewUser(userRegistration);
         System.out.println("**********************Created User****************************************");
@@ -40,6 +40,6 @@ public class RegistrationController {
         }
         System.out.println(createdUser.toString());
         model.addAttribute("user", createdUser);
-        return "register-success";
+        return "auth/register-success";
     }
 }
