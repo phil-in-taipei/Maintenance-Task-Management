@@ -10,7 +10,7 @@ import java.util.List;
 public interface MonthlyTaskSchedulerRepo extends JpaRepository<MonthlyTaskScheduler, Long> {
     List<MonthlyTaskScheduler> findAllByUserIdOrderByDayOfMonthAsc(Long id);
 
-    List<MonthlyTaskScheduler> findAllByUserIdAndMonthlyTaskAppliedQuarterly_QuarterIsNotAndMonthlyTaskAppliedQuarterly_YearIsNot(
+    List<MonthlyTaskScheduler> findAllByUserIdAndMonthlyTaskAppliedQuarterly_QuarterNotAndMonthlyTaskAppliedQuarterly_YearNot(
             Long id, QuarterlySchedulingEnum quarter, Integer year); // query name of the year?
 }
 // findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc

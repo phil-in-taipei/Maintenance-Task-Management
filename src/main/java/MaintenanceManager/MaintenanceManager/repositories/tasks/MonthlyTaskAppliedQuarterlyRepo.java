@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.repositories.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
+import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -12,4 +13,8 @@ public interface MonthlyTaskAppliedQuarterlyRepo
     List<MonthlyTaskAppliedQuarterly>
         findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
                 Long userId);
+
+    List<MonthlyTaskAppliedQuarterly>
+        findAllByQuarterAndYearAndMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
+            QuarterlySchedulingEnum quarter, Integer year, Long userId);
 }

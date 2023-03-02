@@ -5,7 +5,6 @@ import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
-import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
 import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateTaskBatchesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,19 +37,51 @@ public class MonthlyTaskSchedulingService {
         return monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(userId);
     }
 
+
+
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
             Long userId, QuarterlySchedulingEnum quarter, Integer year) {
-        return monthlyTaskSchedulerRepo
-                .findAllByUserIdAndMonthlyTaskAppliedQuarterly_QuarterIsNotAndMonthlyTaskAppliedQuarterly_YearIsNot(
-                        userId, quarter, year
+        List<MonthlyTaskScheduler> allUsersMonthlyTasks =
+                getAllUsersMonthlyTaskSchedulers(userId);
+        List<MonthlyTaskScheduler> alreadyScheduledMonthlyTasks
+                = getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
+                        quarter, year, userId);
+        for (MonthlyTaskScheduler aSMTS : alreadyScheduledMonthlyTasks) {
+            allUsersMonthlyTasks.remove(aSMTS);
+        }
+        return allUsersMonthlyTasks;
+    }
+
+    public List<MonthlyTaskAppliedQuarterly>
+        getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
+            return monthlyTaskAppliedQuarterlyRepo
+                .findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
+                        userId);
+    }
+
+    public List<MonthlyTaskAppliedQuarterly>
+        getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
+            QuarterlySchedulingEnum quarter, Integer year, Long userId
+    ) {
+        return monthlyTaskAppliedQuarterlyRepo
+                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
+                quarter, year, userId
         );
     }
 
-    public List<MonthlyTaskAppliedQuarterly> getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
-        return monthlyTaskAppliedQuarterlyRepo
-                .findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
-                        userId);
+    public List<MonthlyTaskScheduler>
+        getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
+            QuarterlySchedulingEnum quarter, Integer year, Long userId
+    ) {
+        List<MonthlyTaskAppliedQuarterly> qMTAQs =
+                getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
+                quarter, year, userId);
+        List<MonthlyTaskScheduler> alreadyScheduledMonthlyTasks = new ArrayList<>();
+        for (MonthlyTaskAppliedQuarterly mTAQ : qMTAQs) {
+            alreadyScheduledMonthlyTasks.add(mTAQ.getMonthlyTaskScheduler());
+        }
+        return alreadyScheduledMonthlyTasks;
     }
 
     @Transactional
