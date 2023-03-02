@@ -2,7 +2,6 @@ package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskSchedulerRepo;
-import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
 import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateTaskBatchesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,13 +48,15 @@ public class WeeklyTaskSchedulingService {
     @Transactional
     public void saveWeeklyTaskAppliedQuarterly(WeeklyTaskAppliedQuarterly weeklyTaskAppliedQuarterly)
             throws IllegalArgumentException {
+        WeeklyTaskScheduler scheduler = weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler();
+
         System.out.println("*****************Now saving qWeekly task in service*****************************");
         System.out.println(weeklyTaskAppliedQuarterly.toString());
 
         System.out.println("******************Now generating dates to save single tasks****************");
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getWeeklySchedulingDatesByQuarter(
-                        weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDayOfWeek(),
+                        scheduler.getDayOfWeek(),
                         weeklyTaskAppliedQuarterly.getYear(),
                         weeklyTaskAppliedQuarterly.getQuarter()
                 );
@@ -63,9 +64,9 @@ public class WeeklyTaskSchedulingService {
         System.out.println("******************Will generate the following single tasks and add to list****************");
 
         List<MaintenanceTask> batchOfTasks = generateTaskBatchesService.generateRecurringTasksByDateList(
-                weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getWeeklyTaskName(),
-                weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getDescription(),
-                weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler().getUser(), datesToScheduleTasks
+                scheduler.getWeeklyTaskName(),
+                scheduler.getDescription(),
+                scheduler.getUser(), datesToScheduleTasks
         );
         System.out.println("********************Will now save the batch of tasks************************");
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);

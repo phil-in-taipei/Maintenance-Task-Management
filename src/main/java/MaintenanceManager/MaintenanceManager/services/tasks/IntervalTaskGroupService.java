@@ -78,16 +78,15 @@ public class IntervalTaskGroupService {
             IntervalTaskGroupAppliedQuarterly intervalTaskGroupAppliedQuarterly)
             throws IllegalArgumentException {
         System.out.println("*****************Now preparing to save qITG in service*****************************");
-        System.out.println(intervalTaskGroupAppliedQuarterly.toString());
-        System.out.println(intervalTaskGroupAppliedQuarterly.getQuarter());
-        System.out.println(intervalTaskGroupAppliedQuarterly.getYear());
+        IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup();
 
         List<LocalDate> schedulingDates =
                 generateDatesService.getIntervalSchedulingDatesByQuarter(
-                       intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup().getIntervalInDays(),
-                        intervalTaskGroupAppliedQuarterly.getYear(), intervalTaskGroupAppliedQuarterly.getQuarter()
+                        intervalTaskGroup.getIntervalInDays(),
+                        intervalTaskGroupAppliedQuarterly.getYear(),
+                        intervalTaskGroupAppliedQuarterly.getQuarter()
                 );
-        IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup();
+
         List<MaintenanceTask> batchOfTasks =
                 generateTaskBatchesService.generateTaskBatchByDateListAndIntervalTaskList(
                     intervalTaskGroup, schedulingDates

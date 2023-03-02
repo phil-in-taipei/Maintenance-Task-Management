@@ -26,13 +26,16 @@ public class MaintenanceTaskService {
                 .findAllByUserIdAndDateBetweenOrderByDateAsc(userId, firstDate, lastDate);
     }
 
-    public List<MaintenanceTask> getAllUserTasksByDate(Long userId, LocalDate date) {
+    public List<MaintenanceTask> getAllUserTasksByDate(
+            Long userId, LocalDate date) {
 
         return maintenanceTaskRepo.findAllByUserIdAndDate(userId, date);
     }
 
-    public List<MaintenanceTask> getAllUserTasksByIntervalTaskGroup(Long userId, Long iTgId) {
-        return maintenanceTaskRepo.findAllByUserIdAndIntervalTaskGroupId(userId, iTgId);
+    public List<MaintenanceTask> getAllUserTasksByIntervalTaskGroup(
+            Long userId, Long iTgId) {
+        return maintenanceTaskRepo
+                .findAllByUserIdAndIntervalTaskGroupId(userId, iTgId);
     }
 
     public List<MaintenanceTask> getAllUncompletedPastUserTasks(Long userId) {

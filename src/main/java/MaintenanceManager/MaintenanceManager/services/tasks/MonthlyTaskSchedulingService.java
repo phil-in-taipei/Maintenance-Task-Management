@@ -54,18 +54,18 @@ public class MonthlyTaskSchedulingService {
         System.out.println("*****************Now saving qMonthly task in service*****************************");
         System.out.println(monthlyTaskAppliedQuarterly.toString());
         System.out.println("******************Now generating dates to save single tasks****************");
+        MonthlyTaskScheduler scheduler = monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler();
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getMonthlySchedulingDatesByQuarter(
                         monthlyTaskAppliedQuarterly.getYear(),
                         monthlyTaskAppliedQuarterly.getQuarter(),
-                        monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getDayOfMonth()
+                        scheduler.getDayOfMonth()
                 );
         System.out.println(datesToScheduleTasks.toString());
         System.out.println("******************Will generate the following single tasks and put in List****************");
         List<MaintenanceTask> batchOfTasks = generateTaskBatchesService.generateRecurringTasksByDateList(
-                monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getMonthlyTaskName(),
-                monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getDescription(),
-                monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler().getUser(), datesToScheduleTasks
+                scheduler.getMonthlyTaskName(), scheduler.getDescription(),
+                scheduler.getUser(), datesToScheduleTasks
         );
         System.out.println("********************Batch Save tasks in list************************");
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
