@@ -2,6 +2,7 @@ package MaintenanceManager.MaintenanceManager.models.tasks;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import lombok.*;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.persistence.*;
 
@@ -29,6 +30,9 @@ public class MonthlyTaskScheduler {
     @ManyToOne(optional = false)
     @JoinColumn
     private UserPrincipal user;
+
+    @OneToMany(mappedBy = "monthlyTaskScheduler")
+    private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
 
     @Override
     public String toString() {

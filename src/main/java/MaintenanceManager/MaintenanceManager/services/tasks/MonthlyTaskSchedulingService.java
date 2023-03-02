@@ -2,6 +2,7 @@ package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
+import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
@@ -34,6 +35,15 @@ public class MonthlyTaskSchedulingService {
 
     public List<MonthlyTaskScheduler> getAllUsersMonthlyTaskSchedulers(Long userId) {
         return monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(userId);
+    }
+
+    public List<MonthlyTaskScheduler>
+        getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
+            Long userId, QuarterlySchedulingEnum quarter, Integer year) {
+        return monthlyTaskSchedulerRepo
+                .findAllByUserIdAndMonthlyTaskAppliedQuarterly_QuarterIsNotAndMonthlyTaskAppliedQuarterly_YearIsNot(
+                        userId, quarter, year
+        );
     }
 
     public List<MonthlyTaskAppliedQuarterly> getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {

@@ -25,12 +25,22 @@ public class MonthlyTaskSchedulerController {
             SearchQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        System.out.println("This is the quarter: " + monthlyTaskQuarterAndYear.getQuarter());
+        System.out.println("This is the quarter: " + QuarterlySchedulingEnum.valueOf(monthlyTaskQuarterAndYear.getQuarter()));
         System.out.println("This is the year: " + monthlyTaskQuarterAndYear.getYear());
-        List<MonthlyTaskScheduler> monthlyTasks =
-                monthlyTaskSchedulingService.getAllUsersMonthlyTaskSchedulers(user.getId());
-        System.out.println(monthlyTasks.toString());
-        model.addAttribute("monthlyTasks", monthlyTasks);
+        //List<MonthlyTaskScheduler> monthlyTasks =
+        //        monthlyTaskSchedulingService.getAllUsersMonthlyTaskSchedulers(user.getId());
+        System.out.println("*************Experiment******************");
+        System.out.println("*****************Get monthly task schedulers not scheduled for year/quarter*********************");
+        List<MonthlyTaskScheduler> availableMonthlyTasks =
+                monthlyTaskSchedulingService
+                        .getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
+                                user.getId(), QuarterlySchedulingEnum.valueOf(monthlyTaskQuarterAndYear.getQuarter()),
+                                        monthlyTaskQuarterAndYear.getYear()
+                        );
+        System.out.println(availableMonthlyTasks.toString());
+        //System.out.println("**********************All monthly tasks**************************" );
+        //System.out.println(monthlyTasks.toString());
+        model.addAttribute("monthlyTasks", availableMonthlyTasks);
         model.addAttribute("user", user);
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
