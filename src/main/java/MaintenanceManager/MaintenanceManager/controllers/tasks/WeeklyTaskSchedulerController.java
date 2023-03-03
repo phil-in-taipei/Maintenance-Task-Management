@@ -25,8 +25,6 @@ public class WeeklyTaskSchedulerController {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the quarter: " + weeklyTaskQuarterAndYear.getQuarter());
         System.out.println("This is the year: " + weeklyTaskQuarterAndYear.getYear());
-        //List<WeeklyTaskScheduler> weeklyTasks =
-        //        weeklyTaskSchedulingService.getAllUsersWeeklyTaskSchedulers(user.getId());
         List<WeeklyTaskScheduler> availableWeeklyTasks =
                 weeklyTaskSchedulingService
                     .getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(

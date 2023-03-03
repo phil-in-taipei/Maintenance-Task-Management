@@ -25,10 +25,17 @@ public class IntervalTaskGroupController {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the quarter: " + monthlyTaskQuarterAndYear.getQuarter());
         System.out.println("This is the year: " + monthlyTaskQuarterAndYear.getYear());
-        List<IntervalTaskGroup> intervalTaskGroups =
-                intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getId());
-        System.out.println(intervalTaskGroups.toString());
-        model.addAttribute("intervalTaskGroups", intervalTaskGroups);
+      intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getId());
+        List<IntervalTaskGroup> availableIntervalTaskGroups =
+                intervalTaskGroupService
+                        .getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
+                            user.getId(), QuarterlySchedulingEnum.valueOf(
+                                    monthlyTaskQuarterAndYear.getQuarter()),
+                            monthlyTaskQuarterAndYear.getYear()
+                );
+
+        System.out.println(availableIntervalTaskGroups.toString());
+        model.addAttribute("intervalTaskGroups", availableIntervalTaskGroups);
         model.addAttribute("user", user);
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());

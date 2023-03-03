@@ -22,6 +22,7 @@ public class WeeklyTaskScheduler {
     @Column(nullable = false)
     private String weeklyTaskName;
 
+    // get rid of this field
     @Column(nullable = false)
     private String description;
 

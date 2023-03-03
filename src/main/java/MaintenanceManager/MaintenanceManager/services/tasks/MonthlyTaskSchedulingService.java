@@ -37,8 +37,6 @@ public class MonthlyTaskSchedulingService {
         return monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(userId);
     }
 
-
-
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
             Long userId, QuarterlySchedulingEnum quarter, Integer year) {
@@ -65,7 +63,7 @@ public class MonthlyTaskSchedulingService {
             QuarterlySchedulingEnum quarter, Integer year, Long userId
     ) {
         return monthlyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId( //OrderByYearAscQuarterAsc
+                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId(
                 quarter, year, userId
         );
     }

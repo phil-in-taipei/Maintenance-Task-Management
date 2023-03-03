@@ -1,8 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
-import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTask;
-import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
-import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroupAppliedQuarterly;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
+import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskGroupRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskRepo;
@@ -13,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -40,6 +38,20 @@ public class IntervalTaskGroupService {
         return intervalTaskGroupRepo.findAllByTaskGroupOwnerId(userId);
     }
 
+    public List<IntervalTaskGroup>
+        getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
+                Long userId, QuarterlySchedulingEnum quarter, Integer year) {
+            List<IntervalTaskGroup> allUsersITGs =
+                    getAllUsersIntervalTaskGroups(userId);
+            List<IntervalTaskGroup> alreadyScheduledITGS
+                    = getAllITGsAlreadyScheduledForQuarterAndYear(
+                    quarter, year, userId);
+            for (IntervalTaskGroup aSITG : alreadyScheduledITGS) {
+                allUsersITGs.remove(aSITG);
+            }
+            return allUsersITGs;
+    }
+
     public List<IntervalTaskGroupAppliedQuarterly>
         getAllUsersIntervalTaskGroupsAppliedQuarterly(Long userId) {
         return intervalTaskAppliedQuarterlyRepo
@@ -47,6 +59,29 @@ public class IntervalTaskGroupService {
                         userId);
     }
 
+    public List<IntervalTaskGroupAppliedQuarterly>
+        getUsersIntervalTaskGroupsAppliedQuarterlyByQuarterAndYear(
+                QuarterlySchedulingEnum quarter, Integer year, Long userId
+        ) {
+        return intervalTaskAppliedQuarterlyRepo
+                .findAllByQuarterAndYearAndIntervalTaskGroup_TaskGroupOwnerId(
+                        quarter, year, userId
+                );
+    }
+
+    List<IntervalTaskGroup>
+        getAllITGsAlreadyScheduledForQuarterAndYear(
+                QuarterlySchedulingEnum quarter, Integer year, Long userId
+        ) {
+            List<IntervalTaskGroupAppliedQuarterly> qITGAQs =
+                    getUsersIntervalTaskGroupsAppliedQuarterlyByQuarterAndYear(
+                            quarter, year, userId);
+            List<IntervalTaskGroup> alreadyScheduledIntervalTaskGroups = new ArrayList<>();
+            for (IntervalTaskGroupAppliedQuarterly iTGAQ : qITGAQs) {
+                alreadyScheduledIntervalTaskGroups.add(iTGAQ.getIntervalTaskGroup());
+            }
+            return alreadyScheduledIntervalTaskGroups;
+    }
     public IntervalTask getIntervalTask(Long id) {
         return intervalTaskRepo.findById(id)
                 .orElse(null);
