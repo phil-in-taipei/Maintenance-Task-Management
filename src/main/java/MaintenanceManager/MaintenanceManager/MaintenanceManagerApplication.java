@@ -1,5 +1,4 @@
 package MaintenanceManager.MaintenanceManager;
-
 import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
@@ -7,6 +6,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
 import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Arrays;
 
 @SpringBootApplication
+//@RequiredArgsConstructor
 public class MaintenanceManagerApplication implements CommandLineRunner {
 
 	@Autowired
