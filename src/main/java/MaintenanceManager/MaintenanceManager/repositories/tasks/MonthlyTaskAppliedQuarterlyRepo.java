@@ -15,6 +15,6 @@ public interface MonthlyTaskAppliedQuarterlyRepo
                 Long userId);
 
     List<MonthlyTaskAppliedQuarterly>
-        findAllByQuarterAndYearAndMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
+        findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId( // OrderByYearAscQuarterAsc
             QuarterlySchedulingEnum quarter, Integer year, Long userId);
 }

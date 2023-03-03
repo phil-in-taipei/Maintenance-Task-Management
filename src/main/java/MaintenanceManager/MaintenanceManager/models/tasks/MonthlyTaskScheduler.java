@@ -31,6 +31,7 @@ public class MonthlyTaskScheduler {
     @JoinColumn
     private UserPrincipal user;
 
+    // get rid of this field (strategy ineffective for preventing double-booking)
     @OneToMany(mappedBy = "monthlyTaskScheduler")
     private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
 

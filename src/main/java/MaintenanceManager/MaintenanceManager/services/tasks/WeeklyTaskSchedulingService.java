@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,6 +38,44 @@ public class WeeklyTaskSchedulingService {
         getAllUsersWeeklyTasksAppliedQuarterly(Long userId) {
         return weeklyTaskAppliedQuarterlyRepo
                 .findAllByWeeklyTaskScheduler_UserIdOrderByYearAscQuarterAsc(userId);
+    }
+
+    public List<WeeklyTaskScheduler>
+        getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(
+            Long userId, QuarterlySchedulingEnum quarter, Integer year) {
+        List<WeeklyTaskScheduler> allUsersWeeklyTasks =
+                getAllUsersWeeklyTaskSchedulers(userId);
+        List<WeeklyTaskScheduler> alreadyScheduledWeeklyTasks
+                = getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
+                quarter, year, userId);
+        for (WeeklyTaskScheduler aSWTS : alreadyScheduledWeeklyTasks) {
+            allUsersWeeklyTasks.remove(aSWTS);
+        }
+        return allUsersWeeklyTasks;
+    }
+
+    public List<WeeklyTaskScheduler>
+     getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
+            QuarterlySchedulingEnum quarter, Integer year, Long userId
+    ) {
+        List<WeeklyTaskAppliedQuarterly> qWTAQs =
+                getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
+                        quarter, year, userId);
+        List<WeeklyTaskScheduler> alreadyScheduledWeeklyTasks = new ArrayList<>();
+        for (WeeklyTaskAppliedQuarterly wTAQ : qWTAQs) {
+            alreadyScheduledWeeklyTasks.add(wTAQ.getWeeklyTaskScheduler());
+        }
+        return alreadyScheduledWeeklyTasks;
+    }
+
+    public List<WeeklyTaskAppliedQuarterly>
+        getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
+            QuarterlySchedulingEnum quarter, Integer year, Long userId
+    ) {
+        return weeklyTaskAppliedQuarterlyRepo
+                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId( //OrderByYearAscQuarterAsc
+                        quarter, year, userId
+                );
     }
 
     @Transactional

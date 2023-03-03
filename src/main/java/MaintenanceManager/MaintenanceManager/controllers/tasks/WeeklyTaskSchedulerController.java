@@ -25,10 +25,17 @@ public class WeeklyTaskSchedulerController {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the quarter: " + weeklyTaskQuarterAndYear.getQuarter());
         System.out.println("This is the year: " + weeklyTaskQuarterAndYear.getYear());
-        List<WeeklyTaskScheduler> weeklyTasks =
-                weeklyTaskSchedulingService.getAllUsersWeeklyTaskSchedulers(user.getId());
-        System.out.println(weeklyTasks.toString());
-        model.addAttribute("weeklyTasks", weeklyTasks);
+        //List<WeeklyTaskScheduler> weeklyTasks =
+        //        weeklyTaskSchedulingService.getAllUsersWeeklyTaskSchedulers(user.getId());
+        List<WeeklyTaskScheduler> availableWeeklyTasks =
+                weeklyTaskSchedulingService
+                    .getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(
+                    user.getId(), QuarterlySchedulingEnum.valueOf(
+                        weeklyTaskQuarterAndYear.getQuarter()),
+                    weeklyTaskQuarterAndYear.getYear()
+        );
+        System.out.println(availableWeeklyTasks.toString());
+        model.addAttribute("weeklyTasks", availableWeeklyTasks);
         model.addAttribute("user", user);
         model.addAttribute("quarter", weeklyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", weeklyTaskQuarterAndYear.getYear());
