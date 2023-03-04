@@ -1,0 +1,8 @@
+ALTER TABLE `maintenance`.`interval_task_group_applied_quarterly` 
+DROP FOREIGN KEY `FKc5h8vgvupfye1dpsghbmc6hkh`;
+ALTER TABLE `maintenance`.`interval_task_group_applied_quarterly` 
+ADD CONSTRAINT `FKc5h8vgvupfye1dpsghbmc6hkh`
+  FOREIGN KEY (`interval_task_group_id`)
+  REFERENCES `maintenance`.`interval_task_group` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;

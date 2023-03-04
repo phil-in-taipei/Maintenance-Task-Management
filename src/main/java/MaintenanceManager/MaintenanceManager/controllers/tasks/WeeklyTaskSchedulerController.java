@@ -51,6 +51,32 @@ public class WeeklyTaskSchedulerController {
         return "tasks/create-weekly-task-scheduler";
     }
 
+    @RequestMapping("/delete-weekly-task-scheduler/{id}")
+    public String deleteWeeklyMaintenanceTask(
+            @PathVariable(name = "id") Long id, Model model) {
+        if (weeklyTaskSchedulingService.getWeeklyTaskScheduler(id) == null) {
+            model.addAttribute("message",
+                    "Cannot delete, monthly task with id: " +
+                            id + " does not exist.");
+            return "error/error";
+        }
+        weeklyTaskSchedulingService.deleteWeeklyTaskScheduler(id);
+        return "redirect:/monthly-tasks";
+    }
+
+    @RequestMapping("/delete-weekly-task-applied-quarterly/{id}")
+    public String deleteWeeklyTaskAppliedQuarterly(
+            @PathVariable(name = "id") Long id, Model model) {
+        if (weeklyTaskSchedulingService.getWeeklyTaskAppliedQuarterly(id) == null) {
+            model.addAttribute("message",
+                    "Cannot delete, monthly task applied quarterly with id: " +
+                            id + " does not exist.");
+            return "error/error";
+        }
+        weeklyTaskSchedulingService.deleteWeeklyTaskAppliedQuarterly(id);
+        return "redirect:/quarterly-monthly-tasks-scheduled";
+    }
+
     @PostMapping("/weekly-tasks")
     public String saveNewWeeklyTaskScheduler(
             @ModelAttribute("weeklyTaskScheduler")

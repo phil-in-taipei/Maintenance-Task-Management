@@ -36,7 +36,7 @@ public class MonthlyTaskAppliedQuarterly {
     )
     private Integer year;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.ALL}, optional = false)
     private MonthlyTaskScheduler monthlyTaskScheduler;
 
     @Override

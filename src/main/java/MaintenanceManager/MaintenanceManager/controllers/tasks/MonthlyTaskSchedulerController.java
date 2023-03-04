@@ -55,7 +55,7 @@ public class MonthlyTaskSchedulerController {
     }
 
     @RequestMapping("/delete-monthly-task-scheduler/{id}")
-    public String deleteMaintenanceTask(@PathVariable(name = "id") Long id, Model model) {
+    public String deleteMonthlyMaintenanceTask(@PathVariable(name = "id") Long id, Model model) {
         if (monthlyTaskSchedulingService.getMonthlyTaskScheduler(id) == null) {
             model.addAttribute("message",
                     "Cannot delete, monthly task with id: " + id + " does not exist.");

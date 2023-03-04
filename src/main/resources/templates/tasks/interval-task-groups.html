@@ -52,6 +52,7 @@
                 <th>Name</th>
                 <th>Interval In Days</th>
                 <th>Tasks</th>
+                <th>Remove</th>
             </tr>
             </thead>
             <tbody>
@@ -61,6 +62,10 @@
                 <td th:text="${task.intervalInDays}"></td>
                 <td>
                     <a th:href="@{'/interval-task-group/' + ${task.id}}">Go to Tasks</a>
+                </td>
+                <td>
+                    <a th:href="@{'/delete-interval-task-group/' + ${task.id}}">
+                        Delete</a>
                 </td>
             </tr>
             </tbody>

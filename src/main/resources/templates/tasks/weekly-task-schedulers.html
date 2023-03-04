@@ -51,6 +51,7 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Day of Week</th>
+                <th>Remove</th>
 
             </tr>
             </thead>
@@ -60,6 +61,10 @@
                 <td th:text="${task.weeklyTaskName}"></td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.dayOfWeek}"></td>
+                <td>
+                    <a th:href="@{'/delete-weekly-task-scheduler/' + ${task.id}}">
+                        Delete</a>
+                </td>
             </tr>
             </tbody>
         </table>

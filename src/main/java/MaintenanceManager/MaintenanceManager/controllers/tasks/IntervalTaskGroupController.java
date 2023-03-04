@@ -85,6 +85,19 @@ public class IntervalTaskGroupController {
         return "redirect:/interval-task-group/" + taskGroupId;
     }
 
+    @RequestMapping("/delete-interval-task-group/{id}")
+    public String deleteIntervalTaskGroup(
+            @PathVariable(name = "id") Long id, Model model) {
+        if (intervalTaskGroupService.getIntervalTaskGroup(id) == null) {
+            model.addAttribute("message",
+                    "Cannot delete, interval task group with id: " +
+                            id + " does not exist.");
+            return "error/error";
+        }
+        intervalTaskGroupService.deleteIntervalTaskGroup(id);
+        return "redirect:/interval-task-groups";
+    }
+
     @PostMapping("/interval-task-groups")
     public String saveNewIntervalTaskGroup(
             @ModelAttribute("intervalTaskGroup")

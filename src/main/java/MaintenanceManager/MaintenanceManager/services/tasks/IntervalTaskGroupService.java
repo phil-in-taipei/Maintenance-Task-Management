@@ -36,6 +36,25 @@ public class IntervalTaskGroupService {
     MaintenanceTaskService maintenanceTaskService;
 
     @Loggable
+    @Transactional
+    public void deleteIntervalTask(Long id) {
+        intervalTaskRepo.deleteById(id);
+    }
+
+    @Loggable
+    @Transactional
+    public void deleteIntervalTaskGroup(Long id) {
+        //intervalTaskAppliedQuarterlyRepo.deleteAllByIntervalTaskGroupId(id);
+        intervalTaskGroupRepo.deleteById(id);
+    }
+
+    @Loggable
+    public List<IntervalTaskGroupAppliedQuarterly>
+        getIntervalTaskGroupAppliedQuarterlyByITGId(Long id) {
+         return intervalTaskAppliedQuarterlyRepo.findAllByIntervalTaskGroupId(id);
+    }
+
+    @Loggable
     public List<IntervalTaskGroup> getAllUsersIntervalTaskGroups(Long userId) {
         return intervalTaskGroupRepo.findAllByTaskGroupOwnerId(userId);
     }
@@ -102,16 +121,17 @@ public class IntervalTaskGroupService {
     }
 
     @Loggable
-    @Transactional
-    public void saveIntervalTask(IntervalTask intervalTask)
-            throws IllegalArgumentException {
-        intervalTaskRepo.save(intervalTask);
+    public IntervalTaskGroupAppliedQuarterly
+        getIntervalTaskGroupAppliedQuarterly(Long id) {
+            return intervalTaskAppliedQuarterlyRepo.findById(id)
+                .orElse(null);
     }
 
     @Loggable
     @Transactional
-    public void deleteIntervalTask(Long id) {
-        intervalTaskRepo.deleteById(id);
+    public void saveIntervalTask(IntervalTask intervalTask)
+            throws IllegalArgumentException {
+        intervalTaskRepo.save(intervalTask);
     }
 
     @Loggable

@@ -37,6 +37,18 @@ public class WeeklyTaskSchedulingService {
     }
 
     @Loggable
+    @Transactional
+    public void deleteWeeklyTaskScheduler(Long id) {
+        weeklyTaskSchedulerRepo.deleteById(id);
+    }
+
+    @Loggable
+    @Transactional
+    public void deleteWeeklyTaskAppliedQuarterly(Long id) {
+        weeklyTaskAppliedQuarterlyRepo.deleteById(id);
+    }
+
+    @Loggable
     public List<WeeklyTaskAppliedQuarterly>
         getAllUsersWeeklyTasksAppliedQuarterly(Long userId) {
         return weeklyTaskAppliedQuarterlyRepo
@@ -60,7 +72,7 @@ public class WeeklyTaskSchedulingService {
 
     @Loggable
     public List<WeeklyTaskScheduler>
-     getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
+        getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
     ) {
         List<WeeklyTaskAppliedQuarterly> qWTAQs =
@@ -82,6 +94,18 @@ public class WeeklyTaskSchedulingService {
                 .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId( //OrderByYearAscQuarterAsc
                         quarter, year, userId
                 );
+    }
+
+    @Loggable
+    public WeeklyTaskScheduler getWeeklyTaskScheduler(Long id) {
+        return weeklyTaskSchedulerRepo.findById(id)
+                .orElse(null);
+    }
+
+    @Loggable
+    public WeeklyTaskAppliedQuarterly getWeeklyTaskAppliedQuarterly(Long id) {
+        return weeklyTaskAppliedQuarterlyRepo.findById(id)
+                .orElse(null);
     }
 
     @Loggable

@@ -28,10 +28,10 @@ public class IntervalTaskGroup {
     // for query about the weather condition and rescheduling
     // by switching with a possible later one in the same
     // interval task group (probably switch to just one way through maintenance task)
-    @OneToMany(mappedBy = "intervalTaskGroup")
+    @OneToMany(mappedBy = "intervalTaskGroup", orphanRemoval = true)
     private Set<MaintenanceTask> maintenanceTasks;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "interval_task_group_id")
     private List<IntervalTask> intervalTasks;
 

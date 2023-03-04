@@ -35,11 +35,13 @@ public class MonthlyTaskSchedulingService {
     MaintenanceTaskService maintenanceTaskService;
 
     @Loggable
+    @Transactional
     public void deleteMonthlyTaskScheduler(Long id) {
         monthlyTaskSchedulerRepo.deleteById(id);
     }
 
     @Loggable
+    @Transactional
     public void deleteMonthlyTaskAppliedQuarterly(Long id) {
         monthlyTaskAppliedQuarterlyRepo.deleteById(id);
     }

@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.repositories.tasks;
+import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroupAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,6 @@ public interface IntervalTaskAppliedQuarterlyRepo
     List<IntervalTaskGroupAppliedQuarterly>
         findAllByQuarterAndYearAndIntervalTaskGroup_TaskGroupOwnerId(
             QuarterlySchedulingEnum quarter, Integer year, Long userId);
+
+    List<IntervalTaskGroupAppliedQuarterly> findAllByIntervalTaskGroupId(Long id);
 }
