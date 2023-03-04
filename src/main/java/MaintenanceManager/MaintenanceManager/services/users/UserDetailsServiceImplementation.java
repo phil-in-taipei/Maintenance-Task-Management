@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.users;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.user.*;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserMetaRepo;
@@ -21,6 +22,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     @Autowired
     UserMetaRepo userMetaRepo;
 
+    @Loggable
     @Override
     public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
         return userPrincipalRepo.findByUsername(username).orElseThrow(() ->
@@ -28,6 +30,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         );
     }
 
+    @Loggable
     public UserPrincipal createNewUser(UserRegistration userRegistration) {
         Authority userAuth = Authority.builder().authority(AuthorityEnum.ROLE_USER).build();
         Authority mainAuth = Authority.builder().authority(AuthorityEnum.ROLE_MAINTENANCE).build();

@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.weather;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.weather.AccuweatherResponse;
 import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,32 +28,36 @@ public class WeatherApiService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Loggable
     public AccuweatherResponse fetchDailyForecastEntity() {
-        String apiCallUrl = dailyForecastUrl + locationKey + "?apikey=" + apikey + "&details=true&metric=true";
-        System.out.println("**************Calling api url: " + apiCallUrl + "  **********************");
+        String apiCallUrl = dailyForecastUrl + locationKey + "?apikey=" +
+                apikey + "&details=true&metric=true";
+        //System.out.println("**************Calling api url: " + apiCallUrl + "  **********************");
         ResponseEntity<AccuweatherResponse> responseEntity =
                 restTemplate.getForEntity(
                         apiCallUrl,
                         AccuweatherResponse.class // note: previous sample had uri variables number
                 );
-        System.out.println("*************API Call Time: " + LocalDateTime.now() + "*************************");
-        if (responseEntity.getStatusCode().equals(HttpStatus.OK) && responseEntity.getBody() != null) {
+        //System.out.println("*************API Call Time: " + LocalDateTime.now() + "*************************");
+        if (responseEntity.getStatusCode().equals(HttpStatus.OK)
+                && responseEntity.getBody() != null) {
             AccuweatherResponse accuweatherResponse = responseEntity.getBody();
-            System.out.println("******************************This is the api response********************");
-            System.out.println(accuweatherResponse.getDailyForecasts().toArray()[0].toString());
+            //System.out.println("******************************This is the api response********************");
+            //System.out.println(accuweatherResponse.getDailyForecasts().toArray()[0].toString());
             return accuweatherResponse;
         } else {
-            System.out.println("Something went wrong! The response was not marked with status code 200");
-            System.out.println(responseEntity.getStatusCode());
+            //System.out.println("Something went wrong! The response was not marked with status code 200");
+            //System.out.println(responseEntity.getStatusCode());
             return new AccuweatherResponse();
         }
     }
 
+    @Loggable
     @Cacheable(
             value = "dailyWeatherCache",
             key = "#dateString")
     public List<DailyForecast> getDailyWeatherForecastData(String dateString) {
-        System.out.println("*************Cached Method called at: " + dateString + "*****************");
+        //System.out.println("*************Cached Method called at: " + dateString + "*****************");
         return fetchDailyForecastEntity().getDailyForecasts();
     }
 

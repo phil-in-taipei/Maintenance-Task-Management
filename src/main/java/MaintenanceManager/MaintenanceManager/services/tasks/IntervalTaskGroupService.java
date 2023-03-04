@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskGroupRepo;
@@ -34,10 +35,12 @@ public class IntervalTaskGroupService {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
+    @Loggable
     public List<IntervalTaskGroup> getAllUsersIntervalTaskGroups(Long userId) {
         return intervalTaskGroupRepo.findAllByTaskGroupOwnerId(userId);
     }
 
+    @Loggable
     public List<IntervalTaskGroup>
         getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
                 Long userId, QuarterlySchedulingEnum quarter, Integer year) {
@@ -52,6 +55,7 @@ public class IntervalTaskGroupService {
             return allUsersITGs;
     }
 
+    @Loggable
     public List<IntervalTaskGroupAppliedQuarterly>
         getAllUsersIntervalTaskGroupsAppliedQuarterly(Long userId) {
         return intervalTaskAppliedQuarterlyRepo
@@ -59,6 +63,7 @@ public class IntervalTaskGroupService {
                         userId);
     }
 
+    @Loggable
     public List<IntervalTaskGroupAppliedQuarterly>
         getUsersIntervalTaskGroupsAppliedQuarterlyByQuarterAndYear(
                 QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -69,6 +74,7 @@ public class IntervalTaskGroupService {
                 );
     }
 
+    @Loggable
     List<IntervalTaskGroup>
         getAllITGsAlreadyScheduledForQuarterAndYear(
                 QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -82,32 +88,40 @@ public class IntervalTaskGroupService {
             }
             return alreadyScheduledIntervalTaskGroups;
     }
+
+    @Loggable
     public IntervalTask getIntervalTask(Long id) {
         return intervalTaskRepo.findById(id)
                 .orElse(null);
     }
 
+    @Loggable
     public IntervalTaskGroup getIntervalTaskGroup(Long id) {
         return intervalTaskGroupRepo.findById(id)
                 .orElse(null);
     }
 
+    @Loggable
     @Transactional
-    public void saveIntervalTask(IntervalTask intervalTask) throws IllegalArgumentException {
+    public void saveIntervalTask(IntervalTask intervalTask)
+            throws IllegalArgumentException {
         intervalTaskRepo.save(intervalTask);
     }
 
+    @Loggable
     @Transactional
     public void deleteIntervalTask(Long id) {
         intervalTaskRepo.deleteById(id);
     }
 
+    @Loggable
     @Transactional
     public void saveIntervalTaskGroup(IntervalTaskGroup intervalTaskGroup)
             throws IllegalArgumentException {
         intervalTaskGroupRepo.save(intervalTaskGroup);
     }
 
+    @Loggable
     @Transactional
     public void saveIntervalTaskGroupAppliedQuarterly(
             IntervalTaskGroupAppliedQuarterly intervalTaskGroupAppliedQuarterly)

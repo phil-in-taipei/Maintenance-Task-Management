@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
@@ -33,10 +34,12 @@ public class MonthlyTaskSchedulingService {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
+    @Loggable
     public List<MonthlyTaskScheduler> getAllUsersMonthlyTaskSchedulers(Long userId) {
         return monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(userId);
     }
 
+    @Loggable
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
             Long userId, QuarterlySchedulingEnum quarter, Integer year) {
@@ -51,6 +54,7 @@ public class MonthlyTaskSchedulingService {
         return allUsersMonthlyTasks;
     }
 
+    @Loggable
     public List<MonthlyTaskAppliedQuarterly>
         getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
             return monthlyTaskAppliedQuarterlyRepo
@@ -58,6 +62,7 @@ public class MonthlyTaskSchedulingService {
                         userId);
     }
 
+    @Loggable
     public List<MonthlyTaskAppliedQuarterly>
         getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -68,6 +73,7 @@ public class MonthlyTaskSchedulingService {
         );
     }
 
+    @Loggable
     public List<MonthlyTaskScheduler>
         getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -82,12 +88,14 @@ public class MonthlyTaskSchedulingService {
         return alreadyScheduledMonthlyTasks;
     }
 
+    @Loggable
     @Transactional
     public void saveMonthlyTaskScheduler(MonthlyTaskScheduler monthlyTaskScheduler)
             throws IllegalArgumentException {
                 monthlyTaskSchedulerRepo.save(monthlyTaskScheduler);
     }
 
+    @Loggable
     @Transactional
     public void saveMonthlyTaskAppliedQuarterly(MonthlyTaskAppliedQuarterly monthlyTaskAppliedQuarterly)
             throws IllegalArgumentException {
@@ -103,7 +111,8 @@ public class MonthlyTaskSchedulingService {
                 );
         System.out.println(datesToScheduleTasks.toString());
         System.out.println("******************Will generate the following single tasks and put in List****************");
-        List<MaintenanceTask> batchOfTasks = generateTaskBatchesService.generateRecurringTasksByDateList(
+        List<MaintenanceTask> batchOfTasks = generateTaskBatchesService
+                .generateRecurringTasksByDateList(
                 scheduler.getMonthlyTaskName(), scheduler.getDescription(),
                 scheduler.getUser(), datesToScheduleTasks
         );

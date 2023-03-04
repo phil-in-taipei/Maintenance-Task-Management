@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskSchedulerRepo;
@@ -30,16 +31,19 @@ public class WeeklyTaskSchedulingService {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
+    @Loggable
     public List<WeeklyTaskScheduler> getAllUsersWeeklyTaskSchedulers(Long userId) {
         return weeklyTaskSchedulerRepo.findAllByUserIdOrderByDayOfWeekAsc(userId);
     }
 
+    @Loggable
     public List<WeeklyTaskAppliedQuarterly>
         getAllUsersWeeklyTasksAppliedQuarterly(Long userId) {
         return weeklyTaskAppliedQuarterlyRepo
                 .findAllByWeeklyTaskScheduler_UserIdOrderByYearAscQuarterAsc(userId);
     }
 
+    @Loggable
     public List<WeeklyTaskScheduler>
         getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(
             Long userId, QuarterlySchedulingEnum quarter, Integer year) {
@@ -54,6 +58,7 @@ public class WeeklyTaskSchedulingService {
         return allUsersWeeklyTasks;
     }
 
+    @Loggable
     public List<WeeklyTaskScheduler>
      getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -68,6 +73,7 @@ public class WeeklyTaskSchedulingService {
         return alreadyScheduledWeeklyTasks;
     }
 
+    @Loggable
     public List<WeeklyTaskAppliedQuarterly>
         getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -78,14 +84,17 @@ public class WeeklyTaskSchedulingService {
                 );
     }
 
+    @Loggable
     @Transactional
     public void saveWeeklyTaskScheduler(WeeklyTaskScheduler weeklyTaskScheduler)
             throws IllegalArgumentException {
         weeklyTaskSchedulerRepo.save(weeklyTaskScheduler);
     }
 
+    @Loggable
     @Transactional
-    public void saveWeeklyTaskAppliedQuarterly(WeeklyTaskAppliedQuarterly weeklyTaskAppliedQuarterly)
+    public void saveWeeklyTaskAppliedQuarterly(
+            WeeklyTaskAppliedQuarterly weeklyTaskAppliedQuarterly)
             throws IllegalArgumentException {
         WeeklyTaskScheduler scheduler = weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler();
 
@@ -102,10 +111,11 @@ public class WeeklyTaskSchedulingService {
         System.out.println(datesToScheduleTasks.toString());
         System.out.println("******************Will generate the following single tasks and add to list****************");
 
-        List<MaintenanceTask> batchOfTasks = generateTaskBatchesService.generateRecurringTasksByDateList(
-                scheduler.getWeeklyTaskName(),
-                scheduler.getDescription(),
-                scheduler.getUser(), datesToScheduleTasks
+        List<MaintenanceTask> batchOfTasks = generateTaskBatchesService
+                .generateRecurringTasksByDateList(
+                    scheduler.getWeeklyTaskName(),
+                    scheduler.getDescription(),
+                    scheduler.getUser(), datesToScheduleTasks
         );
         System.out.println("********************Will now save the batch of tasks************************");
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);

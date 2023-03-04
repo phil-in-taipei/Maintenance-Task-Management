@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.weather;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,8 +21,10 @@ public class WeatherDataService {
     @Autowired
     WeatherApiService weatherApiService;
 
+    @Loggable
     public Integer getRainProbability(String dateString) {
-        List<DailyForecast> dailyForecasts = weatherApiService.getDailyWeatherForecastData(dateString);
+        List<DailyForecast> dailyForecasts = weatherApiService
+                .getDailyWeatherForecastData(dateString);
         Integer chanceOfRain = dailyForecasts.get(0).getDay().getRainProbability();
         return chanceOfRain;
     }

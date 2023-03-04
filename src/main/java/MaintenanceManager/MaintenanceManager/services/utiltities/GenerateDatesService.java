@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.utiltities;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
@@ -10,7 +11,7 @@ import java.util.List;
 @Service
 public class GenerateDatesService {
 
-
+    @Loggable
     public List<LocalDate> getIntervalSchedulingDatesByQuarter(
             Integer interval, Integer year,
             QuarterlySchedulingEnum quarter) {
@@ -60,6 +61,7 @@ public class GenerateDatesService {
         return dates;
     }
 
+    @Loggable
    public List<LocalDate> getMonthlySchedulingDatesByQuarter(
            Integer year, QuarterlySchedulingEnum quarter, Integer dayOfMonth) {
         // this adds the dates to an ArrayList (one per month at the desired day of month)
@@ -92,7 +94,7 @@ public class GenerateDatesService {
        }
        return dates;
    }
-
+    @Loggable
     public List<LocalDate> getWeeklySchedulingDatesByQuarter(
             DayOfWeek dayofWeek, Integer year,
             QuarterlySchedulingEnum quarter) {
@@ -142,6 +144,7 @@ public class GenerateDatesService {
         return dates;
     }
 
+    @Loggable
     public LocalDate getFirstDayOfWeekByYearAndQuarter(
             DayOfWeek dayofWeek, Integer year,
             QuarterlySchedulingEnum quarter
@@ -151,10 +154,10 @@ public class GenerateDatesService {
        LocalDate firstDayOfQuarter;
         switch (quarter) {
             case Q1:
-                System.out.println("Quarter 1");
+                //System.out.println("Quarter 1");
                 LocalDate ldQ1 = LocalDate.of(year, 1, 1);
                 ldQ1 = ldQ1.with(dayofWeek);
-                System.out.println("Date before adjustment check: " + ldQ1);
+                //System.out.println("Date before adjustment check: " + ldQ1);
                 if (ldQ1.getMonthValue() == 12
                         && ldQ1.getYear() < year) {
                     ldQ1 =  ldQ1.plusWeeks(1);
@@ -162,30 +165,30 @@ public class GenerateDatesService {
                 firstDayOfQuarter = ldQ1;
                 break;
             case Q2:
-                System.out.println("Quarter 2");
+                //System.out.println("Quarter 2");
                 LocalDate ldQ2 = LocalDate.of(year, 4, 1);
                 ldQ2 = ldQ2.with(dayofWeek);
-                System.out.println("Date before adjustment check: " + ldQ2);
+                //System.out.println("Date before adjustment check: " + ldQ2);
                 if (ldQ2.getMonthValue() < 4) {
                     ldQ2 = ldQ2.plusWeeks(1);
                 }
                 firstDayOfQuarter = ldQ2;
                 break;
             case Q3:
-                System.out.println("Quarter 3");
+                //System.out.println("Quarter 3");
                 LocalDate ldQ3 = LocalDate.of(year, 7, 1);
                 ldQ3 = ldQ3.with(dayofWeek);
-                System.out.println("Date before adjustment check: " + ldQ3);
+                //System.out.println("Date before adjustment check: " + ldQ3);
                 if (ldQ3.getMonthValue() < 7) {
                     ldQ3 = ldQ3.plusWeeks(1);
                 }
                 firstDayOfQuarter = ldQ3;
                 break;
             default:
-                System.out.println("Quarter 4");
+                //System.out.println("Quarter 4");
                 LocalDate ldQ4 = LocalDate.of(year, 10, 1);
                 ldQ4 = ldQ4.with(dayofWeek);
-                System.out.println("Date before adjustment check: " + ldQ4);
+                //System.out.println("Date before adjustment check: " + ldQ4);
                 if (ldQ4.with(dayofWeek).getMonthValue() < 10) {
                     ldQ4 = ldQ4.plusWeeks(1);
                 }
@@ -196,6 +199,7 @@ public class GenerateDatesService {
         return firstDayOfQuarter;
     }
 
+    @Loggable
     public LocalDate getFirstDateForIntervalTaskByYearAndQuarter(
             Integer interval, Integer year, QuarterlySchedulingEnum quarter
     ) { // this gets a random day of the week depending on how many days the interval
@@ -211,9 +215,9 @@ public class GenerateDatesService {
             dailyIndex = 7;
         }
         int random = (int)(Math.random() * dailyIndex + 1) - 1;
-        System.out.println("The random number is: " + random);
+        //System.out.println("The random number is: " + random);
         DayOfWeek beginningDayOfWeek = possibleDaysToBegin[random];
-        System.out.println("The beginning day of the week is: " + beginningDayOfWeek);
+        //System.out.println("The beginning day of the week is: " + beginningDayOfWeek);
         return getFirstDayOfWeekByYearAndQuarter(
                 beginningDayOfWeek, year, quarter);
     }
