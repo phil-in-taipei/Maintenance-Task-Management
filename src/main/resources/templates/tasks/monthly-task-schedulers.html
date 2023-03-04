@@ -51,7 +51,7 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Day of Month</th>
-
+                <th>Remove</th>
             </tr>
             </thead>
             <tbody>
@@ -60,6 +60,10 @@
                 <td th:text="${task.monthlyTaskName}"></td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.dayOfMonth}"></td>
+                <td>
+                    <a th:href="@{'/delete-monthly-task-scheduler/' + ${task.id}}">
+                    Delete</a>
+                </td>
             </tr>
             </tbody>
         </table>

@@ -35,6 +35,16 @@ public class MonthlyTaskSchedulingService {
     MaintenanceTaskService maintenanceTaskService;
 
     @Loggable
+    public void deleteMonthlyTaskScheduler(Long id) {
+        monthlyTaskSchedulerRepo.deleteById(id);
+    }
+
+    @Loggable
+    public void deleteMonthlyTaskAppliedQuarterly(Long id) {
+        monthlyTaskAppliedQuarterlyRepo.deleteById(id);
+    }
+
+    @Loggable
     public List<MonthlyTaskScheduler> getAllUsersMonthlyTaskSchedulers(Long userId) {
         return monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(userId);
     }
@@ -86,6 +96,18 @@ public class MonthlyTaskSchedulingService {
             alreadyScheduledMonthlyTasks.add(mTAQ.getMonthlyTaskScheduler());
         }
         return alreadyScheduledMonthlyTasks;
+    }
+
+    @Loggable
+    public MonthlyTaskScheduler getMonthlyTaskScheduler(Long id) {
+        return monthlyTaskSchedulerRepo.findById(id)
+                .orElse(null);
+    }
+
+    @Loggable
+    public MonthlyTaskAppliedQuarterly getMonthlyTaskAppliedQuarterly(Long id) {
+        return monthlyTaskAppliedQuarterlyRepo.findById(id)
+                .orElse(null);
     }
 
     @Loggable

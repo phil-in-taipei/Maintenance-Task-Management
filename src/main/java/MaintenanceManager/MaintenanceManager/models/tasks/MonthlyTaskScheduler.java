@@ -32,8 +32,8 @@ public class MonthlyTaskScheduler {
     private UserPrincipal user;
 
     // get rid of this field (strategy ineffective for preventing double-booking)
-    @OneToMany(mappedBy = "monthlyTaskScheduler")
-    private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
+    //@OneToMany(mappedBy = "monthlyTaskScheduler")
+    //private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
 
     @Override
     public String toString() {
