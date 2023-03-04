@@ -32,8 +32,9 @@ public class MaintenanceTaskController {
         MaintenanceTask task = maintenanceTaskService.getMaintenanceTask(taskId);
         if (task != null) {
             maintenanceTaskService.confirmTaskCompletion(task);
+            System.out.println("This is the task date: " + task.getDate().toString());
         }
-        return "redirect:/tasks";
+        return "redirect:/tasks-by-month";
     }
 
     @GetMapping("/create-single-task")
@@ -43,9 +44,20 @@ public class MaintenanceTaskController {
         return "tasks/create-single-task";
     }
 
-    @GetMapping("/reschedule-task/{taskId}")
-    public ModelAndView showEditTaskPage(@PathVariable(name = "taskId") Long taskId) {
-        ModelAndView mav = new ModelAndView("tasks/reschedule-task");
+    @RequestMapping("/delete-single-task/{taskId}")
+    public String deleteMaintenanceTask(@PathVariable(name = "taskId") Long taskId, Model model) {
+        if (maintenanceTaskService.getMaintenanceTask(taskId) == null) {
+            model.addAttribute("message",
+                    "Cannot delete, task with id: " + taskId + " does not exist.");
+            return "error";
+        }
+        maintenanceTaskService.deleteMaintenanceTask(taskId);
+        return "redirect:/tasks-by-month";
+    }
+
+    @GetMapping("/task-detail/{taskId}")
+    public ModelAndView showTaskDetailPage(@PathVariable(name = "taskId") Long taskId) {
+        ModelAndView mav = new ModelAndView("tasks/task-detail");
         MaintenanceTask originalTask = maintenanceTaskService.getMaintenanceTask(taskId);
         if (originalTask == null) {
             mav.setViewName("error/error");
@@ -101,7 +113,7 @@ public class MaintenanceTaskController {
                             + e.getMessage());
             return "error/error";
         }
-        return "redirect:/tasks";
+        return "redirect:/tasks-by-month";
     }
 
     @GetMapping("/tasks")
@@ -214,6 +226,6 @@ public class MaintenanceTaskController {
                 return "error/error";
             }
         }
-        return "redirect:/tasks";
+        return "redirect:/tasks-by-month";
     }
 }

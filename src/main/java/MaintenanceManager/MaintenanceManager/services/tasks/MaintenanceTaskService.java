@@ -12,10 +12,22 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-//@RequiredArgsConstructor
 public class MaintenanceTaskService {
     @Autowired
     MaintenanceTaskRepo maintenanceTaskRepo;
+
+    @Loggable
+    @Transactional
+    public void confirmTaskCompletion(MaintenanceTask task)
+            throws IllegalArgumentException {
+        task.setStatus(TaskStatusEnum.COMPLETED);
+        maintenanceTaskRepo.save(task);
+    }
+
+    @Loggable
+    public void deleteMaintenanceTask(Long id) {
+        maintenanceTaskRepo.deleteById(id);
+    }
 
     @Loggable
     public List<MaintenanceTask> getAllUserTasks(Long userId) {
@@ -51,6 +63,12 @@ public class MaintenanceTaskService {
     }
 
     @Loggable
+    public MaintenanceTask getMaintenanceTask(Long id) {
+        return maintenanceTaskRepo.findById(id)
+                .orElse(null);
+    }
+
+    @Loggable
     @Transactional
     public void saveBatchOfTasks(List<MaintenanceTask> tasks)
             throws IllegalArgumentException {
@@ -65,17 +83,5 @@ public class MaintenanceTaskService {
         maintenanceTaskRepo.save(task);
     }
 
-    @Loggable
-    @Transactional
-    public void confirmTaskCompletion(MaintenanceTask task)
-            throws IllegalArgumentException {
-                 task.setStatus(TaskStatusEnum.COMPLETED);
-        maintenanceTaskRepo.save(task);
-    }
 
-    @Loggable
-    public MaintenanceTask getMaintenanceTask(Long id) {
-        return maintenanceTaskRepo.findById(id)
-                .orElse(null);
-    }
 }

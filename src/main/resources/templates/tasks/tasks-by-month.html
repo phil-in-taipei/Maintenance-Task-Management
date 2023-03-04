@@ -42,33 +42,29 @@
                 </div>
             </form>
         </div>
+        <br>
         <table border="1" cellpadding="10">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
                 <th>Date</th>
-                <th>Status</th>
+                <th>Name</th>
                 <th>Confirm Completion</th>
-                <th>Reschedule</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="task : ${tasks}">
-                <td th:text="${task.id}"></td>
-                <td th:text="${task.taskName}"></td>
-                <td th:text="${task.description}"></td>
                 <td th:text="${task.date}"></td>
-                <!--<td th:text="${task.taskStatusHistory.status}"></td> -->
-                <td th:text="${task.status}"></td>
                 <td>
-                    <a th:href="@{'/confirm-task-completion/' + ${task.id}}">Confirm!</a>
+                    <a th:text="${task.taskName}"
+                       th:href="@{'/task-detail/' + ${task.id}}"></a>
                 </td>
                 <td>
-                    <a th:href="@{'/reschedule-task/' + ${task.id}}">Reschedule!</a>
+                    <span th:if="${task.status.name() == 'COMPLETED'}">COMPLETED</span>
+                    <span th:unless="${task.status.name() == 'COMPLETED'}">
+                        <a th:text="${task.status}"
+                           th:href="@{'/confirm-task-completion/' + ${task.id}}"></a>
+                    </span>
                 </td>
-
             </tr>
             </tbody>
         </table>

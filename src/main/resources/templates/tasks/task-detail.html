@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <title>Create Task</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container">
+        <div class="mt-4 p-5 rounded">
+            <div class="p-3 rounded-lg m-2">
+                <div align="center">
+                    <h1>Task Details</h1>
+                    <table border="1" cellpadding="10">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Comments</th>
+                            <th>Status</th>
+                            <th>Delete</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td th:text="${task.date}"></td>
+                            <td th:text="${task.taskName}"></td>
+                            <td th:text="${task.comments}"></td>
+                            <td th:text="${task.status}"></td>
+                            <td>
+                                <a th:href="@{'/delete-single-task/' + ${task.id}}">
+                                    Delete
+                                </a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <br><br>
+                <div th:if="${task.status.name() != 'COMPLETED'}">
+                    <h1>Reschedule Task</h1>
+                    <form action="#" th:action="@{'/submit-reschedule-task-form/' + ${task.id}}" method="post" th:object="${editTaskForm}">
+                        <div class="form-control">
+                            <label>Scheduled Date</label>
+                            <div>
+                                <input type="date" id="date" class="form-control" th:field="*{date}" required>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-control">
+                            <label>Comments</label>
+                            <div>
+                                <input type="text" id="taskName" class="form-control" th:field="*{comments}" required>
+                            </div>
+                        </div>
+                        <hr />
+                        <div>
+                            <input class="btn btn-primary" type="submit" value="Submit"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
