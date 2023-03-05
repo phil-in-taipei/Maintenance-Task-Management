@@ -14,15 +14,15 @@
         <h1>User's Tasks</h1>
         <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
         <br/><br/>
-        <table border="1" cellpadding="10">
+        <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th>Confirm Completion</th>
-                <th>Reschedule</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Confirm Completion</th>
+                <th scope="col">Reschedule</th>
             </tr>
             </thead>
             <tbody>

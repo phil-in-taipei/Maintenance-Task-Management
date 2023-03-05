@@ -16,13 +16,13 @@
         <h3 th:text="${intervalTaskGroup.taskGroupName} + ' (' + ${intervalTaskGroup.intervalInDays} + ')'"></h3>
         <br/><a th:href="@{'/create-interval-task/' + ${intervalTaskGroup.id}}">Add New Task to Group</a><br/>
         <br/><br/>
-        <table border="1" cellpadding="10">
+        <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Rain Restriction</th>
-                <th>Delete</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Rain Restriction</th>
+                <th scope="col">Delete</th>
             </tr>
             </thead>
             <tbody>
