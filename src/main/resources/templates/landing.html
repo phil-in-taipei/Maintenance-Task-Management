@@ -23,19 +23,26 @@
             <h2 th:text="'Chance of rain: ' + ${chanceOfRain} + '%'"></h2>
             <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
             This content is only shown to maintenance schedulers
-            <div align="center">
-                <form action="#" th:action="@{'/search-tasks-by-date'}" method="post" th:object="${searchTasksByDate}">
-                    <div class="form-control">
-                        <label>Search Tasks By Date</label>
-                        <div>
-                            <input type="date" id="date" class="form-control" th:field="*{date}" required>
+            <div class="container border rounded date-search">
+                <br />
+                <div class="text-center">
+                    <form class="form-inline" action="#" th:action="@{'/search-tasks-by-date'}" method="post" th:object="${searchTasksByDate}">
+                        <div class="form-group">
+                            <div class="form-control">
+                                <label>Search Tasks By Date</label>
+                                <div>
+                                    <input type="date" id="date"
+                                           class="form-control" th:field="*{date}" required>
+                                </div>
+                            </div>
+                            <hr />
+                            <div class="d-grid gap-2">
+                                <input class="btn btn-primary" type="submit" value="Search"/>
+                            </div>
                         </div>
-                    </div>
-                    <hr />
-                    <div>
-                        <input class="btn btn-primary" type="submit" value="Submit"/>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <br />
             </div>
             <div align="center">
                 <h1>Uncompleted Tasks</h1>
