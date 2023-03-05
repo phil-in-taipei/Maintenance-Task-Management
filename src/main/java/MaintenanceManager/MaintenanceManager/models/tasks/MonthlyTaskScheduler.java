@@ -20,10 +20,6 @@ public class MonthlyTaskScheduler {
     @Column(nullable = false)
     private String monthlyTaskName;
 
-    // get rid of this field
-    @Column(nullable = false)
-    private String description;
-
     @Column(nullable = false)
     private Integer dayOfMonth;
 
@@ -31,7 +27,7 @@ public class MonthlyTaskScheduler {
     @JoinColumn
     private UserPrincipal user;
 
-    // get rid of this field (strategy ineffective for preventing double-booking)
+    // use same configuration as interval task for interval task group
     //@OneToMany(mappedBy = "monthlyTaskScheduler")
     //private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
 
@@ -40,7 +36,6 @@ public class MonthlyTaskScheduler {
         return "MonthlyTaskScheduler{" +
                 "id=" + id +
                 ", Monthly Task Name='" + monthlyTaskName + '\'' +
-                //", Description='" + description + '\'' +
                 ", Day Of Month=" + dayOfMonth +
                 '}';
     }

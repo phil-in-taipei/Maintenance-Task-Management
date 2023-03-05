@@ -21,7 +21,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Rain Restriction</th>
                 <th>Delete</th>
             </tr>
@@ -30,7 +29,6 @@
             <tr th:each="task : ${intervalTaskGroup.getIntervalTasks()}">
                 <td th:text="${task.id}"></td>
                 <td th:text="${task.intervalTaskName}"></td>
-                <td th:text="${task.description}"></td>
                 <td th:text="${task.noRainOnly}"></td>
                 <td>
                     <a th:href="@{'/delete-interval-task/' + ${task.id} + '/' + ${intervalTaskGroup.id}}">Remove</a>

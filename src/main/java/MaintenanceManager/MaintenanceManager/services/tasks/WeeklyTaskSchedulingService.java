@@ -138,7 +138,6 @@ public class WeeklyTaskSchedulingService {
         List<MaintenanceTask> batchOfTasks = generateTaskBatchesService
                 .generateRecurringTasksByDateList(
                     scheduler.getWeeklyTaskName(),
-                    scheduler.getDescription(),
                     scheduler.getUser(), datesToScheduleTasks
         );
         System.out.println("********************Will now save the batch of tasks************************");

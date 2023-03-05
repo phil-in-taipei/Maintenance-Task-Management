@@ -103,7 +103,7 @@ public class MaintenanceTaskController {
             UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
             MaintenanceTask maintenanceTask = new MaintenanceTask(
                     maintenanceTaskForm.getTaskName(),
-                    maintenanceTaskForm.getDescription(),
+                    //maintenanceTaskForm.getDescription(),
                     date, user);
             maintenanceTaskService.saveTask(maintenanceTask);
         } catch (IllegalArgumentException e) {

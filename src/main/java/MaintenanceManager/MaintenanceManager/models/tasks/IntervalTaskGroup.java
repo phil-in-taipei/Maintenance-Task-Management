@@ -31,6 +31,8 @@ public class IntervalTaskGroup {
     @OneToMany(mappedBy = "intervalTaskGroup", orphanRemoval = true)
     private Set<MaintenanceTask> maintenanceTasks;
 
+
+    // apply this configuration to the "applied quarterlies"
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "interval_task_group_id")
     private List<IntervalTask> intervalTasks;

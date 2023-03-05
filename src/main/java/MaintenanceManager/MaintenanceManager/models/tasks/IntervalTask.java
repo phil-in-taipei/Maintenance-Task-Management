@@ -17,8 +17,6 @@ public class IntervalTask {
     @Column(nullable = false)
     private String intervalTaskName;
 
-    @Column(nullable = false)
-    private String description;
 
     @Column(nullable = false)
     private Boolean noRainOnly;
@@ -28,7 +26,6 @@ public class IntervalTask {
         return "IntervalTask{" +
                 "id=" + id +
                 ", intervalTaskName='" + intervalTaskName + '\'' +
-                ", description='" + description + '\'' +
                // ", noRainOnly=" + noRainOnly +
                 '}';
     }

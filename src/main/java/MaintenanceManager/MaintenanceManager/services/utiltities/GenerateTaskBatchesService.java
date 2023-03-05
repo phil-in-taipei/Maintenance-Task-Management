@@ -16,13 +16,13 @@ public class GenerateTaskBatchesService {
 
     @Loggable
     public List<MaintenanceTask> generateRecurringTasksByDateList(
-            String taskName, String description, UserPrincipal user,
+            String taskName, UserPrincipal user,
             List<LocalDate> datesToScheduleTasks
     ) {
         List<MaintenanceTask> batchOfTasks = new ArrayList<>();
         for (LocalDate date : datesToScheduleTasks) {
             MaintenanceTask task = new MaintenanceTask(
-                    taskName, description, date, user
+                    taskName, date, user
             );
             batchOfTasks.add(task);
         }
@@ -51,7 +51,7 @@ public class GenerateTaskBatchesService {
             //System.out.println(date + ": " + intervalTasks.get(indexOfIntervalTaskList).toString());
             IntervalTask intervalTask = intervalTasks.get(indexOfIntervalTaskList);
             MaintenanceTask maintenanceTask = new MaintenanceTask(
-                    intervalTask.getIntervalTaskName(), intervalTask.getDescription(),
+                    intervalTask.getIntervalTaskName(), //intervalTask.getDescription(),
                     date, intervalTaskGroup.getTaskGroupOwner(), intervalTask.getNoRainOnly(),
                     intervalTaskGroup
             );

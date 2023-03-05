@@ -22,10 +22,6 @@ public class MaintenanceTask {
     @Column(nullable = false)
     private String taskName;
 
-    // get rid of this field
-    @Column(nullable = false)
-    private String description;
-
     @Column(nullable = false)
     private LocalDate date;
 
@@ -59,10 +55,9 @@ public class MaintenanceTask {
     private IntervalTaskGroup intervalTaskGroup;
 
     public MaintenanceTask(
-            String taskName, String description,
+            String taskName,
             LocalDate date, UserPrincipal user) {
         this.taskName = taskName;
-        this.description = description;
         this.date = date;
         this.user = user;
         this.status = TaskStatusEnum.PENDING;
@@ -73,12 +68,11 @@ public class MaintenanceTask {
     }
 
     public MaintenanceTask(
-            String taskName, String description,
+            String taskName,
             LocalDate date, UserPrincipal user,
             Boolean noRainOnly,
             IntervalTaskGroup intervalTaskGroup) {
         this.taskName = taskName;
-        this.description = description;
         this.date = date;
         this.user = user;
         this.status = TaskStatusEnum.PENDING;
@@ -94,7 +88,6 @@ public class MaintenanceTask {
         return "MaintenanceTask{" +
                 "id=" + id +
                 ", taskName='" + taskName + '\'' +
-                ", description='" + description + '\'' +
                 ", date=" + date +
                 ", user=" + user.getUsername() +
                 ", status=" + status +

@@ -19,7 +19,6 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Description</th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>Confirm Completion</th>
@@ -30,9 +29,7 @@
             <tr th:each="task : ${tasks}">
                 <td th:text="${task.id}"></td>
                 <td th:text="${task.taskName}"></td>
-                <td th:text="${task.description}"></td>
                 <td th:text="${task.date}"></td>
-                <!--<td th:text="${task.taskStatusHistory.status}"></td> -->
                 <td th:text="${task.status}"></td>
                 <td>
                     <a th:href="@{'/confirm-task-completion/' + ${task.id}}">Confirm!</a>

@@ -141,7 +141,7 @@ public class MonthlyTaskSchedulingService {
         System.out.println("******************Will generate the following single tasks and put in List****************");
         List<MaintenanceTask> batchOfTasks = generateTaskBatchesService
                 .generateRecurringTasksByDateList(
-                scheduler.getMonthlyTaskName(), scheduler.getDescription(),
+                scheduler.getMonthlyTaskName(),// scheduler.getDescription(),
                 scheduler.getUser(), datesToScheduleTasks
         );
         System.out.println("********************Batch Save tasks in list************************");
