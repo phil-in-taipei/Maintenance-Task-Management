@@ -36,7 +36,7 @@ public class IntervalTaskGroupAppliedQuarterly {
     )
     private Integer year;
 
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(optional = false) // cascade = CascadeType.ALL,
     private IntervalTaskGroup intervalTaskGroup;
 
     @Override

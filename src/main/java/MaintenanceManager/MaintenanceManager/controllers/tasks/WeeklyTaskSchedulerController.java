@@ -61,7 +61,7 @@ public class WeeklyTaskSchedulerController {
             return "error/error";
         }
         weeklyTaskSchedulingService.deleteWeeklyTaskScheduler(id);
-        return "redirect:/monthly-tasks";
+        return "redirect:/weekly-tasks";
     }
 
     @RequestMapping("/delete-weekly-task-applied-quarterly/{id}")
@@ -74,7 +74,7 @@ public class WeeklyTaskSchedulerController {
             return "error/error";
         }
         weeklyTaskSchedulingService.deleteWeeklyTaskAppliedQuarterly(id);
-        return "redirect:/quarterly-monthly-tasks-scheduled";
+        return "redirect:/quarterly-weekly-tasks-scheduled";
     }
 
     @PostMapping("/weekly-tasks")
