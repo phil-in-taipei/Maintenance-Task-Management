@@ -27,9 +27,8 @@ public class MonthlyTaskScheduler {
     @JoinColumn
     private UserPrincipal user;
 
-    // use same configuration as interval task for interval task group
-    //@OneToMany(mappedBy = "monthlyTaskScheduler")
-    //private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
+    @OneToMany(mappedBy = "monthlyTaskScheduler", orphanRemoval = true)
+    private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
 
     @Override
     public String toString() {

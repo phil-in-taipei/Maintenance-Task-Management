@@ -36,7 +36,6 @@ public class WeeklyTaskAppliedQuarterly {
     )
     private Integer year;
 
-    // try removing optional=false
     @ManyToOne(cascade = CascadeType.ALL
             , optional = false)
     private WeeklyTaskScheduler weeklyTaskScheduler;

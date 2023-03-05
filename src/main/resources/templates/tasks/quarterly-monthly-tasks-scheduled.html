@@ -18,7 +18,6 @@
                     <th>Quarter</th>
                     <th>Year</th>
                     <th>Monthly Scheduler</th>
-                    <th>Remove</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -26,10 +25,6 @@
                     <td th:text="${task.quarter}"></td>
                     <td th:text="${task.year}"></td>
                     <td th:text="${task.monthlyTaskScheduler.templateSelector()}"></td>
-                    <td>
-                        <a th:href="@{'/delete-monthly-task-applied-quarterly/' + ${task.id}}">
-                            Delete</a>
-                    </td>
                     <td>
                 </tr>
                 </tbody>

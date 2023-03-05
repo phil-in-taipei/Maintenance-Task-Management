@@ -2,6 +2,7 @@ package MaintenanceManager.MaintenanceManager.models.tasks;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.Set;
 
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import lombok.*;
@@ -28,6 +29,9 @@ public class WeeklyTaskScheduler {
     @ManyToOne(optional = false)
     @JoinColumn
     private UserPrincipal user;
+
+    @OneToMany(mappedBy = "weeklyTaskScheduler", orphanRemoval = true)
+    private Set<WeeklyTaskAppliedQuarterly> weeklyTaskAppliedQuarterly;
 
     @Override
     public String toString() {

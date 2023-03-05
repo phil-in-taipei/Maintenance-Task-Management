@@ -36,9 +36,8 @@ public class MonthlyTaskAppliedQuarterly {
     )
     private Integer year;
 
-    // get rid of this field -- implement through the MonthlyTaskScheduler
-    // first try getting rid of optional=false
-    @ManyToOne(cascade = CascadeType.ALL, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL
+            , optional = false)
     private MonthlyTaskScheduler monthlyTaskScheduler;
 
     @Override
