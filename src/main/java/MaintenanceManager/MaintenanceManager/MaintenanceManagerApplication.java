@@ -34,7 +34,8 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	public static void main(String[] args) {
-		SpringApplication.run(MaintenanceManagerApplication.class, args);
+		SpringApplication
+				.run(MaintenanceManagerApplication.class, args);
 	}
 
 	@Bean

@@ -15,18 +15,22 @@
             <table border="1" cellpadding="10">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Quarter</th>
                     <th>Year</th>
                     <th>Monthly Scheduler</th>
+                    <th>Remove</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${qMonthlyTasks}">
-                    <td th:text="${task.id}"></td>
                     <td th:text="${task.quarter}"></td>
                     <td th:text="${task.year}"></td>
-                    <td th:text="${task.monthlyTaskScheduler.toString()}"></td>
+                    <td th:text="${task.monthlyTaskScheduler.templateSelector()}"></td>
+                    <td>
+                        <a th:href="@{'/delete-monthly-task-applied-quarterly/' + ${task.id}}">
+                            Delete</a>
+                    </td>
+                    <td>
                 </tr>
                 </tbody>
             </table>

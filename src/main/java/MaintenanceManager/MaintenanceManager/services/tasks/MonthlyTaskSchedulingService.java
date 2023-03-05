@@ -37,18 +37,22 @@ public class MonthlyTaskSchedulingService {
     @Loggable
     @Transactional
     public void deleteMonthlyTaskScheduler(Long id) {
-        monthlyTaskSchedulerRepo.deleteById(id);
+        monthlyTaskSchedulerRepo
+                .deleteById(id);
     }
 
     @Loggable
     @Transactional
     public void deleteMonthlyTaskAppliedQuarterly(Long id) {
-        monthlyTaskAppliedQuarterlyRepo.deleteById(id);
+        monthlyTaskAppliedQuarterlyRepo
+                .deleteById(id);
     }
 
     @Loggable
-    public List<MonthlyTaskScheduler> getAllUsersMonthlyTaskSchedulers(Long userId) {
-        return monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(userId);
+    public List<MonthlyTaskScheduler>
+        getAllUsersMonthlyTaskSchedulers(Long userId) {
+            return monthlyTaskSchedulerRepo
+                    .findAllByUserIdOrderByDayOfMonthAsc(userId);
     }
 
     @Loggable

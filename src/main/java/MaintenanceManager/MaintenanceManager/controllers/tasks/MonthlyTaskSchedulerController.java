@@ -55,10 +55,12 @@ public class MonthlyTaskSchedulerController {
     }
 
     @RequestMapping("/delete-monthly-task-scheduler/{id}")
-    public String deleteMonthlyMaintenanceTask(@PathVariable(name = "id") Long id, Model model) {
+    public String deleteMonthlyMaintenanceTask(
+            @PathVariable(name = "id") Long id, Model model) {
         if (monthlyTaskSchedulingService.getMonthlyTaskScheduler(id) == null) {
             model.addAttribute("message",
-                    "Cannot delete, monthly task with id: " + id + " does not exist.");
+                    "Cannot delete, monthly task with id: " +
+                            id + " does not exist.");
             return "error/error";
         }
         monthlyTaskSchedulingService.deleteMonthlyTaskScheduler(id);
@@ -66,10 +68,14 @@ public class MonthlyTaskSchedulerController {
     }
 
     @RequestMapping("/delete-monthly-task-applied-quarterly/{id}")
-    public String deleteMonthlyTaskAppliedQuarterly(@PathVariable(name = "id") Long id, Model model) {
-        if (monthlyTaskSchedulingService.getMonthlyTaskAppliedQuarterly(id) == null) {
-            model.addAttribute("message",
-                    "Cannot delete, monthly task applied quarterly with id: " +
+    public String deleteMonthlyTaskAppliedQuarterly(
+            @PathVariable(name = "id") Long id, Model model) {
+        if (monthlyTaskSchedulingService
+                .getMonthlyTaskAppliedQuarterly(id) == null) {
+            model.addAttribute(
+                    "message",
+                    "Cannot delete, monthly task " +
+                            "applied quarterly with id: " +
                             id + " does not exist.");
             return "error/error";
         }
@@ -97,24 +103,26 @@ public class MonthlyTaskSchedulerController {
     }
 
     @GetMapping("/monthly-tasks")
-    public String showAllUserMonthlyTasks(Authentication authentication, Model model) {
+    public String showAllUserMonthlyTasks(
+            Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         List<MonthlyTaskScheduler> monthlyTasks =
-                monthlyTaskSchedulingService.getAllUsersMonthlyTaskSchedulers(user.getId());
+                monthlyTaskSchedulingService
+                        .getAllUsersMonthlyTaskSchedulers(user.getId());
         model.addAttribute("monthlyTasks", monthlyTasks);
         model.addAttribute("user", user);
-        model.addAttribute("monthlyTaskQuarterAndYear", new SearchQuarterAndYear());
+        model.addAttribute("monthlyTaskQuarterAndYear",
+                new SearchQuarterAndYear());
         return "tasks/monthly-task-schedulers";
     }
 
     @GetMapping("/quarterly-monthly-tasks-scheduled")
-    public String showAllUserQuarterlyMonthlyTasks(Authentication authentication, Model model) {
+    public String showAllUserQuarterlyMonthlyTasks(
+            Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         List<MonthlyTaskAppliedQuarterly> qMonthlyTasks =
-                monthlyTaskSchedulingService.getAllUsersMonthlyTasksAppliedQuarterly(user.getId());
-        System.out.println(
-                "**********************************These are the qMonthly tasks for the user: " +
-                        qMonthlyTasks.toString() + "***********************************");
+                monthlyTaskSchedulingService
+                        .getAllUsersMonthlyTasksAppliedQuarterly(user.getId());
         model.addAttribute("qMonthlyTasks", qMonthlyTasks);
         model.addAttribute("user", user);
         return "tasks/quarterly-monthly-tasks-scheduled";

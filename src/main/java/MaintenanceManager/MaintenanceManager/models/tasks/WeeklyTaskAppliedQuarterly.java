@@ -36,7 +36,7 @@ public class WeeklyTaskAppliedQuarterly {
     )
     private Integer year;
 
-    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.ALL}
+    @ManyToOne(cascade = CascadeType.ALL
             , optional = false)
     private WeeklyTaskScheduler weeklyTaskScheduler;
 

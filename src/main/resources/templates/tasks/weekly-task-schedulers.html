@@ -47,7 +47,6 @@
         <table border="1" cellpadding="10">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Day of Week</th>
@@ -57,7 +56,6 @@
             </thead>
             <tbody>
             <tr th:each="task : ${weeklyTasks}">
-                <td th:text="${task.id}"></td>
                 <td th:text="${task.weeklyTaskName}"></td>
                 <td th:text="${task.description}"></td>
                 <td th:text="${task.dayOfWeek}"></td>

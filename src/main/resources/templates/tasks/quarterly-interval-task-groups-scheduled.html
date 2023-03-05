@@ -15,18 +15,21 @@
       <table border="1" cellpadding="10">
         <thead>
         <tr>
-          <th>ID</th>
           <th>Quarter</th>
           <th>Year</th>
           <th>Interval Task Group</th>
+          <th>Delete</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="task : ${qITG}">
-          <td th:text="${task.id}"></td>
           <td th:text="${task.quarter}"></td>
           <td th:text="${task.year}"></td>
-          <td th:text="${task.intervalTaskGroup.toString()}"></td>
+          <td th:text="${task.intervalTaskGroup.templateSelector()}"></td>
+          <td>
+            <a th:href="@{'/delete-interval-task-group-applied-quarterly/' + ${task.id}}">
+              Delete</a>
+          </td>
         </tr>
         </tbody>
       </table>

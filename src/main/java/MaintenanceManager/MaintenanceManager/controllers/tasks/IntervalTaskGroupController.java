@@ -98,6 +98,20 @@ public class IntervalTaskGroupController {
         return "redirect:/interval-task-groups";
     }
 
+    @RequestMapping("/delete-interval-task-group-applied-quarterly/{id}")
+    public String deleteIntervalTaskGroupAppliedQuarterly(
+            @PathVariable(name = "id") Long id, Model model) {
+        if (intervalTaskGroupService.getIntervalTaskGroupAppliedQuarterly(id) == null) {
+            model.addAttribute("message",
+                    "Cannot delete, interval task group " +
+                            " applied quarterly with id: " +
+                            id + " does not exist.");
+            return "error/error";
+        }
+        intervalTaskGroupService.deleteIntervalTaskGroupAppliedQuarterly(id);
+        return "redirect:/quarterly-interval-task-groups-scheduled";
+    }
+
     @PostMapping("/interval-task-groups")
     public String saveNewIntervalTaskGroup(
             @ModelAttribute("intervalTaskGroup")

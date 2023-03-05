@@ -44,8 +44,13 @@ public class IntervalTaskGroupService {
     @Loggable
     @Transactional
     public void deleteIntervalTaskGroup(Long id) {
-        //intervalTaskAppliedQuarterlyRepo.deleteAllByIntervalTaskGroupId(id);
         intervalTaskGroupRepo.deleteById(id);
+    }
+
+    @Loggable
+    @Transactional
+    public void deleteIntervalTaskGroupAppliedQuarterly(Long id) {
+        intervalTaskAppliedQuarterlyRepo.deleteById(id);
     }
 
     @Loggable
