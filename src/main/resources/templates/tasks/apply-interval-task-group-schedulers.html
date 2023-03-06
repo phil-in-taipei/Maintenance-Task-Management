@@ -9,20 +9,26 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <div class="container">
-        <div class="mt-4 p-5 rounded">
+    <br />
+    <div class="container border rounded">
             <div class="p-3 rounded-lg m-2">
                 <div class="row">
-                    <h2>Apply Interval task group to year/quarter</h2>
+                    <h2 class="text-center">Apply Interval Task Group</h2>
+                    <h3 class="text-center" th:text="(${quarter} + ' ' + ${year})"></h3>
                 </div>
                 <hr />
                 <div class="row">
-                    <h3 th:text="'User: ' + ${user.username}"></h3>
-                    <h3 th:text="'Quarter: ' + ${quarter}"></h3>
-                    <h3 th:text="'Year: ' + ${year}"></h3>
+                    <div class="container border rounded"><br />
+                        <h4 class="text-center">Schedules all tasks in the Interval Task Group</h4>
+                        <h4 class="text-center">at specified daily intervals</h4>
+                        <br />
+                    </div>
                 </div>
-                <div class="row">
-                    <form action="#"
+                <hr />
+                <div class="row text-center">
+                    <div class="container border rounded">
+                        <br />
+                    <form class="form" action="#"
                           th:action="@{'/submit-quarterly-interval-task-group-scheduled/' + ${quarter} + '/' + ${year}}"
                           method="post" th:object="${qWeeklyTask}">
                         <hr />
@@ -39,12 +45,13 @@
                         <div>
                             <input class="btn btn-primary" type="submit" value="Submit"/>
                         </div>
+                        <br />
                     </form>
                 </div>
-                <hr />
+                </div><hr />
             </div>
-        </div>
     </div>
+    <br />
 </div>
 </body>
 </html>
