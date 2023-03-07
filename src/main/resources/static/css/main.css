@@ -2,3 +2,15 @@
 .date-search {
   max-width: 550px;
 }
+
+#applyMonthlySchedulerForm {
+    display: none;
+}
+
+#applyWeeklySchedulerForm {
+    display: none;
+}
+
+#applyIntervalTaskGroupForm {
+    display: none;
+}

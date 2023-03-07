@@ -10,9 +10,9 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-  <div align="center">
-    <h1>User's Tasks</h1>
-    <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
+  <br />
+  <div class="container border rounded text-center">
+    <h2 th:text="${user.username} + '\'s Tasks'"></h2>
     <div class="container">
       <div class="row">
         <div class="col">
@@ -27,6 +27,7 @@
       </div>
     </div>
     <br/><br/>
+    <div class="container border rounded text-center">
     <table class="table">
       <thead>
       <tr>
@@ -52,7 +53,10 @@
         </tr>
       </tbody>
     </table>
+      </div>
+    <br />
   </div>
+  <br />
 </div>
 </body>
 </html>

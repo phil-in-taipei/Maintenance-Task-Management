@@ -10,9 +10,9 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <div class="container">
-        <div class="mt-4 p-5 rounded">
-            <div class="p-3 rounded-lg m-2">
+    <br />
+    <div class="container text-center border rounded">
+        <div class="container">
                 <h1>Register</h1>
                 <form action="#" th:action="@{/register}" method="post" th:object="${userRegistration}">
                     <hr />
@@ -68,13 +68,13 @@
                         </div>
                     </div>
                     <hr />
-                    <div>
+                    <div class="d-grid gap-2 col-6 mx-auto">
                         <input class="btn btn-primary" type="submit" value="Submit"/>
                     </div>
                 </form>
-            </div>
         </div>
     </div>
+    <br />
 </div>
 </body>
 </html>

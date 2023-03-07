@@ -10,11 +10,21 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <div align="center">
+    <br />
+    <div class="container border rounded text-center">
         <br />
-        <h2 th:text="${user.username} + ': Weekly Task Schedulers'"></h2>
-        <div class="container border rounded text-center">
-            <form class="form" action="#" th:action="@{'/apply-weekly-schedulers'}" method="post" th:object="${weeklyTaskQuarterAndYear}">
+        <h2 th:text="${user.username} + '\'s Weekly Task Schedulers'"></h2>
+        <hr />
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button class="btn btn-outline-primary" id="weeklySchedulerBtn"
+                    onclick="toggleApplyWeeklySchedulerForm()">
+                Click to Apply Monthly Schedulers to Quarter/Year
+            </button>
+        </div>
+        <hr />
+        <div class="container border rounded text-center" id="applyWeeklySchedulerForm">
+            <form class="form" action="#" th:action="@{'/apply-weekly-schedulers'}"
+                  method="post" th:object="${weeklyTaskQuarterAndYear}">
                 <h3>Apply Weekly Schedulers</h3>
                 <div class="form-control">
                     <label>Quarter</label>
@@ -45,7 +55,7 @@
             </form>
         </div>
         <br/><br/>
-        <div class="container border rounded text-center">
+        <div class="container border rounded text-center" id="weeklyTasksTable">
         <table class="table">
             <thead>
             <tr>
