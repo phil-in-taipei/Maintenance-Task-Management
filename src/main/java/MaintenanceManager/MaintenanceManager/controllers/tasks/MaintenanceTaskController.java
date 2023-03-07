@@ -24,9 +24,6 @@ public class MaintenanceTaskController {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
-    @Autowired
-    IntervalTaskGroupService intervalTaskGroupService;
-
     @RequestMapping("/confirm-task-completion/{taskId}")
     public String confirmTaskCompletion(@PathVariable(name = "taskId") Long taskId) {
         MaintenanceTask task = maintenanceTaskService.getMaintenanceTask(taskId);
@@ -128,7 +125,6 @@ public class MaintenanceTaskController {
     @GetMapping("/tasks-by-month")
     public String showAllUserTasksByMonth(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        Month[] monthOptions = Month.values();
         LocalDate today = LocalDate.now();
         Month month = today.getMonth();
         Year year = Year.of(today.getYear());
@@ -138,9 +134,6 @@ public class MaintenanceTaskController {
         List<MaintenanceTask> tasks = maintenanceTaskService
                 .getAllUserTasksInDateRange(
                 user.getId(), monthBegin, monthEnd);
-        model.addAttribute("monthOptions", monthOptions);
-        model.addAttribute("searchMonthAndYear",
-                new SearchMonthAndYear());
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("tasks", tasks);
@@ -148,34 +141,6 @@ public class MaintenanceTaskController {
         return "tasks/tasks-by-month";
     }
 
-    @PostMapping("/search-tasks-by-month-year")
-    public String searchTasksByMonth(
-            @ModelAttribute("searchMonthAndYear")
-            SearchMonthAndYear searchMonthAndYear,
-            Model model, Authentication authentication) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        Month month = searchMonthAndYear.getMonth();
-        int queryMonth = month.getValue();
-        System.out.println("This is the query month: " + queryMonth);
-        int queryYear = searchMonthAndYear.getYear();
-        LocalDate date = LocalDate.now();
-        LocalDate monthBegin = date.withDayOfMonth(1).withMonth(queryMonth)
-                .withYear(queryYear);
-        LocalDate monthEnd = monthBegin.plusMonths(1)
-                .withDayOfMonth(1).minusDays(1);
-        Month[] monthOptions = Month.values();
-        List<MaintenanceTask> tasks = maintenanceTaskService
-                .getAllUserTasksInDateRange(
-                        user.getId(), monthBegin, monthEnd);
-        model.addAttribute("searchMonthAndYear",
-                new SearchMonthAndYear());
-        model.addAttribute("monthOptions", monthOptions);
-        model.addAttribute("year", queryYear);
-        model.addAttribute("month", month);
-        model.addAttribute("tasks", tasks);
-        model.addAttribute("user", user);
-        return "tasks/tasks-by-month";
-    }
 
     @GetMapping("tasks-by-date/{date}")
     public String showUserTasksByDate (

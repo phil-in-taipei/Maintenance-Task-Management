@@ -14,37 +14,6 @@
     <div class="container border rounded text-center">
         <h2 th:text="${user.username} + ': Tasks'"></h2>
         <h2 th:text="${month} + ' ' + ${year}"></h2>
-        <br/><br/>
-        <div class="container border rounded text-center">
-            <form action="#" th:action="@{'/search-tasks-by-month-year'}" method="post" th:object="${searchMonthAndYear}">
-                <h3>Search for Tasks by Month/Year</h3>
-                <div class="form-control">
-                    <label>Month</label>
-                    <div>
-                        <select class="form-select"  type="text" id="month"th:field="*{month}">
-                            <option th:each="monthOpt : ${monthOptions}"
-                                    th:value="${monthOpt}" th:text="${monthOpt}"></option> <!-- .getValue() -->
-                        </select>
-                    </div>
-                </div>
-                <hr />
-                <div class="form-control">
-                    <label>Year</label>
-                    <div>
-                        <select class="form-select" th:field="*{year}">
-                            <option th:value="2023" th:text="2023"></option>
-                            <option th:value="2024" th:text="2024"></option>
-                        </select>
-                    </div>
-                </div>
-                <br />
-                <div>
-                    <input class="btn btn-primary" type="submit" value="Submit"/>
-                </div>
-            </form>
-            <br />
-        </div>
-        <br>
         <hr />
         <div class="container border rounded text-center">
         <table class="table">
@@ -73,7 +42,9 @@
             </tbody>
         </table>
         </div>
+        <br />
     </div>
+    <br />
 </div>
 </body>
 </html>

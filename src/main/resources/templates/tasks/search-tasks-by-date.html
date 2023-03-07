@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <title>Search Date</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <br />
+    <div class="container border rounded date-search">
+        <br />
+        <div class="text-center">
+            <form class="form-inline" action="#" th:action="@{'/search-tasks-by-date'}" method="post" th:object="${searchTasksByDate}">
+                <div class="form-group">
+                    <div class="form-control">
+                        <label>Search Tasks By Date</label>
+                        <div>
+                            <input type="date" id="date"
+                                   class="form-control" th:field="*{date}" required>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="d-grid gap-2">
+                        <input class="btn btn-primary" type="submit" value="Search"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <br />
+    </div>
+    <br />
+</div>
+</body>
+</html>

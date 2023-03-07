@@ -29,36 +29,40 @@ public class HomeController {
     WeatherDataService weatherDataService;
 
     @GetMapping("/")
-    public String homePage() {
+    public String homePage(Model model) {
+        List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
+        model.addAttribute("weather", weather);
         return "index";
     }
 
     @GetMapping("/landing")
     public String landingPage(Authentication authentication, Model model) {
+        // get user info
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        System.out.println("This is the user: " + user);
+        // get all uncompleted past tasks
         List<MaintenanceTask> uncompletedTasks = maintenanceTaskService.getAllUncompletedPastUserTasks(user.getId());
+        // get all user's tasks for the current date
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
                 user.getId(), LocalDate.now());
-        System.out.println("These are the user's tasks: " + maintenanceTasks.toString());
         SearchTasksByDate searchTasksByDate = new SearchTasksByDate();
         Integer chanceOfRain = weatherDataService.getRainProbability(LocalDate.now().toString());
-        System.out.println("*************This is the chance of rain in landing: " + chanceOfRain + "%************");
-        model.addAttribute("searchTasksByDate", searchTasksByDate);
+        // the chance of rain in landing: to display warning about weather dependent tasks
+        List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
         model.addAttribute("uncompletedTasks", uncompletedTasks);
         model.addAttribute("dailyTasks", maintenanceTasks);
         model.addAttribute("user", user);
+        model.addAttribute("weather", weather);
         model.addAttribute("chanceOfRain", chanceOfRain);
         return "landing";
     }
 
+    // get rid of this route
     @GetMapping("/forecast")
     public String testApiForecast(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         System.out.println("This is the user: " + user);
         List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
         model.addAttribute("user", user);
-        //model.addAttribute("weather", weather.getDailyForecasts());
         model.addAttribute("weather", weather);
         return "test-forecast";
     }

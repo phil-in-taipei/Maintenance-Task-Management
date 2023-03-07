@@ -58,6 +58,18 @@
                                    href="#">Interval Tasks</a></li>
                         </ul>
                     </li>
+
+                    <li sec:authorize="hasRole('ROLE_MAINTENANCE')"  class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Search Tasks
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a th:href="@{/search-tasks-by-date}"  class="dropdown-item"
+                                   href="#">Search Date</a></li>
+                            <li><a th:href="@{/search-tasks-by-month-and-year}" class="dropdown-item"
+                                   href="#">Search Month/Year</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>

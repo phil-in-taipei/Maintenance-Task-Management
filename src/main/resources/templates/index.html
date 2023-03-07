@@ -9,7 +9,29 @@
 </head>
 <body>
     <div layout:fragment="content" th:remove="tag">
-        <h1>This is the index page</h1>
+        <br />
+        <div class="container border rounded text-center">
+            <div class="mt-4 p-5 rounded">
+                <div class="p-3 rounded-lg m-2">
+                    <div class="row">
+                        <h1>Maintenance Task Manager</h1>
+                        <hr />
+                        <h2>Schedule Task Reminders:</h2>
+                        <h2>Weekly, Monthly, and </h2>
+                        <h2>Sequences of Tasks at Daily Intervals</h2>
+                    </div>
+                    <hr />
+                    <div class="container border rounded"></div>
+                    <div class="row">
+                        <h3 th:text="'Weather Forecast: ' + ${weather[0].Day.LongPhrase}"></h3>
+                        <h3 th:text="'Date: ' + ${weather[0].Date}"></h3>
+                    </div>
+                    </div>
+                    <hr />
+                </div>
+            </div>
+        </div>
+        <br />
     </div>
 </body>
 </html>

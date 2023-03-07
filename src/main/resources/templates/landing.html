@@ -10,41 +10,22 @@
 </head>
 <body>
     <div layout:fragment="content" th:remove="tag">
-        <h1>Index Page</h1>
-        <p>This is the home page. All authenticated users can access this page</p>
+        <br />
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-            This content is only shown to administrators.
-        </div>
-        <div sec:authorize="hasRole('ROLE_USER')">
-            This content is only shown to users.
+            <div class="container border rounded text-center">
+                <h1>Welcome!</h1>
+            </div>
         </div>
         <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
-            <h1>Welcome!</h1>
-            <h2 th:text="'Chance of rain: ' + ${chanceOfRain} + '%'"></h2>
-            <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
-            This content is only shown to maintenance schedulers
-            <div class="container border rounded date-search">
-                <br />
-                <div class="text-center">
-                    <form class="form-inline" action="#" th:action="@{'/search-tasks-by-date'}" method="post" th:object="${searchTasksByDate}">
-                        <div class="form-group">
-                            <div class="form-control">
-                                <label>Search Tasks By Date</label>
-                                <div>
-                                    <input type="date" id="date"
-                                           class="form-control" th:field="*{date}" required>
-                                </div>
-                            </div>
-                            <hr />
-                            <div class="d-grid gap-2">
-                                <input class="btn btn-primary" type="submit" value="Search"/>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <br />
+            <div class="container border rounded text-center">
+                <h1>Welcome!</h1>
+                <h3 th:text="'Temperature: ' + ${weather[0].Temperature.Minimum.Value} + ' -- ' + ${weather[0].Temperature.Maximum.Value}"></h3>
+                <h3 th:text="'Wind: ' + ${weather[0].Day.Wind.Speed.Value}"></h3>
+                <h3 th:text="'Chance of Rain: ' + ${weather[0].Day.RainProbability} + '%'"></h3>
+                <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
             </div>
-            <div align="center">
+            <br />
+            <div class="container border rounded text-center">
                 <h1>Uncompleted Tasks</h1>
                 <br/><br/>
                 <table class="table">
@@ -74,7 +55,7 @@
                 </table>
             </div>
             <hr />
-            <div align="center">
+            <div class="container border rounded text-center">
                 <h1>Daily Tasks</h1>
                 <br/><br/>
                 <table class="table">
@@ -104,6 +85,7 @@
                 </table>
             </div>
         </div>
+        <br />
     </div>
 </body>
 </html>
