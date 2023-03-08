@@ -10,37 +10,42 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <div align="center">
+    <br />
+    <div class="container border rounded text-center bg-light">
         <h1>User's Tasks</h1>
         <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
         <br/><br/>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Date</th>
-                <th scope="col">Status</th>
-                <th scope="col">Confirm Completion</th>
-                <th scope="col">Reschedule</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="task : ${tasks}">
-                <td th:text="${task.id}"></td>
-                <td th:text="${task.taskName}"></td>
-                <td th:text="${task.date}"></td>
-                <td th:text="${task.status}"></td>
-                <td>
-                    <a th:href="@{'/confirm-task-completion/' + ${task.id}}">Confirm!</a>
-                </td>
-                <td>
-                    <a th:href="@{'/reschedule-task/' + ${task.id}}">Reschedule!</a>
-                </td>
+        <div class="container border bg-light">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Confirm Completion</th>
+                    <th scope="col">Reschedule</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${tasks}">
+                    <td th:text="${task.id}"></td>
+                    <td th:text="${task.taskName}"></td>
+                    <td th:text="${task.date}"></td>
+                    <td th:text="${task.status}"></td>
+                    <td>
+                        <a th:href="@{'/confirm-task-completion/' + ${task.id}}">
+                            Confirm!</a>
+                    </td>
+                    <td>
+                        <a th:href="@{'/reschedule-task/' + ${task.id}}">
+                            Reschedule!</a>
+                    </td>
 
-            </tr>
-            </tbody>
-        </table>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

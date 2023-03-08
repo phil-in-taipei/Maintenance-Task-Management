@@ -12,18 +12,18 @@
 <div layout:fragment="content" th:remove="tag">
     <br />
     <div class="container border rounded text-center">
-        <div class="mt-4 p-5 rounded">
+        <div class="mt-4 p-5 rounded bg-light">
                 <h1>Create Interval Task Group</h1>
                 <form action="#" th:action="@{/interval-task-groups}" method="post" th:object="${intervalTaskGroup}">
                     <hr />
-                    <div class="form-control">
+                    <div class="form-control bg-light">
                         <label>Task Group Name</label>
                         <div>
                             <input type="text" id="taskName" class="form-control" th:field="*{taskGroupName}" required>
                         </div>
                     </div>
                     <hr />
-                    <div class="form-control">
+                    <div class="form-control bg-light">
                         <label>Interval Between Tasks (Days)</label>
                         <div>
                             <input type="number" id="dayOfMonth" min="1" max="45"
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="d-grid gap-2 col-6 mx-auto">
+                    <div class="d-grid gap-2 col-6 mx-auto bg-light">
                         <input class="btn btn-primary" type="submit" value="Submit"/>
                     </div>
                 </form>

@@ -10,32 +10,35 @@
 </head>
 <body>
 <div layout:fragment="content" th:remove="tag">
-    <div align="center">
+    <br />
+    <div class="container border rounded text-center bg-light">
         <h1>Interval Task Group</h1>
         <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
         <h3 th:text="${intervalTaskGroup.taskGroupName} + ' (' + ${intervalTaskGroup.intervalInDays} + ')'"></h3>
         <br/><a th:href="@{'/create-interval-task/' + ${intervalTaskGroup.id}}">Add New Task to Group</a><br/>
         <br/><br/>
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Name</th>
-                <th scope="col">Rain Restriction</th>
-                <th scope="col">Delete</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="task : ${intervalTaskGroup.getIntervalTasks()}">
-                <td th:text="${task.id}"></td>
-                <td th:text="${task.intervalTaskName}"></td>
-                <td th:text="${task.noRainOnly}"></td>
-                <td>
-                    <a th:href="@{'/delete-interval-task/' + ${task.id} + '/' + ${intervalTaskGroup.id}}">Remove</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="container bg-light">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Rain Restriction</th>
+                    <th scope="col">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="task : ${intervalTaskGroup.getIntervalTasks()}">
+                    <td th:text="${task.id}"></td>
+                    <td th:text="${task.intervalTaskName}"></td>
+                    <td th:text="${task.noRainOnly}"></td>
+                    <td>
+                        <a th:href="@{'/delete-interval-task/' + ${task.id} + '/' + ${intervalTaskGroup.id}}">Remove</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>

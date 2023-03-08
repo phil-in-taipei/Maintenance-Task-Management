@@ -13,7 +13,7 @@
     <div class="container">
         <div class="mt-4 p-5 rounded">
             <div class="p-3 rounded-lg m-2">
-                <div align="center">
+                <div class="container text-center bg-light">
                     <h1>Task Details</h1>
                     <table class="table">
                         <thead>
@@ -40,7 +40,8 @@
                     </table>
                 </div>
                 <br><br>
-                <div th:if="${task.status.name() != 'COMPLETED'}">
+                <div th:if="${task.status.name() != 'COMPLETED'}"
+                     class="container text-center bg-light">
                     <h1>Reschedule Task</h1>
                     <form action="#" th:action="@{'/submit-reschedule-task-form/' + ${task.id}}" method="post" th:object="${editTaskForm}">
                         <div class="form-control">

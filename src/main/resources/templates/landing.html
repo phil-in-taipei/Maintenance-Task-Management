@@ -17,7 +17,7 @@
             </div>
         </div>
         <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
-            <div class="container border rounded text-center">
+            <div class="container border rounded text-center bg-light">
                 <h1>Welcome!</h1>
                 <h3 th:text="'Temperature: ' + ${weather[0].Temperature.Minimum.Value} + ' -- ' + ${weather[0].Temperature.Maximum.Value}"></h3>
                 <h3 th:text="'Wind: ' + ${weather[0].Day.Wind.Speed.Value}"></h3>
@@ -25,7 +25,7 @@
                 <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
             </div>
             <br />
-            <div class="container border rounded text-center">
+            <div class="container border rounded text-center bg-light">
                 <h1>Uncompleted Tasks</h1>
                 <br/><br/>
                 <table class="table">
@@ -55,7 +55,7 @@
                 </table>
             </div>
             <hr />
-            <div class="container border rounded text-center">
+            <div class="container border rounded text-center bg-light">
                 <h1>Daily Tasks</h1>
                 <br/><br/>
                 <table class="table">

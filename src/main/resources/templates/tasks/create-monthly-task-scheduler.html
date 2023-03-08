@@ -12,18 +12,20 @@
 <div layout:fragment="content" th:remove="tag">
     <br />
     <div class="container border rounded text-center">
-        <div class="mt-4 p-5 rounded">
+        <div class="mt-4 p-5 rounded bg-light">
                 <h1>Create Monthly Task Scheduler</h1>
                 <form action="#" th:action="@{/monthly-tasks}" method="post" th:object="${monthlyTaskScheduler}">
                     <hr />
-                    <div class="form-control">
+                    <div class="form-control bg-light">
                         <label>Task Name</label>
                         <div>
-                            <input type="text" id="taskName" class="form-control" th:field="*{monthlyTaskName}" required>
+                            <input type="text" id="taskName"
+                                   class="form-control"
+                                   th:field="*{monthlyTaskName}" required>
                         </div>
                     </div>
                     <hr />
-                    <div class="form-control">
+                    <div class="form-control bg-light">
                         <label>Day of Month</label>
                         <div>
                             <input type="number" id="dayOfMonth" min="1" max="28"
@@ -31,7 +33,7 @@
                         </div>
                     </div>
                     <hr />
-                    <div class="d-grid gap-2 col-6 mx-auto">
+                    <div class="d-grid gap-2 col-6 mx-auto bg-light">
                         <input class="btn btn-primary" type="submit" value="Submit"/>
                     </div>
                 </form>

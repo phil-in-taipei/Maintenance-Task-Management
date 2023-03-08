@@ -25,15 +25,15 @@
           </div>
         </div>
         <div class="row text-center">
-          <div class="container border rounded">
+          <div class="container border rounded bg-light">
             <br />
           <form class="form" action="#"
                 th:action="@{'/submit-quarterly-monthly-tasks-scheduled/' + ${quarter} + '/' + ${year}}"
                 method="post" th:object="${qMonthlyTask}">
             <hr />
-            <div class="form-control">
+            <div class="form-control bg-light">
               <label>Monthly Task</label>
-              <div>
+              <div class="bg-light">
                 <select class="form-select" th:name="monthlyTaskScheduler">
                   <option th:if="${monthlyTasks.isEmpty()}">None Available</option>
                   <option th:each="task : ${monthlyTasks}" th:value="${task.id}" th:text="${task.templateSelector()}"></option>

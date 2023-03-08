@@ -12,25 +12,25 @@
 <div layout:fragment="content" th:remove="tag">
   <br />
   <div class="container border rounded text-center">
-    <div class="mt-4 p-5 rounded">
+    <div class="mt-4 p-5 rounded bg-light">
         <h1>Create Single Task</h1>
         <form action="#" th:action="@{'/interval-task-group/' + ${taskGroupId}}" method="post" th:object="${intervalTask}">
           <hr />
-          <div class="form-control">
+          <div class="form-control bg-light">
             <label>Task Name</label>
             <div>
               <input type="text" id="intervalTaskName" class="form-control" th:field="*{intervalTaskName}" required>
             </div>
           </div>
           <hr />
-          <div class="form-control">
+          <div class="form-control bg-light">
             <label>Not Rainy Weather Only</label>
             <div>
               <input type="checkbox" id="noRainOnly" th:field="*{noRainOnly}">
             </div>
           </div>
           <hr />
-          <div>
+          <div class="bg-light">
             <input class="btn btn-primary" type="submit" value="Submit"/>
           </div>
         </form>

@@ -11,27 +11,39 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <br />
-    <div class="container border rounded date-search">
+    <br />
+    <br />
+    <br />
+    <div class="container border rounded date-search bg-light">
         <br />
-        <div class="text-center">
+        <br />
+        <h2 class="text-center">Search Tasks by Date</h2>
+        <hr />
+        <div class="text-center bg-light">
             <form class="form-inline" action="#" th:action="@{'/search-tasks-by-date'}" method="post" th:object="${searchTasksByDate}">
                 <div class="form-group">
-                    <div class="form-control">
-                        <label>Search Tasks By Date</label>
-                        <div>
+                    <div class="form-control bg-light">
+                        <label>Date</label>
+                        <div class="bg-light">
                             <input type="date" id="date"
                                    class="form-control" th:field="*{date}" required>
                         </div>
                     </div>
                     <hr />
-                    <div class="d-grid gap-2">
+                    <div class="d-grid gap-2 bg-light">
                         <input class="btn btn-primary" type="submit" value="Search"/>
                     </div>
                 </div>
             </form>
         </div>
         <br />
+        <br />
+        <br />
     </div>
+    <br />
+    <br />
+    <br />
+    <br />
     <br />
 </div>
 </body>
