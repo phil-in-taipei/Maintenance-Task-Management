@@ -10,25 +10,38 @@
 <body>
     <div layout:fragment="content" th:remove="tag">
         <br />
-        <div class="container border rounded text-center bg-light">
+        <div class="container border rounded text-center">
             <div class="mt-4 p-5 rounded">
                 <div class="p-3 rounded-lg m-2">
                     <div class="row container border rounded bg-light">
                         <h1>Maintenance Task Manager</h1>
                         <hr />
-                        <h2>Schedule Task Reminders:</h2>
-                        <h2>Weekly, Monthly, and </h2>
-                        <h2>Sequences of Tasks at Daily Intervals</h2>
+                        <h2>Schedule Task Reminders</h2>
+                        <hr />
+                        <h3>(Weekly, Monthly, and </h3>
+                        <h3>Sequences of Tasks at Daily Intervals)</h3>
                     </div>
                     <hr />
                     <div class="row">
-                        <div class="container border rounded bg-light">
-                            <h3 th:text="'Weather Forecast: ' + ${weather[0].Day.LongPhrase}">
-
-                            </h3>
-                            <h3 th:text="'Date: ' + ${weather[0].Date}"></h3>
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary" type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#collapseForecast"
+                                    aria-expanded="false"
+                                    aria-controls="collapseExample">
+                                View Today's Weather
+                            </button>
+                            <br />
                         </div>
-
+                        <br />
+                        <div class="collapse" id="collapseForecast">
+                            <div class="container border rounded bg-light">
+                                <h3 th:text="'Date: ' + ${#strings.substring(weather[0].Date, 0, 10)}"></h3>
+                                </h3>
+                                <h3 th:text="'Forecast: ' + ${weather[0].Day.LongPhrase}">
+                                </h3>
+                            </div>
+                        </div>
                     </div>
                     </div>
                     <hr />

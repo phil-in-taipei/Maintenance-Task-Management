@@ -20,18 +20,21 @@
                     Sorry, please try again!</p>
                 <form th:action="@{/login}" method="post">
                     <hr />
-                    <div class="form-control">
+                    <div class="form-control bg-light">
                         <label>Username</label>
                         <div>
-                            <input type="text" class="form-control" id="username" name="username"
+                            <input type="text" class="form-control" id="username"
+                                   name="username"
                                    placeholder="Your Username">
                         </div>
                     </div>
                     <hr />
-                    <div class="form-control">
+                    <div class="form-control bg-light">
                         <label for="password">Password</label>
                         <div>
-                            <input type="password" class="form-control" id="password" name="password">
+                            <input type="password" class="form-control" id="password"
+                                   placeholder="Your Password"
+                                   name="password">
                         </div>
                     </div>
                     <hr />

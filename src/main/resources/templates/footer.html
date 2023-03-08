@@ -18,10 +18,14 @@
                     </a></h5>
             </div>
             <div class="col">
-                <h5> <span sec:authorize="isAuthenticated()">
+                <h5>
+                    <span sec:authorize="isAuthenticated()">
                     Logged in as user: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
                     <a th:if="${#httpServletRequest.remoteUser !=null}" th:href="@{/logout}">Sign Out</a>
-                </span>
+                    </span>
+                    <span sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/register}">Sign Up!</a>
+                    </span>
                 </h5>
             </div>
         </div>
