@@ -13,30 +13,41 @@
     <br />
     <div class="container text-center">
         <div class="container border rounded bg-light">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Quarter</th>
-                    <th scope="col">Year</th>
-                    <th scope="col">Monthly Scheduler</th>
-                    <th scope="col">Remove</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="task : ${qMonthlyTasks}">
-                    <td th:text="${task.quarter}"></td>
-                    <td th:text="${task.year}"></td>
-                    <td th:text="${task.monthlyTaskScheduler.templateSelector()}"></td>
-                    <td>
-                        <a th:href="@{'/delete-monthly-task-applied-quarterly/' + ${task.id}}">
-                            Delete</a>
-                    </td>
-                    <td>
-                </tr>
-                </tbody>
-            </table>
+            <br />
+            <h2>Monthly Tasks Applied Quarterly</h2>
+            <hr />
+            <br />
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Quarter</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Monthly Scheduler</th>
+                        <th scope="col">Remove</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="task : ${qMonthlyTasks}">
+                        <td th:text="${task.quarter}"></td>
+                        <td th:text="${task.year}"></td>
+                        <td th:text="${task.monthlyTaskScheduler.templateSelector()}"></td>
+                        <td>
+                            <a th:href="@{'/delete-monthly-task-applied-quarterly/' + ${task.id}}">
+                                Delete</a>
+                        </td>
+                        <td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
 </div>
 </body>
 </html>

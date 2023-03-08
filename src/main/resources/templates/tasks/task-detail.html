@@ -15,46 +15,60 @@
             <div class="p-3 rounded-lg m-2">
                 <div class="container text-center bg-light">
                     <h1>Task Details</h1>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Date</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Comments</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Delete</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td th:text="${task.date}"></td>
-                            <td th:text="${task.taskName}"></td>
-                            <td th:text="${task.comments}"></td>
-                            <td th:text="${task.status}"></td>
-                            <td>
-                                <a th:href="@{'/delete-single-task/' + ${task.id}}">
-                                    Delete
-                                </a></td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Comments</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Delete</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td th:text="${task.date}"></td>
+                                <td th:text="${task.taskName}"></td>
+                                <td th:text="${task.comments}"></td>
+                                <td th:text="${task.status}"></td>
+                                <td>
+                                    <a th:href="@{'/delete-single-task/' + ${task.id}}">
+                                        Delete
+                                    </a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <br><br>
                 <div th:if="${task.status.name() != 'COMPLETED'}"
                      class="container text-center bg-light">
+                    <hr />
+                    <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseReschedule" aria-expanded="false"
+                            aria-controls="collapseExample">
+                        Click to Reschedule
+                    </button>
+                    <br />
+                    <hr />
+                    <div class="collapse" id="collapseReschedule">
                     <h1>Reschedule Task</h1>
-                    <form action="#" th:action="@{'/submit-reschedule-task-form/' + ${task.id}}" method="post" th:object="${editTaskForm}">
+                    <form action="#" th:action="@{'/submit-reschedule-task-form/' + ${task.id}}"
+                          method="post" th:object="${editTaskForm}">
                         <div class="form-control">
                             <label>Scheduled Date</label>
                             <div>
-                                <input type="date" id="date" class="form-control" th:field="*{date}" required>
+                                <input type="date" id="date"
+                                       class="form-control" th:field="*{date}" required>
                             </div>
                         </div>
                         <hr />
                         <div class="form-control">
                             <label>Comments</label>
                             <div>
-                                <input type="text" id="taskName" class="form-control" th:field="*{comments}" required>
+                                <input type="text" id="taskName"
+                                       class="form-control" th:field="*{comments}" required>
                             </div>
                         </div>
                         <hr />
@@ -62,8 +76,12 @@
                             <input class="btn btn-primary" type="submit" value="Submit"/>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
+            <br />
+            <br />
+            <br />
         </div>
     </div>
 </div>

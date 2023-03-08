@@ -58,26 +58,28 @@
         <br/><br/>
         <div class="container border rounded text-center bg-light"
              id="weeklyTasksTable">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Day of Week</th>
-                <th scope="col">Remove</th>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Day of Week</th>
+                        <th scope="col">Remove</th>
 
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="task : ${weeklyTasks}">
-                <td th:text="${task.weeklyTaskName}"></td>
-                <td th:text="${task.dayOfWeek}"></td>
-                <td>
-                    <a th:href="@{'/delete-weekly-task-scheduler/' + ${task.id}}">
-                        Delete</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="task : ${weeklyTasks}">
+                        <td th:text="${task.weeklyTaskName}"></td>
+                        <td th:text="${task.dayOfWeek}"></td>
+                        <td>
+                            <a th:href="@{'/delete-weekly-task-scheduler/' + ${task.id}}">
+                                Delete</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <br />

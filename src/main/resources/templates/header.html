@@ -13,7 +13,12 @@
             <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/landing}">
                 Maintenance Manager
             </a>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <!-- <li class="nav-item" sec:authorize="!isAuthenticated()">
                         <a th:href="@{/}" class="nav-link active" aria-current="page" href="#">Home</a>
@@ -22,13 +27,18 @@
                         <a th:href="@{/landing}" class="nav-link active" aria-current="page" href="#">Home</a>
                     </li> -->
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/login}" class="nav-link active" aria-current="page" href="#">Login</a>
+                        <a th:href="@{/login}" class="nav-link active"
+                           aria-current="page" href="#">
+                            Login</a>
                     </li>
                     <li class="nav-item" sec:authorize="!isAuthenticated()">
-                        <a th:href="@{/register}" class="nav-link active" aria-current="page" href="#">Register</a>
+                        <a th:href="@{/register}" class="nav-link active"
+                           aria-current="page" href="#">
+                            Register</a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_MAINTENANCE')"  class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
                             Create Tasks
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -68,6 +78,24 @@
                                    href="#">Search Date</a></li>
                             <li><a th:href="@{/search-tasks-by-month-and-year}" class="dropdown-item"
                                    href="#">Search Month/Year</a></li>
+                        </ul>
+                    </li>
+
+                    <li sec:authorize="hasRole('ROLE_MAINTENANCE')"  class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown4"
+                           role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Schedulers Applied Quarterly
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a th:href="@{/quarterly-weekly-tasks-scheduled}"
+                                   class="dropdown-item"
+                                   href="#">Weekly Schedulers</a></li>
+                            <li><a th:href="@{/quarterly-monthly-tasks-scheduled}"
+                                   class="dropdown-item"
+                                   href="#">Monthly Schedulers</a></li>
+                            <li><a th:href="@{/quarterly-interval-task-groups-scheduled}"
+                                   class="dropdown-item"
+                                   href="#">Interval Task Groups</a></li>
                         </ul>
                     </li>
                 </ul>

@@ -16,31 +16,34 @@
         <h2 th:text="${month} + ' ' + ${year}"></h2>
         <hr />
         <div class="container border rounded text-center bg-light">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Name</th>
-                <th scope="col">Confirm Completion</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="task : ${tasks}">
-                <td th:text="${task.date}"></td>
-                <td>
-                    <a th:text="${task.taskName}"
-                       th:href="@{'/task-detail/' + ${task.id}}"></a>
-                </td>
-                <td>
-                    <span th:if="${task.status.name() == 'COMPLETED'}">COMPLETED</span>
-                    <span th:unless="${task.status.name() == 'COMPLETED'}">
-                        <a th:text="${task.status}"
-                           th:href="@{'/confirm-task-completion/' + ${task.id}}"></a>
-                    </span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Confirm Completion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="task : ${tasks}">
+                        <td th:text="${task.date}"></td>
+                        <td>
+                            <a th:text="${task.taskName}"
+                               th:href="@{'/task-detail/' + ${task.id}}"></a>
+                        </td>
+                        <td>
+                            <span th:if="${task.status.name() == 'COMPLETED'}">
+                                COMPLETED</span>
+                            <span th:unless="${task.status.name() == 'COMPLETED'}">
+                                <a th:text="${task.status}"
+                                   th:href="@{'/confirm-task-completion/' + ${task.id}}"></a>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <br />
     </div>
