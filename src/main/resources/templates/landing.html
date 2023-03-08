@@ -29,10 +29,24 @@
                 <br />
                 <br />
                 <div class="collapse" id="collapseWeather">
-                    <h3 th:text="'Temperature: ' + ${weather[0].Temperature.Minimum.Value} + ' -- ' + ${weather[0].Temperature.Maximum.Value}"></h3>
-                    <h3 th:text="'Wind: ' + ${weather[0].Day.Wind.Speed.Value}"></h3>
-                    <h3 th:text="'Chance of Rain: ' + ${weather[0].Day.RainProbability} + '%'"></h3>
-                    <h2 th:text="${user.username} + ' (' + ${user.id} + ')'"></h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">User</th>
+                            <th scope="col">Temperature</th>
+                            <th scope="col">Wind</th>
+                            <th scope="col">Chance of Rain</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td th:text="${user.username}"></td>
+                                <td th:text="${weather[0].Temperature.Minimum.Value} + 'C - ' + ${weather[0].Temperature.Maximum.Value} + 'C'"></td>
+                                <td th:text="${weather[0].Day.Wind.Speed.Value}"></td>
+                                <td th:text="${weather[0].Day.RainProbability} + '%'"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <br />
             </div>
