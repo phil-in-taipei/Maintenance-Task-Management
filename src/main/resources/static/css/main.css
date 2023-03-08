@@ -1,4 +1,9 @@
 
+.cross-out-alert {
+  text-decoration: line-through;
+  color: #dc3545;
+}
+
 .date-search {
   max-width: 1000px;
 }

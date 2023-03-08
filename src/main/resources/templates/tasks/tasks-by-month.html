@@ -22,6 +22,7 @@
                     <tr>
                         <th scope="col">Date</th>
                         <th scope="col">Name</th>
+                        <th scope="col">Rain Restriction</th>
                         <th scope="col">Confirm Completion</th>
                     </tr>
                     </thead>
@@ -32,6 +33,7 @@
                             <a th:text="${task.taskName}"
                                th:href="@{'/task-detail/' + ${task.id}}"></a>
                         </td>
+                        <td th:text="${task.noRainOnly}"></td>
                         <td>
                             <span th:if="${task.status.name() == 'COMPLETED'}">
                                 COMPLETED</span>
