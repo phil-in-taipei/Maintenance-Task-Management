@@ -23,8 +23,7 @@ public class IntervalTaskGroupController {
             SearchQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        System.out.println("This is the quarter: " + monthlyTaskQuarterAndYear.getQuarter());
-        System.out.println("This is the year: " + monthlyTaskQuarterAndYear.getYear());
+
       intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getId());
         List<IntervalTaskGroup> availableIntervalTaskGroups =
                 intervalTaskGroupService
@@ -34,7 +33,6 @@ public class IntervalTaskGroupController {
                             monthlyTaskQuarterAndYear.getYear()
                 );
 
-        System.out.println(availableIntervalTaskGroups.toString());
         model.addAttribute("intervalTaskGroups", availableIntervalTaskGroups);
         model.addAttribute("user", user);
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
@@ -55,8 +53,8 @@ public class IntervalTaskGroupController {
     public String showCreateIntervalTaskFormPage(
             @PathVariable(name = "taskGroupId") Long taskGroupId, Model model) {
         IntervalTask intervalTask = new IntervalTask();
-        System.out.println("This is the interval task to add to the form: " + intervalTask);
-        System.out.println("This is the task group id: " + taskGroupId);
+        //System.out.println("This is the interval task to add to the form: " + intervalTask);
+        //System.out.println("This is the task group id: " + taskGroupId);
         model.addAttribute("intervalTask", new IntervalTask());
         model.addAttribute("taskGroupId", taskGroupId);
         return "tasks/create-interval-task";

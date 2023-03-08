@@ -77,9 +77,9 @@ public class MaintenanceTaskController {
             Model model, Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         LocalDate queryDate = LocalDate.parse(searchTasksByDate.getDate());
-        System.out.println("This is the query date: " + queryDate);
+
         List<MaintenanceTask> tasks = maintenanceTaskService.getAllUserTasksByDate(user.getId(), queryDate);
-        System.out.println(tasks.toString());
+
         model.addAttribute("tasks", tasks);
         LocalDate dayBefore = queryDate.minusDays(1);
         LocalDate dayAfter = queryDate.plusDays(1);
@@ -100,7 +100,6 @@ public class MaintenanceTaskController {
             UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
             MaintenanceTask maintenanceTask = new MaintenanceTask(
                     maintenanceTaskForm.getTaskName(),
-                    //maintenanceTaskForm.getDescription(),
                     date, user);
             maintenanceTaskService.saveTask(maintenanceTask);
         } catch (IllegalArgumentException e) {
@@ -148,9 +147,10 @@ public class MaintenanceTaskController {
             Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         LocalDate queryDate = LocalDate.parse(date);
-        System.out.println("This is the query date: " + queryDate);
-        List<MaintenanceTask> tasks = maintenanceTaskService.getAllUserTasksByDate(user.getId(), queryDate);
-        System.out.println(tasks.toString());
+
+        List<MaintenanceTask> tasks = maintenanceTaskService
+                .getAllUserTasksByDate(user.getId(), queryDate);
+
         LocalDate dayBefore = queryDate.minusDays(1);
         LocalDate dayAfter = queryDate.plusDays(1);
         model.addAttribute("dayAfter", dayAfter.toString());

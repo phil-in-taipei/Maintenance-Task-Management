@@ -127,9 +127,8 @@ public class MonthlyTaskSchedulingService {
     @Transactional
     public void saveMonthlyTaskAppliedQuarterly(MonthlyTaskAppliedQuarterly monthlyTaskAppliedQuarterly)
             throws IllegalArgumentException {
-        System.out.println("*****************Now saving qMonthly task in service*****************************");
-        System.out.println(monthlyTaskAppliedQuarterly.toString());
-        System.out.println("******************Now generating dates to save single tasks****************");
+        // Preparing to save qMonthly task
+        // Generating dates to save single tasks on specified dates throughout quarter/year
         MonthlyTaskScheduler scheduler = monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler();
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getMonthlySchedulingDatesByQuarter(
@@ -137,16 +136,16 @@ public class MonthlyTaskSchedulingService {
                         monthlyTaskAppliedQuarterly.getQuarter(),
                         scheduler.getDayOfMonth()
                 );
-        System.out.println(datesToScheduleTasks.toString());
-        System.out.println("******************Will generate the following single tasks and put in List****************");
+
+        // Generate the following single tasks and put in List
         List<MaintenanceTask> batchOfTasks = generateTaskBatchesService
                 .generateRecurringTasksByDateList(
-                scheduler.getMonthlyTaskName(),// scheduler.getDescription(),
+                scheduler.getMonthlyTaskName(),
                 scheduler.getUser(), datesToScheduleTasks
         );
-        System.out.println("********************Batch Save tasks in list************************");
+        // Batch Save tasks in list
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
-        System.out.println("********************Will now save the qMonthly task************************");
+        // Save the submitted quarterly applied monthly task scheduler
         monthlyTaskAppliedQuarterlyRepo.save(monthlyTaskAppliedQuarterly);
     }
 }

@@ -151,24 +151,26 @@ public class IntervalTaskGroupService {
     public void saveIntervalTaskGroupAppliedQuarterly(
             IntervalTaskGroupAppliedQuarterly intervalTaskGroupAppliedQuarterly)
             throws IllegalArgumentException {
-        System.out.println("*****************Now preparing to save qITG in service*****************************");
+        //Preparing to save quarterly-applied interval task groups
         IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup();
 
+        // tasks will alternatively be saved every n-th interval day
+        // throughout the quarter/year specified in the submitted object
         List<LocalDate> schedulingDates =
                 generateDatesService.getIntervalSchedulingDatesByQuarter(
                         intervalTaskGroup.getIntervalInDays(),
                         intervalTaskGroupAppliedQuarterly.getYear(),
                         intervalTaskGroupAppliedQuarterly.getQuarter()
                 );
-
+        // generating tasks to be scheduled on the dates in scheduling dates list
         List<MaintenanceTask> batchOfTasks =
                 generateTaskBatchesService.generateTaskBatchByDateListAndIntervalTaskList(
                     intervalTaskGroup, schedulingDates
                 );
 
-        System.out.println("*****************Now saving batch of tasks*******************");
+        // Saving batch of tasks
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
-        System.out.println("*****************Now saving qITG object*******************");
+        // saving quarterly-applied interval task group object
         intervalTaskAppliedQuarterlyRepo.save(intervalTaskGroupAppliedQuarterly);
     }
 }

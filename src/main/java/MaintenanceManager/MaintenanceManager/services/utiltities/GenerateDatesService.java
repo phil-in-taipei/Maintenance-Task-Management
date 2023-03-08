@@ -16,7 +16,7 @@ public class GenerateDatesService {
             Integer interval, Integer year,
             QuarterlySchedulingEnum quarter) {
         List<LocalDate> dates = new ArrayList<>();
-        System.out.println("Quarter: " + quarter + "; Interval: " + interval + "; Year + " + year);
+
         // gets the starting date (randomly generated according to interval task) and
         // then adds a date to the ArrayList every n-th day (interval)
         LocalDate dateInQuarter = getFirstDateForIntervalTaskByYearAndQuarter(
@@ -99,7 +99,7 @@ public class GenerateDatesService {
             DayOfWeek dayofWeek, Integer year,
             QuarterlySchedulingEnum quarter) {
         List<LocalDate> dates = new ArrayList<>();
-        System.out.println("Quarter: " + quarter + "; Day: " + dayofWeek + "; Year + " + year);
+
         // dateInQuarter first gets the starting point LocalDate, and then is continually modified
         // to be one week later and added to the ArrayList until the date is in the next quarter
         LocalDate dateInQuarter = getFirstDayOfWeekByYearAndQuarter(

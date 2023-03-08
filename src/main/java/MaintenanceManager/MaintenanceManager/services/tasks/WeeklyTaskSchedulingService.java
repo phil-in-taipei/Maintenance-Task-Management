@@ -91,7 +91,7 @@ public class WeeklyTaskSchedulingService {
             QuarterlySchedulingEnum quarter, Integer year, Long userId
     ) {
         return weeklyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId( //OrderByYearAscQuarterAsc
+                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId(
                         quarter, year, userId
                 );
     }
@@ -122,27 +122,27 @@ public class WeeklyTaskSchedulingService {
             throws IllegalArgumentException {
         WeeklyTaskScheduler scheduler = weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler();
 
-        System.out.println("*****************Now saving qWeekly task in service*****************************");
+        // Preparing to save quarterly-applied weekly task scheduler
         System.out.println(weeklyTaskAppliedQuarterly.toString());
 
-        System.out.println("******************Now generating dates to save single tasks****************");
+        // Generating dates to save single tasks on each of the specified days in the quarter/year
         List<LocalDate> datesToScheduleTasks =
                 generateDatesService.getWeeklySchedulingDatesByQuarter(
                         scheduler.getDayOfWeek(),
                         weeklyTaskAppliedQuarterly.getYear(),
                         weeklyTaskAppliedQuarterly.getQuarter()
                 );
-        System.out.println(datesToScheduleTasks.toString());
-        System.out.println("******************Will generate the following single tasks and add to list****************");
 
+        // Generate the single tasks on the dates in the datesToScheduleTasks List
         List<MaintenanceTask> batchOfTasks = generateTaskBatchesService
                 .generateRecurringTasksByDateList(
                     scheduler.getWeeklyTaskName(),
                     scheduler.getUser(), datesToScheduleTasks
         );
-        System.out.println("********************Will now save the batch of tasks************************");
+
+        // Saves the batch of generated tasks for the quarter/year
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
-        System.out.println("********************Will now save the qMonthly task************************");
+        // Saves the quarterly-applied weekly task scheduler
         weeklyTaskAppliedQuarterlyRepo.save(weeklyTaskAppliedQuarterly);
     }
 }
