@@ -46,37 +46,12 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Authority userAuth = Authority.builder().authority(AuthorityEnum.ROLE_USER).build();
-		Authority adminAuth = Authority.builder().authority(AuthorityEnum.ROLE_ADMIN).build();
-		Authority mainAuth = Authority.builder().authority(AuthorityEnum.ROLE_MAINTENANCE).build();
+		Authority userAuth = Authority.builder().id(1L).authority(AuthorityEnum.ROLE_USER).build();
+		Authority adminAuth = Authority.builder().id(2L).authority(AuthorityEnum.ROLE_ADMIN).build();
+		Authority mainAuth = Authority.builder().id(3L).authority(AuthorityEnum.ROLE_MAINTENANCE).build();
 
 		if (authorityRepo.findAll().isEmpty()) {
 			authorityRepo.saveAll(Arrays.asList(userAuth, adminAuth, mainAuth));
-		}
-
-		if (userPrincipalRepo.findAll().isEmpty()) {
-			UserMeta admin = UserMeta.builder()
-					.surname("Admin")
-					.givenName("User")
-					.email("admin@email.com")
-					.age(35)
-					.build();
-			UserMeta main1 = UserMeta.builder()
-					.surname("Maintenance1")
-					.givenName("One")
-					.email("maintenance1@email.com")
-					.age(25)
-					.build();
-			userPrincipalRepo.saveAll(
-					Arrays.asList(
-							new UserPrincipal("MAIN1",
-									passwordEncoder.encode("testpassword"),
-									Arrays.asList(userAuth, mainAuth), main1),
-							new UserPrincipal("ADMIN",
-									passwordEncoder.encode("testpassword"),
-									Arrays.asList(adminAuth, userAuth), admin)
-					)
-			);
 		}
 	}
 
