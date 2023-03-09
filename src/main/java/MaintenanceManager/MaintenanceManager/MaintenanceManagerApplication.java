@@ -46,11 +46,15 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		Authority userAuth = Authority.builder().id(1L).authority(AuthorityEnum.ROLE_USER).build();
-		Authority adminAuth = Authority.builder().id(2L).authority(AuthorityEnum.ROLE_ADMIN).build();
-		Authority mainAuth = Authority.builder().id(3L).authority(AuthorityEnum.ROLE_MAINTENANCE).build();
-
 		if (authorityRepo.findAll().isEmpty()) {
+			// constructs the Authorities for the different user types and
+			// saves to database. This is a key step before creating any users
+			Authority userAuth = Authority.builder().id(1L)
+					.authority(AuthorityEnum.ROLE_USER).build();
+			Authority adminAuth = Authority.builder().id(2L)
+					.authority(AuthorityEnum.ROLE_ADMIN).build();
+			Authority mainAuth = Authority.builder().id(3L)
+					.authority(AuthorityEnum.ROLE_MAINTENANCE).build();
 			authorityRepo.saveAll(Arrays.asList(userAuth, adminAuth, mainAuth));
 		}
 	}
