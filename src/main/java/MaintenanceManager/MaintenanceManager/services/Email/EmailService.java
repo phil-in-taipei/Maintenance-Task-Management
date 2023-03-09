@@ -24,25 +24,20 @@ public class EmailService {
 
     @Value("${spring.mail.username}") private String sender;
 
-    public String sendEMail(EmailContent emailContent)
+    public void sendEMail(EmailContent emailContent)
     {
-
         try {
 
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
-
             mailMessage.setFrom(sender);
             mailMessage.setTo(emailContent.getRecipient());
             mailMessage.setText(emailContent.getMsgBody());
             mailMessage.setSubject(emailContent.getSubject());
-
             javaMailSender.send(mailMessage);
-            return "Mail Sent Successfully...";
         }
-
         catch (Exception e) {
-            return "Error while Sending Mail";
+            System.out.println("Error sending email: " + e.toString());
         }
     }
 
