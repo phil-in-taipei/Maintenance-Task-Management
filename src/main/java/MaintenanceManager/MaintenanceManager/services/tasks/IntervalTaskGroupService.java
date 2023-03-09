@@ -35,6 +35,9 @@ public class IntervalTaskGroupService {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
+
+    // the 3 methods below delete objects with orphanRemoval option in model
+    // allowing for cascading deletion of related models
     @Loggable
     @Transactional
     public void deleteIntervalTask(Long id) {
@@ -53,17 +56,23 @@ public class IntervalTaskGroupService {
         intervalTaskAppliedQuarterlyRepo.deleteById(id);
     }
 
+
+    // this finds all interval task groups which have been applied quarterly
+    // by the id of the interval task group (child field)
     @Loggable
     public List<IntervalTaskGroupAppliedQuarterly>
         getIntervalTaskGroupAppliedQuarterlyByITGId(Long id) {
          return intervalTaskAppliedQuarterlyRepo.findAllByIntervalTaskGroupId(id);
     }
 
+    // gets all interval task groups of a given user
     @Loggable
     public List<IntervalTaskGroup> getAllUsersIntervalTaskGroups(Long userId) {
         return intervalTaskGroupRepo.findAllByTaskGroupOwnerId(userId);
     }
 
+    // gets all interval task groups which have NOT already been scheduled during
+    // a given quarter/year -- this is for the selectors in the form template
     @Loggable
     public List<IntervalTaskGroup>
         getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
@@ -79,6 +88,8 @@ public class IntervalTaskGroupService {
             return allUsersITGs;
     }
 
+    // gets  a record of all interval task groups which a
+    // maintenance user has already applied quarterly
     @Loggable
     public List<IntervalTaskGroupAppliedQuarterly>
         getAllUsersIntervalTaskGroupsAppliedQuarterly(Long userId) {
@@ -87,6 +98,8 @@ public class IntervalTaskGroupService {
                         userId);
     }
 
+    // gets  a record of all interval task groups which a
+    // maintenance user has already applied during a given quarter and year
     @Loggable
     public List<IntervalTaskGroupAppliedQuarterly>
         getUsersIntervalTaskGroupsAppliedQuarterlyByQuarterAndYear(
@@ -98,6 +111,8 @@ public class IntervalTaskGroupService {
                 );
     }
 
+    // gets all interval task groups which have already been scheduled in a quarter
+    // to prevent double booking/database integrity error
     @Loggable
     List<IntervalTaskGroup>
         getAllITGsAlreadyScheduledForQuarterAndYear(
@@ -113,18 +128,24 @@ public class IntervalTaskGroupService {
             return alreadyScheduledIntervalTaskGroups;
     }
 
+    // gets the interval task (one member of a group),
+    // this is to check that it exists prior to deletions
     @Loggable
     public IntervalTask getIntervalTask(Long id) {
         return intervalTaskRepo.findById(id)
                 .orElse(null);
     }
 
+    // gets the interval task group applied, this is
+    // to check that it exists prior to deletions
     @Loggable
     public IntervalTaskGroup getIntervalTaskGroup(Long id) {
         return intervalTaskGroupRepo.findById(id)
                 .orElse(null);
     }
 
+    // gets the interval task group applied quarterly, this is to
+    // check that it exists prior to deletions
     @Loggable
     public IntervalTaskGroupAppliedQuarterly
         getIntervalTaskGroupAppliedQuarterly(Long id) {
@@ -132,6 +153,7 @@ public class IntervalTaskGroupService {
                 .orElse(null);
     }
 
+    // saves one task scheduler which will belong to the interval task groups
     @Loggable
     @Transactional
     public void saveIntervalTask(IntervalTask intervalTask)
@@ -139,6 +161,7 @@ public class IntervalTaskGroupService {
         intervalTaskRepo.save(intervalTask);
     }
 
+    // saves group of task schedulers which are alternatively applied at specified daily intervals
     @Loggable
     @Transactional
     public void saveIntervalTaskGroup(IntervalTaskGroup intervalTaskGroup)
@@ -146,6 +169,8 @@ public class IntervalTaskGroupService {
         intervalTaskGroupRepo.save(intervalTaskGroup);
     }
 
+    // saves an interval task group quarterly/yearly application and triggers the
+    // member tasks to be scheduled at specified daily intervals during the quarter
     @Loggable
     @Transactional
     public void saveIntervalTaskGroupAppliedQuarterly(

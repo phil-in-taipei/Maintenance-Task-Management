@@ -24,10 +24,10 @@ public class EmailService {
 
     @Value("${spring.mail.username}") private String sender;
 
+    // simple helper method to send automated email with smtp
     public void sendEMail(EmailContent emailContent)
     {
         try {
-
             SimpleMailMessage mailMessage
                     = new SimpleMailMessage();
             mailMessage.setFrom(sender);
@@ -37,7 +37,7 @@ public class EmailService {
             javaMailSender.send(mailMessage);
         }
         catch (Exception e) {
-            System.out.println("Error sending email: " + e.toString());
+            System.out.println("***************Error sending email: " + e.toString() + "*********************");
         }
     }
 
@@ -45,17 +45,18 @@ public class EmailService {
     {
 
         LocalDate today = LocalDate.now();
+
+        // This is the result of the query for user's tasks today
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
                 user.getId(), today);
 
         String formattedDate = today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
 
-        System.out.println("**************Result of query for user's tasks today***********");
-        System.out.println(maintenanceTasks.toString());
-        StringBuilder messageBody = null;
+        // this will check if anything is scheduled in the query, and if so, construct a string
+        // with the scheduled tasks listed and numbered for the automated email notification
         if (!maintenanceTasks.isEmpty()) {
             int itemNumber = 1;
-            messageBody = new StringBuilder(
+            StringBuilder messageBody = new StringBuilder(
                     "Good morning, \n\nThe following tasks have been scheduled for " + formattedDate + ":");
             for (MaintenanceTask task : maintenanceTasks) {
                 messageBody.append("\n");
@@ -64,16 +65,15 @@ public class EmailService {
                 itemNumber++;
             }
             messageBody.append("\n\nHave a nice day!");
-            System.out.println("***********Not empty -- this is the message that will be sent: ************");
-            System.out.println(messageBody);
+            // The query list was not empty, so the message will be sent
+            sendEMail(
+                    new EmailContent(user.getUserMeta().getEmail(),
+                            messageBody.toString(), "Maintenance Task Reminder: " + formattedDate)
+            );
         } else {
             System.out.println("***********No tasks scheduled today!*********");
         }
 
-        sendEMail(
-                new EmailContent(user.getUserMeta().getEmail(),
-                        messageBody.toString(), "Maintenance Task Reminder: " + formattedDate)
-        );
     }
 
 }

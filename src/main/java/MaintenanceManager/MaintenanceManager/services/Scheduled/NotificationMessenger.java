@@ -20,6 +20,8 @@ public class NotificationMessenger {
 
     // this is scheduled to occur at 5:00 am each day in the Taipei time zone
     @Loggable
+    // every two minutes when testing it out
+    //@Scheduled(fixedRate = 120000000) public void sendDailyMaintenanceTasksReminder() {
     @Scheduled(cron = "0 0 5 * * *", zone = "Asia/Taipei") public void sendDailyMaintenanceTasksReminder() {
         // this will send a notification email to each of the users who have
         // ROLE_MAINTENANCE authority
