@@ -31,7 +31,8 @@
       </div>
     </div>
     <br/><br/>
-    <div class="container border rounded text-center bg-light">
+    <div th:if="${tasks.size() > 0}"
+         class="container border rounded text-center bg-light">
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -70,6 +71,17 @@
   <br />
   <br />
   <br />
+  </div>
+    <div th:unless="${tasks.size() > 0}"
+         class="container border rounded text-center bg-light">
+      <h3>No Tasks Scheduled on this Date!</h3>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+  </div>
 </div>
 </body>
 </html>

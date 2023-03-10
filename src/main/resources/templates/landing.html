@@ -24,9 +24,9 @@
         </div>
         <br />
         <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
-
-            <hr />
-            <div class="container border rounded text-center bg-light">
+            <hr th:if="${dailyTasks.size() > 0}" />
+            <div th:if="${dailyTasks.size() > 0}"
+                 class="container border rounded text-center bg-light">
                 <br />
                 <h1>Daily Tasks</h1>
                 <h4>Tasks Cannot be Carried Out in Rain As Indicated</h4>
@@ -77,7 +77,8 @@
             </div>
             <br />
             <hr />
-            <div class="container border rounded text-center bg-light">
+            <div th:if="${uncompletedTasks.size() > 0}"
+                    class="container border rounded text-center bg-light">
                 <br />
                 <h1>Uncompleted Tasks</h1>
                 <hr />
@@ -153,6 +154,7 @@
                 </div>
                 <br />
             </div>
+            <hr />
         </div>
         <br />
         <br />
