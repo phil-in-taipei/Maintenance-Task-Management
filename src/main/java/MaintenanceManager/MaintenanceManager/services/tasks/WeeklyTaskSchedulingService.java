@@ -31,11 +31,9 @@ public class WeeklyTaskSchedulingService {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
-    @Loggable
-    public List<WeeklyTaskScheduler> getAllUsersWeeklyTaskSchedulers(Long userId) {
-        return weeklyTaskSchedulerRepo.findAllByUserIdOrderByDayOfWeekAsc(userId);
-    }
 
+    // the 2 methods below delete objects with orphanRemoval option in model
+    // allowing for cascading deletion of related weekly task scheduler models
     @Loggable
     @Transactional
     public void deleteWeeklyTaskScheduler(Long id) {
@@ -48,6 +46,14 @@ public class WeeklyTaskSchedulingService {
         weeklyTaskAppliedQuarterlyRepo.deleteById(id);
     }
 
+    // gets all weekly task schedulers of a given user
+    @Loggable
+    public List<WeeklyTaskScheduler> getAllUsersWeeklyTaskSchedulers(Long userId) {
+        return weeklyTaskSchedulerRepo.findAllByUserIdOrderByDayOfWeekAsc(userId);
+    }
+
+    // gets record of all weekly task schedulers which have been applied quarterly
+    // as WeeklyTaskAppliedQuarterly objects from database
     @Loggable
     public List<WeeklyTaskAppliedQuarterly>
         getAllUsersWeeklyTasksAppliedQuarterly(Long userId) {
@@ -55,6 +61,8 @@ public class WeeklyTaskSchedulingService {
                 .findAllByWeeklyTaskScheduler_UserIdOrderByYearAscQuarterAsc(userId);
     }
 
+    // gets all weekly task schedulers which have NOT already been scheduled during
+    // a given quarter/year by the user. This is for the selectors in the form template
     @Loggable
     public List<WeeklyTaskScheduler>
         getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(
@@ -70,6 +78,9 @@ public class WeeklyTaskSchedulingService {
         return allUsersWeeklyTasks;
     }
 
+    // gets a record of all weekly task schedulers which a
+    // maintenance user has already applied for a give quarter/year
+    // (they are extracted from the WeeklyTaskAppliedQuarterly objects)
     @Loggable
     public List<WeeklyTaskScheduler>
         getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
@@ -85,6 +96,9 @@ public class WeeklyTaskSchedulingService {
         return alreadyScheduledWeeklyTasks;
     }
 
+    // gets record of all user's WeeklyTaskAppliedQuarterly objects
+    // these are records of the weekly task schedulers having been applied
+    // to a given year/quarter
     @Loggable
     public List<WeeklyTaskAppliedQuarterly>
         getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
@@ -96,18 +110,23 @@ public class WeeklyTaskSchedulingService {
                 );
     }
 
+    // queries a weekly task scheduler by id. This is make sure it
+    // exists prior to deletion for error handling
     @Loggable
     public WeeklyTaskScheduler getWeeklyTaskScheduler(Long id) {
         return weeklyTaskSchedulerRepo.findById(id)
                 .orElse(null);
     }
 
+    // queries a WeeklyTaskAppliedQuarterly record object by id.
+    // This is make sure it exists prior to deletion for error handling
     @Loggable
     public WeeklyTaskAppliedQuarterly getWeeklyTaskAppliedQuarterly(Long id) {
         return weeklyTaskAppliedQuarterlyRepo.findById(id)
                 .orElse(null);
     }
 
+    // saves the weekly task schedulers which correspond to a set day of the week
     @Loggable
     @Transactional
     public void saveWeeklyTaskScheduler(WeeklyTaskScheduler weeklyTaskScheduler)
@@ -115,6 +134,9 @@ public class WeeklyTaskSchedulingService {
         weeklyTaskSchedulerRepo.save(weeklyTaskScheduler);
     }
 
+    // saves a weekly task scheduler quarterly/yearly application
+    // and triggers the weekly task to be recursively scheduled on
+    // the specified day of the week throughout the quarter
     @Loggable
     @Transactional
     public void saveWeeklyTaskAppliedQuarterly(

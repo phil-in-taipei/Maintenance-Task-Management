@@ -34,6 +34,8 @@ public class MonthlyTaskSchedulingService {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
+    // the 2 methods below delete objects with orphanRemoval option in model
+    // allowing for cascading deletion of related monthly task scheduler models
     @Loggable
     @Transactional
     public void deleteMonthlyTaskScheduler(Long id) {
@@ -48,6 +50,7 @@ public class MonthlyTaskSchedulingService {
                 .deleteById(id);
     }
 
+    // gets all monthly task schedulers of a given user
     @Loggable
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulers(Long userId) {
@@ -55,6 +58,8 @@ public class MonthlyTaskSchedulingService {
                     .findAllByUserIdOrderByDayOfMonthAsc(userId);
     }
 
+    // gets all monthly task schedulers which have NOT already been scheduled during
+    // a given quarter/year by the user. This is for the selectors in the form template
     @Loggable
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
@@ -70,6 +75,9 @@ public class MonthlyTaskSchedulingService {
         return allUsersMonthlyTasks;
     }
 
+
+    // gets record of all monthly task schedulers which have been applied quarterly
+    // as MonthlyTaskAppliedQuarterly objects from database
     @Loggable
     public List<MonthlyTaskAppliedQuarterly>
         getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
@@ -78,6 +86,9 @@ public class MonthlyTaskSchedulingService {
                         userId);
     }
 
+    // gets record of all user's MonthlyTaskAppliedQuarterly objects
+    // these are records of the monthly task schedulers having been applied
+    // to a given year/quarter
     @Loggable
     public List<MonthlyTaskAppliedQuarterly>
         getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
@@ -89,6 +100,9 @@ public class MonthlyTaskSchedulingService {
         );
     }
 
+    // gets a record of all monthly task schedulers which a
+    // maintenance user has already applied for a give quarter/year
+    // (they are extracted from the MonthlyTaskAppliedQuarterly objects)
     @Loggable
     public List<MonthlyTaskScheduler>
         getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
@@ -104,18 +118,23 @@ public class MonthlyTaskSchedulingService {
         return alreadyScheduledMonthlyTasks;
     }
 
+    // queries a monthly task scheduler by id. This is make sure it
+    // exists prior to deletion for error handling
     @Loggable
     public MonthlyTaskScheduler getMonthlyTaskScheduler(Long id) {
         return monthlyTaskSchedulerRepo.findById(id)
                 .orElse(null);
     }
 
+    // queries a MonthlyTaskAppliedQuarterly record object by id.
+    // This is make sure it exists prior to deletion for error handling
     @Loggable
     public MonthlyTaskAppliedQuarterly getMonthlyTaskAppliedQuarterly(Long id) {
         return monthlyTaskAppliedQuarterlyRepo.findById(id)
                 .orElse(null);
     }
 
+    // saves the monthly task schedulers which correspond to a set day of the month
     @Loggable
     @Transactional
     public void saveMonthlyTaskScheduler(MonthlyTaskScheduler monthlyTaskScheduler)
@@ -123,11 +142,15 @@ public class MonthlyTaskSchedulingService {
                 monthlyTaskSchedulerRepo.save(monthlyTaskScheduler);
     }
 
+    // saves a monthly task scheduler quarterly/yearly application
+    // and triggers the monthly task to be recursively scheduled on
+    // the specified day of the month throughout the quarter
     @Loggable
     @Transactional
-    public void saveMonthlyTaskAppliedQuarterly(MonthlyTaskAppliedQuarterly monthlyTaskAppliedQuarterly)
+    public void saveMonthlyTaskAppliedQuarterly(
+            MonthlyTaskAppliedQuarterly monthlyTaskAppliedQuarterly)
             throws IllegalArgumentException {
-        // Preparing to save qMonthly task
+        // Preparing to save Monthly task scheduler applied quarterly object
         // Generating dates to save single tasks on specified dates throughout quarter/year
         MonthlyTaskScheduler scheduler = monthlyTaskAppliedQuarterly.getMonthlyTaskScheduler();
         List<LocalDate> datesToScheduleTasks =

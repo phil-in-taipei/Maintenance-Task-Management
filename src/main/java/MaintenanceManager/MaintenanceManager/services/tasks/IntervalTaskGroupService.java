@@ -37,7 +37,7 @@ public class IntervalTaskGroupService {
 
 
     // the 3 methods below delete objects with orphanRemoval option in model
-    // allowing for cascading deletion of related models
+    // allowing for cascading deletion of interval task group-related models
     @Loggable
     @Transactional
     public void deleteIntervalTask(Long id) {
