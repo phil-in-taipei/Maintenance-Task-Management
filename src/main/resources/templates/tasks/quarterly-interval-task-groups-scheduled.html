@@ -17,7 +17,8 @@
       <h2>Interval Task Groups Applied Quarterly</h2>
       <hr />
       <br />
-      <div class="table-responsive">
+      <div th:if="${qITG.size() > 0}"
+           class="table-responsive">
         <table class="table">
           <thead>
           <tr>
@@ -39,6 +40,13 @@
           </tr>
           </tbody>
         </table>
+      </div>
+      <div th:unless="${qITG.size() > 0}"
+           class="container border rounded text-center bg-light">
+        <br />
+        <h3>There are currently no interval task groups</h3>
+        <h3>which have been applied to a quarter/year</h3>
+        <br />
       </div>
     </div>
   </div>

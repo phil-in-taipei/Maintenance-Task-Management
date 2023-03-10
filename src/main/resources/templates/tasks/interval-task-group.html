@@ -18,7 +18,8 @@
         <br/><a th:href="@{'/create-interval-task/' + ${intervalTaskGroup.id}}">Add New Task to Group</a><br/>
         <br/><br/>
         <div class="container bg-light">
-            <div class="table-responsive">
+            <div th:if="${intervalTaskGroup.getIntervalTasks().size() > 0}"
+                    class="table-responsive">
             <table class="table">
                 <thead>
                 <tr>
@@ -39,6 +40,12 @@
                 </tr>
                 </tbody>
             </table>
+            </div>
+            <div th:unless="${intervalTaskGroup.getIntervalTasks().size() > 0}"
+                 class="container border rounded text-center bg-light">
+                <br />
+                <h3>There are currently no tasks in the interval task group</h3>
+                <br />
             </div>
         </div>
     </div>

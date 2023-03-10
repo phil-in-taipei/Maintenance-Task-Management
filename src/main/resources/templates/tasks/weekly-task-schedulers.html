@@ -56,7 +56,8 @@
             </form>
         </div>
         <br/><br/>
-        <div class="container border rounded text-center bg-light"
+        <div th:if="${weeklyTasks.size() > 0}"
+             class="container border rounded text-center bg-light"
              id="weeklyTasksTable">
             <div class="table-responsive">
                 <table class="table">
@@ -80,6 +81,12 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div th:unless="${weeklyTasks.size() > 0}"
+             class="container border rounded text-center bg-light">
+            <br />
+            <h3>There are currently no weekly task schedulers</h3>
+            <br />
         </div>
     </div>
     <br />
