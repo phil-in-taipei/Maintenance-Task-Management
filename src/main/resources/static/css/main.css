@@ -19,3 +19,12 @@
 #applyIntervalTaskGroupForm {
     display: none;
 }
+
+#footer {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  height: 60px;
+  background: #8fa9fa;
+}

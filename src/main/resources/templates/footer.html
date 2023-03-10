@@ -6,27 +6,29 @@
 </head>
 <body class="bg-light">
 <th:block th:fragment="footer">
-    <footer class="text-center bg-light">
-        <hr />
-        <div class="container row">
-            <div class="col">
-                <h5><a class="navbar-brand" sec:authorize="!isAuthenticated()" th:href="@{/}">
+    <footer class="text-center bg-light" id="footer">
+        <div class="container">
+            <br />
+        </div>
+        <div class="container row align-middle">
+            <div class="col align-middle">
+                <h6><a class="navbar-brand" sec:authorize="!isAuthenticated()" th:href="@{/}">
                     Maintenance Manager
                 </a>
                     <a class="navbar-brand" sec:authorize="isAuthenticated()" th:href="@{/landing}">
                         Maintenance Manager
-                    </a></h5>
+                    </a></h6>
             </div>
-            <div class="col">
-                <h5>
+            <div class="col align-middle">
+                <h6>
                     <span sec:authorize="isAuthenticated()">
-                    Logged in as user: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
+                    <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
                     <a th:if="${#httpServletRequest.remoteUser !=null}" th:href="@{/logout}">Sign Out</a>
                     </span>
                     <span sec:authorize="!isAuthenticated()">
                         <a th:href="@{/register}">Sign Up!</a>
                     </span>
-                </h5>
+                </h6>
             </div>
         </div>
     </footer>

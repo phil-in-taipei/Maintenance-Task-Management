@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <title>Error Page</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <br />
+    <br />
+    <br />
+    <br />
+    <div class="container border rounded text-center bg-light align-middle"><br />
+    <h1>Error</h1><hr />
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Path</th>
+            <th scope="col">Status Code</th>
+            <th scope="col">Error</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${timestamp}"></td>
+            <td th:text="${path}"></td>
+            <td th:text="${status}"></td>
+            <td th:text="${error}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+    <br />
+</div>
+</body>
+</html>

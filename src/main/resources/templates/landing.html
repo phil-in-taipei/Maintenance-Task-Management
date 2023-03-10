@@ -12,11 +12,17 @@
     <div layout:fragment="content" th:remove="tag">
         <br />
         <div sec:authorize="hasRole('ROLE_ADMIN')">
-            <div class="container border rounded text-center">
-                <h1>Welcome!</h1>
+            <br />
+            <br />
+            <div class="container border rounded text-center bg-light">
+                <br />
+                <h1>Welcome Admin!</h1>
+                <br />
             </div>
+            <br />
+            <br />
         </div>
-        <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
+        <div sec:authorize="hasRole('ROLE_USER')">
             <div class="container border rounded text-center bg-light">
                 <br />
                 <h1>Weather Forecast</h1>
@@ -30,29 +36,32 @@
                 <br />
                 <div class="collapse" id="collapseWeather">
                     <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">User</th>
-                            <th scope="col">Temperature</th>
-                            <th scope="col">Wind</th>
-                            <th scope="col">Chance of Rain</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">User</th>
+                                <th scope="col">Temperature</th>
+                                <th scope="col">Wind</th>
+                                <th scope="col">Chance of Rain</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             <tr>
                                 <td th:text="${user.username}"></td>
                                 <td th:text="${weather[0].Temperature.Minimum.Value} + 'C - ' + ${weather[0].Temperature.Maximum.Value} + 'C'"></td>
                                 <td th:text="${weather[0].Day.Wind.Speed.Value}"></td>
                                 <td th:text="${weather[0].Day.RainProbability} + '%'"></td>
                             </tr>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <br />
             </div>
-            <br />
+        </div>
+        <br />
+        <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
+
             <hr />
             <div class="container border rounded text-center bg-light">
                 <br />

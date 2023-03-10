@@ -10,10 +10,14 @@
 </head>
 <body>
     <div layout:fragment="content" th:remove="tag">
+        <br />
+        <div class="container border rounded text-center bg-light align-middle">
+            <br />
         <div align="center">
             <h2>Sorry, there was an error!</h2>
             <h3 th:text="${message}"></h3>
         </div>
+            </div>
     </div>
 </body>
 </html>
