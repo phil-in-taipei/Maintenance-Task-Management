@@ -54,6 +54,8 @@ public class MaintenanceTask {
     )
     private IntervalTaskGroup intervalTaskGroup;
 
+    // in the first constructor the noRainOnly is set to false by default
+    // this is because it is only used in the Interval Task Groups
     public MaintenanceTask(
             String taskName,
             LocalDate date, UserPrincipal user) {

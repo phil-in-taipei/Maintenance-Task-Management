@@ -17,6 +17,10 @@ public class IntervalTaskGroupController {
     @Autowired
     IntervalTaskGroupService intervalTaskGroupService;
 
+
+    // directs user to form to apply interval task groups schedulers
+    // to a specific quarter/year. It will also trigger batch scheduling
+    // of the interval task schedulers in the group
     @PostMapping("/apply-interval-task-group-schedulers")
     public String showApplyITGSchedulerFormPage(
             @ModelAttribute("monthlyTaskQuarterAndYear")
@@ -42,6 +46,7 @@ public class IntervalTaskGroupController {
         return "tasks/apply-interval-task-group-schedulers";
     }
 
+    // this is to create an interval task group
     @GetMapping("/create-interval-task-group")
     public String showCreateIntervalTaskGroupFormPage(Model model) {
         IntervalTaskGroup intervalTaskGroup = new IntervalTaskGroup();

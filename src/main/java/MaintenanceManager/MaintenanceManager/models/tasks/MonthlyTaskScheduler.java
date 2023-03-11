@@ -27,6 +27,8 @@ public class MonthlyTaskScheduler {
     @JoinColumn
     private UserPrincipal user;
 
+    // orphanRemoval deletes related quarterly applications
+    // of the MonthlyTaskScheduler upon deletion
     @OneToMany(mappedBy = "monthlyTaskScheduler", orphanRemoval = true)
     private Set<MonthlyTaskAppliedQuarterly> monthlyTaskAppliedQuarterly;
 
@@ -39,6 +41,7 @@ public class MonthlyTaskScheduler {
                 '}';
     }
 
+    // this is for forms in thymeleaf to have a readable String
     public String templateSelector() {
         String ordinalNumber = "th";
         if (dayOfMonth == 1 || dayOfMonth == 21 || dayOfMonth == 31) {

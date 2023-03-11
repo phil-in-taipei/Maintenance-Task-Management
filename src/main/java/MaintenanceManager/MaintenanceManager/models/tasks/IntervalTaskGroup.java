@@ -25,11 +25,11 @@ public class IntervalTaskGroup {
     @JoinColumn
     private UserPrincipal taskGroupOwner;
 
-
+    // orphanRemoval deletes related maintenance tasks in the group upon deletion
     @OneToMany(mappedBy = "intervalTaskGroup", orphanRemoval = true)
     private Set<MaintenanceTask> maintenanceTasks;
 
-
+    // orphanRemoval deletes related interval tasks in the group upon deletion
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "interval_task_group_id")
     private List<IntervalTask> intervalTasks;
@@ -37,6 +37,8 @@ public class IntervalTaskGroup {
     @Column(nullable = false)
     private int intervalInDays;
 
+    // orphanRemoval deletes related quarterly applications
+    // of the IntervalTaskGroup upon deletion
     @OneToMany(mappedBy = "intervalTaskGroup", orphanRemoval = true)
     private Set<IntervalTaskGroupAppliedQuarterly> intervalTaskGroupAppliedQuarterly;
 
@@ -51,6 +53,7 @@ public class IntervalTaskGroup {
                 '}';
     }
 
+    // this is for forms in thymeleaf to have a readable String
     public String templateSelector() {
         return taskGroupName + " " + "(Every " +
                 intervalInDays + " days)";

@@ -18,7 +18,9 @@ public class MonthlyTaskSchedulerController {
     @Autowired
     MonthlyTaskSchedulingService monthlyTaskSchedulingService;
 
-
+    // directs user to form to apply monthly schedulers
+    // to a specific quarter/year. It will also trigger batch scheduling
+    // of task on the specified day of month throughout the quarter
     @PostMapping("/apply-monthly-schedulers")
     public String showApplyMonthlySchedulerFormPage(
             @ModelAttribute("monthlyTaskQuarterAndYear")
@@ -47,6 +49,7 @@ public class MonthlyTaskSchedulerController {
         return "tasks/apply-monthly-schedulers";
     }
 
+    // directs user to form for the creation of a monthly scheduler
     @GetMapping("/create-monthly-task-scheduler")
     public String showCreateMonthlyTaskFormPage(Model model) {
         MonthlyTaskScheduler monthlyTaskScheduler = new MonthlyTaskScheduler();
@@ -54,6 +57,8 @@ public class MonthlyTaskSchedulerController {
         return "tasks/create-monthly-task-scheduler";
     }
 
+    // link to delete monthly scheduler. Returns an error if the id does not match
+    // a weekly scheduler (does not exist)
     @RequestMapping("/delete-monthly-task-scheduler/{id}")
     public String deleteMonthlyMaintenanceTask(
             @PathVariable(name = "id") Long id, Model model) {
@@ -67,6 +72,8 @@ public class MonthlyTaskSchedulerController {
         return "redirect:/monthly-tasks";
     }
 
+    // link to delete quarterly applied record of monthly scheduler.
+    // Returns an error if the id does not match an object in the database (does not exist)
     @RequestMapping("/delete-monthly-task-applied-quarterly/{id}")
     public String deleteMonthlyTaskAppliedQuarterly(
             @PathVariable(name = "id") Long id, Model model) {
@@ -83,6 +90,7 @@ public class MonthlyTaskSchedulerController {
         return "redirect:/quarterly-monthly-tasks-scheduled";
     }
 
+    // link for posting request to create new monthly task scheduler
     @PostMapping("/monthly-tasks")
     public String saveNewMonthlyTaskScheduler(
             @ModelAttribute("monthlyTaskScheduler")
@@ -102,6 +110,7 @@ public class MonthlyTaskSchedulerController {
         return "redirect:/monthly-tasks";
     }
 
+    // shows all monthly task schedulers which have been created by the authenticated user
     @GetMapping("/monthly-tasks")
     public String showAllUserMonthlyTasks(
             Authentication authentication, Model model) {
@@ -116,6 +125,9 @@ public class MonthlyTaskSchedulerController {
         return "tasks/monthly-task-schedulers";
     }
 
+    // shows record of all quarterly/yearly application of monthly task schedulers
+    // these correspond to the scheduling of the specified monthly task on the date
+    // of month throughout the quarter
     @GetMapping("/quarterly-monthly-tasks-scheduled")
     public String showAllUserQuarterlyMonthlyTasks(
             Authentication authentication, Model model) {
@@ -128,6 +140,8 @@ public class MonthlyTaskSchedulerController {
         return "tasks/quarterly-monthly-tasks-scheduled";
     }
 
+    // In the form the user selects the monthly task scheduler along with the year and quarter
+    // In the service method, the scheduling of the monthly tasks will be triggered for the quarter
     @PostMapping("/submit-quarterly-monthly-tasks-scheduled/{quarter}/{year}")
     public String saveNewQuarterlyMonthlyTask(
             @ModelAttribute("qMonthlyTask")
@@ -136,7 +150,6 @@ public class MonthlyTaskSchedulerController {
             @PathVariable(name = "year") Integer year,
             Authentication authentication) {
         try {
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
             qMonthlyTask.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));
             qMonthlyTask.setYear(year);
             monthlyTaskSchedulingService.saveMonthlyTaskAppliedQuarterly(qMonthlyTask);

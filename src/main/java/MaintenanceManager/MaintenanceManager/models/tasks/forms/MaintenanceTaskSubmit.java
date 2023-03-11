@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MaintenanceTaskSubmit {
-
     private String taskName;
     private String description;
     private String date;

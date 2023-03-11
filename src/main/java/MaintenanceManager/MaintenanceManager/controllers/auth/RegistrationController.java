@@ -24,21 +24,24 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String submitRegisterForm(@ModelAttribute("userRegistration") UserRegistration userRegistration,
-                                     Model model) {
-        System.out.println("*****************Submitting User Registration Data ************************");
-        System.out.println(userRegistration.toString());
-        if (!Objects.equals(userRegistration.getPassword(), userRegistration.getPasswordConfirmation())) {
+    public String submitRegisterForm(
+            @ModelAttribute("userRegistration")
+            UserRegistration userRegistration,
+            Model model) {
+        // verifies that the passwords match prior to registration;
+        // otherwise, redirects to registration failure page
+        if (!Objects.equals(userRegistration.getPassword(),
+                userRegistration.getPasswordConfirmation())) {
             model.addAttribute("errorMsg", "The passwords do not match!");
             return "auth/register-failure";
         }
         UserPrincipal createdUser = userDetailsService.createNewMaintenanceUser(userRegistration);
-        System.out.println("**********************Created User****************************************");
+        // verifies user creation successful; otherwise, redirects to registration failure page
         if (createdUser == null) {
-            model.addAttribute("errorMsg", "There was error creating your account");
+            model.addAttribute("errorMsg",
+                    "There was error creating your account");
             return "register-failure";
         }
-        System.out.println(createdUser.toString());
         model.addAttribute("user", createdUser);
         return "auth/register-success";
     }
@@ -50,21 +53,24 @@ public class RegistrationController {
     }
 
     @PostMapping("/register-admin")
-    public String submitRegisterFormForAdmin(@ModelAttribute("userRegistration") UserRegistration userRegistration,
+    public String submitRegisterFormForAdmin(
+            @ModelAttribute("userRegistration") UserRegistration userRegistration,
                                      Model model) {
-        System.out.println("*****************Submitting User Registration Data ************************");
-        System.out.println(userRegistration.toString());
-        if (!Objects.equals(userRegistration.getPassword(), userRegistration.getPasswordConfirmation())) {
+        // verifies that the passwords match prior to registration;
+        // otherwise, redirects to registration failure page
+        if (!Objects.equals(userRegistration.getPassword(),
+                userRegistration.getPasswordConfirmation())) {
             model.addAttribute("errorMsg", "The passwords do not match!");
             return "auth/register-failure";
         }
-        UserPrincipal createdUser = userDetailsService.createNewAdminUser(userRegistration);
-        System.out.println("**********************Created User****************************************");
+        UserPrincipal createdUser = userDetailsService
+                .createNewAdminUser(userRegistration);
+        // verifies user creation successful; otherwise, redirects to registration failure page
         if (createdUser == null) {
-            model.addAttribute("errorMsg", "There was error creating your account");
+            model.addAttribute("errorMsg",
+                    "There was error creating your account");
             return "register-failure";
         }
-        System.out.println(createdUser.toString());
         model.addAttribute("user", createdUser);
         return "auth/register-success";
     }

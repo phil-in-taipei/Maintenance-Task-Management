@@ -108,13 +108,11 @@ public class GenerateDatesService {
             case Q1:
                 int Q21stMonth = 4;
                 while (dateInQuarter.getMonthValue() < Q21stMonth) {
-                    System.out.println(dateInQuarter);
                     dates.add(dateInQuarter);
                     dateInQuarter = dateInQuarter.plusWeeks(1);
                 }
                 break;
             case Q2:
-                System.out.println("Quarter 2");
                 int Q31stMonth = 7;
                 while (dateInQuarter.getMonthValue() < Q31stMonth) {
                     System.out.println(dateInQuarter);
@@ -123,7 +121,6 @@ public class GenerateDatesService {
                 }
                 break;
             case Q3:
-                System.out.println("Quarter 3");
                 int Q41stMonth = 10;
                 while (dateInQuarter.getMonthValue() < Q41stMonth) {
                     System.out.println(dateInQuarter);
@@ -132,7 +129,6 @@ public class GenerateDatesService {
                 }
                 break;
             default:
-                System.out.println("Quarter 4");
                 int nextYearValue = year + 1;
                 while (dateInQuarter.getYear() < nextYearValue) {
                     System.out.println(dateInQuarter);
@@ -154,10 +150,8 @@ public class GenerateDatesService {
        LocalDate firstDayOfQuarter;
         switch (quarter) {
             case Q1:
-                //System.out.println("Quarter 1");
                 LocalDate ldQ1 = LocalDate.of(year, 1, 1);
                 ldQ1 = ldQ1.with(dayofWeek);
-                //System.out.println("Date before adjustment check: " + ldQ1);
                 if (ldQ1.getMonthValue() == 12
                         && ldQ1.getYear() < year) {
                     ldQ1 =  ldQ1.plusWeeks(1);
@@ -165,30 +159,24 @@ public class GenerateDatesService {
                 firstDayOfQuarter = ldQ1;
                 break;
             case Q2:
-                //System.out.println("Quarter 2");
                 LocalDate ldQ2 = LocalDate.of(year, 4, 1);
                 ldQ2 = ldQ2.with(dayofWeek);
-                //System.out.println("Date before adjustment check: " + ldQ2);
                 if (ldQ2.getMonthValue() < 4) {
                     ldQ2 = ldQ2.plusWeeks(1);
                 }
                 firstDayOfQuarter = ldQ2;
                 break;
             case Q3:
-                //System.out.println("Quarter 3");
                 LocalDate ldQ3 = LocalDate.of(year, 7, 1);
                 ldQ3 = ldQ3.with(dayofWeek);
-                //System.out.println("Date before adjustment check: " + ldQ3);
                 if (ldQ3.getMonthValue() < 7) {
                     ldQ3 = ldQ3.plusWeeks(1);
                 }
                 firstDayOfQuarter = ldQ3;
                 break;
             default:
-                //System.out.println("Quarter 4");
                 LocalDate ldQ4 = LocalDate.of(year, 10, 1);
                 ldQ4 = ldQ4.with(dayofWeek);
-                //System.out.println("Date before adjustment check: " + ldQ4);
                 if (ldQ4.with(dayofWeek).getMonthValue() < 10) {
                     ldQ4 = ldQ4.plusWeeks(1);
                 }
@@ -215,9 +203,7 @@ public class GenerateDatesService {
             dailyIndex = 7;
         }
         int random = (int)(Math.random() * dailyIndex + 1) - 1;
-        //System.out.println("The random number is: " + random);
         DayOfWeek beginningDayOfWeek = possibleDaysToBegin[random];
-        //System.out.println("The beginning day of the week is: " + beginningDayOfWeek);
         return getFirstDayOfWeekByYearAndQuarter(
                 beginningDayOfWeek, year, quarter);
     }

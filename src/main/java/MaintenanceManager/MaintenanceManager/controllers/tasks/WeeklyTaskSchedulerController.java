@@ -17,6 +17,9 @@ public class WeeklyTaskSchedulerController {
     @Autowired
     WeeklyTaskSchedulingService weeklyTaskSchedulingService;
 
+    // directs user to form to apply weekly schedulers
+    // to a specific quarter/year. It will also trigger batch scheduling
+    // of task on the specified day of week throughout the quarter
     @PostMapping("/apply-weekly-schedulers")
     public String showApplyWeeklySchedulerFormPage(
             @ModelAttribute("weeklyTaskQuarterAndYear")
@@ -42,6 +45,7 @@ public class WeeklyTaskSchedulerController {
         return "tasks/apply-weekly-schedulers";
     }
 
+    // directs user to form for the creation of a weekly scheduler
     @GetMapping("/create-weekly-task-scheduler")
     public String showCreateWeeklyTaskFormPage(Model model) {
         WeeklyTaskScheduler weeklyTaskScheduler = new WeeklyTaskScheduler();
@@ -51,6 +55,8 @@ public class WeeklyTaskSchedulerController {
         return "tasks/create-weekly-task-scheduler";
     }
 
+    // link to delete weekly scheduler. Returns an error if the id does not match
+    // a weekly scheduler (does not exist)
     @RequestMapping("/delete-weekly-task-scheduler/{id}")
     public String deleteWeeklyMaintenanceTask(
             @PathVariable(name = "id") Long id, Model model) {
@@ -64,6 +70,8 @@ public class WeeklyTaskSchedulerController {
         return "redirect:/weekly-tasks";
     }
 
+    // link to delete quarterly applied record of monthly scheduler.
+    // Returns an error if the id does not match an object in the database (does not exist)
     @RequestMapping("/delete-weekly-task-applied-quarterly/{id}")
     public String deleteWeeklyTaskAppliedQuarterly(
             @PathVariable(name = "id") Long id, Model model) {
@@ -77,6 +85,7 @@ public class WeeklyTaskSchedulerController {
         return "redirect:/quarterly-weekly-tasks-scheduled";
     }
 
+    // link for posting request to create new weekly task scheduler
     @PostMapping("/weekly-tasks")
     public String saveNewWeeklyTaskScheduler(
             @ModelAttribute("weeklyTaskScheduler")
@@ -96,6 +105,7 @@ public class WeeklyTaskSchedulerController {
         return "redirect:/weekly-tasks";
     }
 
+    // shows all weekly task schedulers which have been created by the authenticated user
     @GetMapping("/weekly-tasks")
     public String showAllUserWeeklyTasks(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
@@ -108,28 +118,28 @@ public class WeeklyTaskSchedulerController {
         return "tasks/weekly-task-schedulers";
     }
 
+    // shows record of all quarterly/yearly application of weekly task schedulers
+    // these correspond to the scheduling of the specified weekly task on the day
+    // of the week throughout the quarter
     @GetMapping("/quarterly-weekly-tasks-scheduled")
     public String showAllUserQuarterlyWeeklyTasks(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         List<WeeklyTaskAppliedQuarterly> qWeeklyTasks =
                 weeklyTaskSchedulingService.getAllUsersWeeklyTasksAppliedQuarterly(user.getId());
-        System.out.println(
-                "**********************************These are the qWeekly tasks for the user: " +
-                        qWeeklyTasks.toString() + "***********************************");
         model.addAttribute("qWeeklyTasks", qWeeklyTasks);
         model.addAttribute("user", user);
         return "tasks/quarterly-weekly-tasks-scheduled";
     }
 
+    // In the form the user selects the weekly task scheduler along with the year and quarter
+    // In the service method, the scheduling of the weekly tasks will be triggered for the quarter
     @PostMapping("/submit-quarterly-weekly-tasks-scheduled/{quarter}/{year}")
     public String saveNewQuarterlyWeeklyTask(
             @ModelAttribute("qWeeklyTask")
             WeeklyTaskAppliedQuarterly qWeeklyTask, Model model,
             @PathVariable(name = "quarter") String quarter,
-            @PathVariable(name = "year") Integer year,
-            Authentication authentication) {
+            @PathVariable(name = "year") Integer year) {
         try {
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
             qWeeklyTask.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));
             qWeeklyTask.setYear(year);
             weeklyTaskSchedulingService.saveWeeklyTaskAppliedQuarterly(qWeeklyTask);

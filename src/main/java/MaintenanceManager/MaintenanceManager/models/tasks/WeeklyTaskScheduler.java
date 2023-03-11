@@ -30,6 +30,8 @@ public class WeeklyTaskScheduler {
     @JoinColumn
     private UserPrincipal user;
 
+    // orphanRemoval deletes related quarterly applications
+    // of the WeeklyTaskScheduler upon deletion
     @OneToMany(mappedBy = "weeklyTaskScheduler", orphanRemoval = true)
     private Set<WeeklyTaskAppliedQuarterly> weeklyTaskAppliedQuarterly;
 
@@ -43,6 +45,7 @@ public class WeeklyTaskScheduler {
                 '}';
     }
 
+    // this is for forms in thymeleaf to have a readable String
     public String templateSelector() {
         String dayOfWeekStr = dayOfWeek
                 .getDisplayName(TextStyle.FULL,

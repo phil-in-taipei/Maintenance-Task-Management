@@ -14,6 +14,8 @@ import java.util.List;
 @Service
 public class GenerateTaskBatchesService {
 
+    // this takes in a list of dates, and standard task, and a user
+    // and generates the same task on each of the dates in the list
     @Loggable
     public List<MaintenanceTask> generateRecurringTasksByDateList(
             String taskName, UserPrincipal user,
@@ -29,36 +31,37 @@ public class GenerateTaskBatchesService {
         return batchOfTasks;
     }
 
+    // this takes in a list of dates, and a group of alternating interval tasks
+    // It iterates through the list, while also iterating through the group of interval
+    // tasks and generates a batch of tasks
     @Loggable
     public List<MaintenanceTask> generateTaskBatchByDateListAndIntervalTaskList(
             IntervalTaskGroup intervalTaskGroup, List<LocalDate> schedulingDates
     ) {
         List<IntervalTask> intervalTasks = intervalTaskGroup.getIntervalTasks();
         int lengthOfIntervalTasks = intervalTasks.size();
+
+        // this last index will be used as a switch when iterating through the sequence
+        // of interval tasks. It will continue to go up by one index unless it is the
+        // last index in the list of interval tasks, at which point if will reset the index
+        // back to zero (and reiterate through the sequence of tasks)
         int lastIndexInIntervalTaskList = lengthOfIntervalTasks - 1;
-        //System.out.println("*****************Interval Tasks/length " +  lengthOfIntervalTasks + " ********************");
-        //System.out.println(intervalTasks.toString());
-        int lengthOfDates = schedulingDates.size();
-        //System.out.println("*****************Dates/length " +  lengthOfDates +" *****************************");
-        //System.out.println(schedulingDates.toString());
 
         List<MaintenanceTask> batchOfTasks = new ArrayList<>();
 
-        //System.out.println("****************Now iterating through dates/tasks and matching them***********");
-        //System.out.println("****************While adding the tasks to a List***********");
         int indexOfIntervalTaskList = 0;
         for (LocalDate date : schedulingDates) {
-            //System.out.println(date + ": " + intervalTasks.get(indexOfIntervalTaskList).toString());
             IntervalTask intervalTask = intervalTasks.get(indexOfIntervalTaskList);
             MaintenanceTask maintenanceTask = new MaintenanceTask(
                     intervalTask.getIntervalTaskName(), //intervalTask.getDescription(),
                     date, intervalTaskGroup.getTaskGroupOwner(), intervalTask.getNoRainOnly(),
                     intervalTaskGroup
             );
-            //System.out.println("*****************Maintenance task to be added*******************");
-            //System.out.println(maintenanceTask.toString());
+
             batchOfTasks.add(maintenanceTask);
             if (indexOfIntervalTaskList == lastIndexInIntervalTaskList) {
+                // the end of the interval task list has been reached,
+                // so the sequence is reset back to zero
                 indexOfIntervalTaskList = 0;
             } else {
                 indexOfIntervalTaskList++;
