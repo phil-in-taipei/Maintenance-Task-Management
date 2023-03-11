@@ -18,21 +18,6 @@ public class UserPrincipal implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Override
-    public String toString() {
-        return "UserPrincipal{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                //", password='" + password + '\'' +
-                ", userMeta=" + userMeta.toString() +
-                ", authorities=" + authorities +
-                ", accountNonExpired=" + accountNonExpired +
-                ", accountNonLocked=" + accountNonLocked +
-                ", credentialsNonExpired=" + credentialsNonExpired +
-                ", enabled=" + enabled +
-                '}';
-    }
-
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -65,5 +50,25 @@ public class UserPrincipal implements UserDetails {
         accountNonLocked = true;
         credentialsNonExpired = true;
         enabled = true;
+    }
+
+    @Override
+    public String toString() {
+        return "UserPrincipal{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                //", password='" + password + '\'' +
+                ", userMeta=" + userMeta.toString() +
+                ", authorities=" + authorities +
+                ", accountNonExpired=" + accountNonExpired +
+                ", accountNonLocked=" + accountNonLocked +
+                ", credentialsNonExpired=" + credentialsNonExpired +
+                ", enabled=" + enabled +
+                '}';
+    }
+
+    public String getTemplateSelector() {
+        return username + " ("  + this.getUserMeta().getGivenName() +  " "
+                + this.getUserMeta().getSurname() + ")";
     }
 }

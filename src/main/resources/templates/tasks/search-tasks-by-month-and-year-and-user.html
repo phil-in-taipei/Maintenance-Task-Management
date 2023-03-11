@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+  <title>Search User/Month/Year</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+  <br/>
+  <br />
+  <br />
+  <div class="container text-center">
+    <div class="container border rounded bg-light">
+      <br />
+      <br />
+      <form action="#" th:action="@{'/search-tasks-by-month-and-year-and-user'}"
+            method="post" th:object="${searchMonthAndYearAndUser}">
+        <h3>Search for Tasks by Month/Year/User</h3>
+        <div class="form-control bg-light">
+          <label>User</label>
+          <div>
+            <select class="form-select"  type="text" id="userId" th:field="*{userId}">
+              <option th:each="userOpt : ${maintenanceUsers}"
+                      th:value="${userOpt.id}" th:text="${userOpt.getTemplateSelector()}"></option>
+            </select>
+          </div>
+        </div>
+        <hr />
+        <div class="form-control bg-light">
+          <label>Month</label>
+          <div>
+            <select class="form-select"  type="text" id="month"th:field="*{month}">
+              <option th:each="monthOpt : ${monthOptions}"
+                      th:value="${monthOpt}" th:text="${monthOpt}"></option>
+            </select>
+          </div>
+        </div>
+        <hr />
+        <div class="form-control bg-light">
+          <label>Year</label>
+          <div>
+            <select class="form-select" th:field="*{year}">
+              <option th:value="2023" th:text="2023"></option>
+              <option th:value="2024" th:text="2024"></option>
+            </select>
+          </div>
+        </div>
+        <br />
+        <div>
+          <input class="btn btn-primary" type="submit" value="Submit"/>
+        </div>
+      </form>
+    </div>
+    <br />
+    <br />
+    <br />
+  </div>
+  <br>
+  <br />
+  <br />
+  <br />
+  <br />
+</div>
+</body>
+</html>

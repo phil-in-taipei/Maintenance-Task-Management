@@ -78,7 +78,8 @@ public class MaintenanceTaskController {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         LocalDate queryDate = LocalDate.parse(searchTasksByDate.getDate());
 
-        List<MaintenanceTask> tasks = maintenanceTaskService.getAllUserTasksByDate(user.getId(), queryDate);
+        List<MaintenanceTask> tasks = maintenanceTaskService
+                .getAllUserTasksByDate(user.getId(), queryDate);
 
         model.addAttribute("tasks", tasks);
         LocalDate dayBefore = queryDate.minusDays(1);

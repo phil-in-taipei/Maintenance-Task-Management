@@ -3,8 +3,10 @@ package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchMonthAndYear;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByMonthAndYearAndUser;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
+import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,9 @@ import java.util.List;
 
 @Controller
 public class SearchTasksController {
+
+    @Autowired
+    UserDetailsServiceImplementation userDetailsService;
 
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
@@ -39,7 +44,7 @@ public class SearchTasksController {
     }
 
     @PostMapping("/search-tasks-by-month-year")
-    public String searchTasksByMonth(
+    public String searchTasksByMonthAndYear(
             @ModelAttribute("searchMonthAndYear")
             SearchMonthAndYear searchMonthAndYear,
             Model model, Authentication authentication) {
@@ -65,6 +70,47 @@ public class SearchTasksController {
         model.addAttribute("tasks", tasks);
         model.addAttribute("user", user);
         return "tasks/tasks-by-month";
+    }
+
+    @GetMapping("/search-tasks-by-month-and-year-and-user")
+    public String showSearchTasksByMonthAndYearAndUserPage(Model model) {
+        List<UserPrincipal> maintenanceUsers = userDetailsService.getAllMaintenanceUsers();
+        model.addAttribute("maintenanceUsers", maintenanceUsers);
+        Month[] monthOptions = Month.values();
+        model.addAttribute("monthOptions", monthOptions);
+        model.addAttribute("searchMonthAndYearAndUser",
+                new SearchTasksByMonthAndYearAndUser());
+        return "tasks/search-tasks-by-month-and-year-and-user";
+    }
+
+    @PostMapping("/search-tasks-by-month-and-year-and-user")
+    public String searchTasksByMonthAndYearAndUser(
+            @ModelAttribute("searchMonthAndYearAndUser")
+            SearchTasksByMonthAndYearAndUser searchMonthAndYearAndUser,
+            Model model, Authentication authentication) {
+        UserPrincipal user = userDetailsService.getUserById(
+                searchMonthAndYearAndUser.getUserId());
+        Month month = searchMonthAndYearAndUser.getMonth();
+        int queryMonth = month.getValue();
+        System.out.println("This is the query month: " + queryMonth);
+        int queryYear = searchMonthAndYearAndUser.getYear();
+        LocalDate date = LocalDate.now();
+        LocalDate monthBegin = date.withDayOfMonth(1).withMonth(queryMonth)
+                .withYear(queryYear);
+        LocalDate monthEnd = monthBegin.plusMonths(1)
+                .withDayOfMonth(1).minusDays(1);
+        Month[] monthOptions = Month.values();
+        List<MaintenanceTask> tasks = maintenanceTaskService
+                .getAllUserTasksInDateRange(
+                        user.getId(), monthBegin, monthEnd);
+        model.addAttribute("searchMonthAndYear",
+                new SearchMonthAndYear());
+        model.addAttribute("monthOptions", monthOptions);
+        model.addAttribute("year", queryYear);
+        model.addAttribute("month", month);
+        model.addAttribute("tasks", tasks);
+        model.addAttribute("user", user);
+        return "tasks/user-tasks-by-month";
     }
 
 }
