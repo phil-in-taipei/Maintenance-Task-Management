@@ -54,17 +54,20 @@ public class IntervalTaskGroupController {
         return "tasks/create-interval-task-group";
     }
 
+    // this will produce a form to create an interval task scheduler which
+    // will be one member of the interval task group. It will be used as a template
+    // to schedule tasks when the interval task group is applied to a specific quarter/year
     @GetMapping("/create-interval-task/{taskGroupId}")
     public String showCreateIntervalTaskFormPage(
             @PathVariable(name = "taskGroupId") Long taskGroupId, Model model) {
-        IntervalTask intervalTask = new IntervalTask();
-        //System.out.println("This is the interval task to add to the form: " + intervalTask);
-        //System.out.println("This is the task group id: " + taskGroupId);
         model.addAttribute("intervalTask", new IntervalTask());
         model.addAttribute("taskGroupId", taskGroupId);
         return "tasks/create-interval-task";
     }
 
+    // link to delete an interval task (just one member of the task group)
+    // it will verify that both the interval task and interval task group exists
+    // prior to deletion; otherwise, it will redirect to an error page
     @RequestMapping("/delete-interval-task/{intervalTaskId}/{taskGroupId}")
     public String deleteIntervalTask(
             @PathVariable(name = "intervalTaskId")
@@ -88,6 +91,10 @@ public class IntervalTaskGroupController {
         return "redirect:/interval-task-group/" + taskGroupId;
     }
 
+    // Link to delete an interval task group interval task group exists
+    // prior to deletion; otherwise, it will redirect to an error page.
+    // It will also trigger the deletion of interval tasks in the group
+    // by means of the orphanRemoval setting in the model
     @RequestMapping("/delete-interval-task-group/{id}")
     public String deleteIntervalTaskGroup(
             @PathVariable(name = "id") Long id, Model model) {
@@ -101,6 +108,9 @@ public class IntervalTaskGroupController {
         return "redirect:/interval-task-groups";
     }
 
+    // this will delete the record of the application of the interval task group
+    // from the database. It will first verify that record with the corresponding id
+    // exists prior to deletion; otherwise, link to an error page
     @RequestMapping("/delete-interval-task-group-applied-quarterly/{id}")
     public String deleteIntervalTaskGroupAppliedQuarterly(
             @PathVariable(name = "id") Long id, Model model) {
@@ -115,6 +125,8 @@ public class IntervalTaskGroupController {
         return "redirect:/quarterly-interval-task-groups-scheduled";
     }
 
+    // link to submit the form for user to create a new interval task group
+    // returns link to error page in the event creation fails
     @PostMapping("/interval-task-groups")
     public String saveNewIntervalTaskGroup(
             @ModelAttribute("intervalTaskGroup")
@@ -129,11 +141,13 @@ public class IntervalTaskGroupController {
                     "message",
                     "Could not save interval task group, "
                             + e.getMessage());
-            return "error";
+            return "error/error";
         }
         return "redirect:/interval-task-groups";
     }
 
+    // this links to a page with a table showing all users' interval task groups
+    // the member interval tasks are accessible via link on the page
     @GetMapping("/interval-task-groups")
     public String showAllUserIntervalTaskGroups(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
@@ -146,6 +160,7 @@ public class IntervalTaskGroupController {
         return "tasks/interval-task-groups";
     }
 
+    // link to save new interval task to a specific interval task group (according to id)
     @PostMapping("/interval-task-group/{taskGroupId}")
     public String saveNewIntervalTask(
             @PathVariable(name = "taskGroupId") Long taskGroupId,
@@ -170,6 +185,9 @@ public class IntervalTaskGroupController {
         return "redirect:/interval-task-groups";
     }
 
+    // this shows the interval task group and enables user to access the individual
+    // interval tasks in the group as well as a link to create new interval tasks
+    // in the group or delete the interval tasks in the group
     @GetMapping("/interval-task-group/{taskGroupId}")
     public ModelAndView showIntervalTaskGroup(
             @PathVariable(name = "taskGroupId") Long taskGroupId,
@@ -192,22 +210,23 @@ public class IntervalTaskGroupController {
         return mav;
     }
 
+    // this produces a table showing a record of all applications of interval task groups
+    // to specific quarters/years
     @GetMapping("/quarterly-interval-task-groups-scheduled")
     public String showAllUserQuarterlyIntervalTaskGroups(
             Authentication authentication, Model model) {
-        System.out.println(
-                "**********************************Controller method to get qITGs for the user***********************************");
+
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         List<IntervalTaskGroupAppliedQuarterly> qITG =
                 intervalTaskGroupService.getAllUsersIntervalTaskGroupsAppliedQuarterly(user.getId());
-        //System.out.println(
-        //        "**********************************These are the qITGs for the user: " +
-        //                qITG.toString() + "***********************************");
         model.addAttribute("qITG", qITG);
         model.addAttribute("user", user);
         return "tasks/quarterly-interval-task-groups-scheduled";
     }
 
+    // In the form the user selects the interval task group along with the year and quarter
+    // In the service method, the scheduling of the sequence of tasks in the group will be
+    // triggered for the quarter/year
     @PostMapping("/submit-quarterly-interval-task-group-scheduled/{quarter}/{year}")
     public String saveNewQuarterlyIntervalTaskGroup(
             @ModelAttribute("qITG")

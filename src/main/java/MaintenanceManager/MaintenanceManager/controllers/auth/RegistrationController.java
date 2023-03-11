@@ -17,12 +17,17 @@ public class RegistrationController {
     @Autowired
     UserDetailsServiceImplementation userDetailsService;
 
+    // this renders the page with the form for maintenance users to register
+    // those registering on this page will have maintenance authority
+    // this link is shown in the navbar. Most users will register here
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("userRegistration", new UserRegistration());
         return "auth/register";
     }
 
+    // this is the link to submit the form for maintenance users to register
+    // those registering on this page will have maintenance authority
     @PostMapping("/register")
     public String submitRegisterForm(
             @ModelAttribute("userRegistration")
@@ -46,12 +51,17 @@ public class RegistrationController {
         return "auth/register-success";
     }
 
+    // this renders the page with the form for admin users to register
+    // those registering on this page will have admin authority
+    // this link is not shown in the navbar
     @GetMapping("/register-admin")
     public String showRegisterFormForAdmin(Model model) {
         model.addAttribute("userRegistration", new UserRegistration());
         return "auth/register-admin";
     }
 
+    // this is the link to submit the form for admin users to register
+    // those registering on this page will have admin authority
     @PostMapping("/register-admin")
     public String submitRegisterFormForAdmin(
             @ModelAttribute("userRegistration") UserRegistration userRegistration,
@@ -60,7 +70,8 @@ public class RegistrationController {
         // otherwise, redirects to registration failure page
         if (!Objects.equals(userRegistration.getPassword(),
                 userRegistration.getPasswordConfirmation())) {
-            model.addAttribute("errorMsg", "The passwords do not match!");
+            model.addAttribute("errorMsg",
+                    "The passwords do not match!");
             return "auth/register-failure";
         }
         UserPrincipal createdUser = userDetailsService

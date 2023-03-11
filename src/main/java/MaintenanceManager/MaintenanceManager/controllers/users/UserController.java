@@ -15,6 +15,8 @@ public class UserController {
     @Autowired
     UserDetailsServiceImplementation userDetailsService;
 
+    // this is for the admin to view a list of all maintenance users registered
+    // for the web app
     @GetMapping("/maintenance-users")
     public String showAllMaintenanceUsersPage(Model model) {
         List<UserPrincipal> maintenanceUsers = userDetailsService.getAllMaintenanceUsers();

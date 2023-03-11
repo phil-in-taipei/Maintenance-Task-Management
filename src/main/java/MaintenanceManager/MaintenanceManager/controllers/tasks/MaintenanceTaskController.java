@@ -70,27 +70,6 @@ public class MaintenanceTaskController {
         return mav;
     }
 
-    @PostMapping("/search-tasks-by-date")
-    public String searchTasksByDate(
-            @ModelAttribute("rescheduledTask")
-            SearchTasksByDate searchTasksByDate,
-            Model model, Authentication authentication) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        LocalDate queryDate = LocalDate.parse(searchTasksByDate.getDate());
-
-        List<MaintenanceTask> tasks = maintenanceTaskService
-                .getAllUserTasksByDate(user.getId(), queryDate);
-
-        model.addAttribute("tasks", tasks);
-        LocalDate dayBefore = queryDate.minusDays(1);
-        LocalDate dayAfter = queryDate.plusDays(1);
-        model.addAttribute("dayAfter", dayAfter.toString());
-        model.addAttribute("dayBefore", dayBefore.toString());
-        model.addAttribute("date", queryDate.toString()); //searchTasksByDate.getDate()
-        model.addAttribute("user", user);
-        return "tasks/tasks-by-date";
-    }
-
     @PostMapping("/tasks")
     public String saveNewTask(
             @ModelAttribute("task")

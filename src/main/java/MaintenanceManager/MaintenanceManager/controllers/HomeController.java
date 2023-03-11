@@ -28,6 +28,8 @@ public class HomeController {
     @Autowired
     WeatherDataService weatherDataService;
 
+    // this page displays basic information of the web app and the daily weather forecast
+    // from an external api (Accuweather)
     @GetMapping("/")
     public String homePage(Model model) {
         List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
@@ -35,6 +37,9 @@ public class HomeController {
         return "index";
     }
 
+    // landing page for after user has logged in. It will display the tasks which are uncompleted
+    // and scheduled prior to the given day on which the user views the page along with the tasks
+    // scheduled for that day (if any). It will also display the weather forecast
     @GetMapping("/landing")
     public String landingPage(Authentication authentication, Model model) {
         // get user info
@@ -54,16 +59,5 @@ public class HomeController {
         model.addAttribute("weather", weather);
         model.addAttribute("chanceOfRain", chanceOfRain);
         return "landing";
-    }
-
-    // get rid of this route
-    @GetMapping("/forecast")
-    public String testApiForecast(Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        System.out.println("This is the user: " + user);
-        List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
-        model.addAttribute("user", user);
-        model.addAttribute("weather", weather);
-        return "test-forecast";
     }
 }
