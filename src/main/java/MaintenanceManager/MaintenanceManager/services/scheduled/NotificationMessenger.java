@@ -26,7 +26,6 @@ public class NotificationMessenger {
         // this will send a notification email to each of the users who have
         // ROLE_MAINTENANCE authority
         // with a reminder of the tasks which are scheduled on that day
-        System.out.println("Sending message now!!!");
         List<UserPrincipal> maintenanceUsers = userDetailsService
                 .getAllMaintenanceUsers();
         for (UserPrincipal user : maintenanceUsers) {

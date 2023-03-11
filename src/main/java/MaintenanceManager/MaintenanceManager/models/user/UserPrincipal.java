@@ -67,6 +67,7 @@ public class UserPrincipal implements UserDetails {
                 '}';
     }
 
+    // this is for forms in thymeleaf to have a readable String
     public String getTemplateSelector() {
         return username + " ("  + this.getUserMeta().getGivenName() +  " "
                 + this.getUserMeta().getSurname() + ")";

@@ -2,51 +2,48 @@
 <html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
       layout:decorate="~{layout}">
 <head>
-  <title>User's Task</title>
+  <title>User's Tasks</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<div layout:fragment="content" th:remove="tag">
-  <br />
-  <div class="container border rounded text-center bg-light">
-    <h2 th:text="${user.username} + '\'s Tasks'"></h2>
-    <h2 th:text="${month} + ' ' + ${year}"></h2>
-    <hr />
+  <div layout:fragment="content" th:remove="tag">
+    <br />
     <div class="container border rounded text-center bg-light">
-      <div th:if="${tasks.size() > 0}"
-           class="table-responsive">
-        <table class="table">
-          <thead>
-          <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Name</th>
-            <th scope="col">Rain Restriction</th>
-            <th scope="col">Status</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="task : ${tasks}">
-            <td th:text="${task.date}"></td>
-            <td>
-              <a th:text="${task.taskName}"></a>
-            </td>
-            <td th:text="${task.noRainOnly}"></td>
-            <td th:text="${task.status.name()}"></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div th:unless="${tasks.size() > 0}"
-           class="container border rounded text-center bg-light">
-        <h3>No Tasks Scheduled during this month!</h3>
+      <h2 th:text="${user.username} + ': ' + ${month} + ' ' + ${year}"></h2>
+      <hr />
+      <div class="container border rounded text-center bg-light">
+          <div th:if="${tasks.size() > 0}"
+               class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Date</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Rain Restriction</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="task : ${tasks}">
+                  <td th:text="${task.date}"></td>
+                  <td>
+                    <a th:text="${task.taskName}"></a>
+                  </td>
+                  <td th:text="${task.noRainOnly}"></td>
+                  <td th:text="${task.status.name()}"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div th:unless="${tasks.size() > 0}">
+            <h3>No Tasks Scheduled during this month!</h3>
+          </div>
       </div>
     </div>
-    <br />
   </div>
-  <br />
-</div>
 </body>
 </html>
