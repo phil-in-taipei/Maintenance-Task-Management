@@ -36,6 +36,11 @@
                            aria-current="page" href="#">
                             Register</a>
                     </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/maintenance-users}" class="nav-link active"
+                           aria-current="page" href="#">
+                            Maintenance Users</a>
+                    </li>
                     <li sec:authorize="hasRole('ROLE_MAINTENANCE')"  class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">

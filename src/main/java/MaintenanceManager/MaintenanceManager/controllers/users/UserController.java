@@ -1,6 +1,5 @@
 package MaintenanceManager.MaintenanceManager.controllers.users;
 
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskSubmit;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;

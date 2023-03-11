@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.users;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.user.*;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,14 +29,6 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
 
     @Autowired
     UserMetaRepo userMetaRepo;
-
-    @Loggable
-    @Override
-    public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userPrincipalRepo.findByUsername(username).orElseThrow(() ->
-                new UsernameNotFoundException("User not found with username or email : " + username)
-        );
-    }
 
     @Loggable
     public UserPrincipal createNewAdminUser(UserRegistration userRegistration) {
@@ -81,5 +75,19 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     public List<UserPrincipal> getAllMaintenanceUsers() {
         return
                 userPrincipalRepo.findByMaintenanceAuthority();
+    }
+
+    @Loggable
+    public UserPrincipal getUserById(Long id) {
+        return userPrincipalRepo.findById(id)
+                .orElse(null);
+    }
+
+    @Loggable
+    @Override
+    public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userPrincipalRepo.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("User not found with username or email : " + username)
+        );
     }
 }

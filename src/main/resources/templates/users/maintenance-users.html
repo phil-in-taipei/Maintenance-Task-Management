@@ -26,7 +26,6 @@
                         <th scope="col">Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Age</th>
-                        <!--<th scope="col">Remove</th> -->
                     </tr>
                     </thead>
                     <tbody>
@@ -36,10 +35,6 @@
                         </td>
                         <td th:text="${user.userMeta.email}"></td>
                         <td th:text="${user.userMeta.age}"></td>
-                        <!--<td>
-                            <a th:href="@{'/delete-monthly-task-applied-quarterly/' + ${task.id}}">
-                                Delete</a>
-                        </td> -->
                     </tr>
                     </tbody>
                 </table>
