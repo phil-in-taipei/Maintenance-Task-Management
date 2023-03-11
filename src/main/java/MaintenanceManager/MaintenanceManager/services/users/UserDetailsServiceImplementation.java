@@ -38,6 +38,9 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
 
     @Loggable
     public UserPrincipal createNewAdminUser(UserRegistration userRegistration) {
+        // the ids of the different authorities are
+        // set in the bootstrapping class
+        // these are the two authorities given to admins
         Authority userAuth = authorityRepo.getById(1L);
         Authority mainAuth = authorityRepo.getById(2L);
         UserMeta userMeta = UserMeta.builder()
@@ -54,6 +57,9 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
 
     @Loggable
     public UserPrincipal createNewMaintenanceUser(UserRegistration userRegistration) {
+        // the ids of the different authorities are
+        // set in the bootstrapping class
+        // these are the two authorities given to maintenance schedulers
         Authority userAuth = authorityRepo.getById(1L);
         Authority mainAuth = authorityRepo.getById(3L);
         UserMeta userMeta = UserMeta.builder()
@@ -68,8 +74,12 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         return userPrincipalRepo.save(newUser);
     }
 
+    // gets all users who are maintenance schedulers
+    // this is for the admin to view in a table of all
+    // maintenance users
     @Loggable
     public List<UserPrincipal> getAllMaintenanceUsers() {
-        return userPrincipalRepo.findByMaintenanceAuthority();
+        return
+                userPrincipalRepo.findByMaintenanceAuthority();
     }
 }

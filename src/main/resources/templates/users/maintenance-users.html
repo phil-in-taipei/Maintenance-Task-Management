@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Maintenance Users</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <br />
+    <div class="container text-center">
+        <div class="container border rounded bg-light">
+            <br />
+            <h2>Maintenance Users</h2>
+            <hr />
+            <br />
+            <div th:if="${maintenanceUsers.size() > 0}"
+                 class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Username</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Age</th>
+                        <!--<th scope="col">Remove</th> -->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user : ${maintenanceUsers}">
+                        <td th:text="${user.username}"></td>
+                        <td th:text="${user.userMeta.surname} + ', ' + ${user.userMeta.givenName}">
+                        </td>
+                        <td th:text="${user.userMeta.email}"></td>
+                        <td th:text="${user.userMeta.age}"></td>
+                        <!--<td>
+                            <a th:href="@{'/delete-monthly-task-applied-quarterly/' + ${task.id}}">
+                                Delete</a>
+                        </td> -->
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div th:unless="${maintenanceUsers.size() > 0}"
+                 class="container border rounded text-center bg-light">
+                <br />
+                <h3>There are currently no maintenance users</h3>
+                <h3>who have registered for this web app</h3>
+                <br />
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
+</body>
+</html>

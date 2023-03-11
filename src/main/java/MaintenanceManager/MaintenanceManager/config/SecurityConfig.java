@@ -18,7 +18,7 @@ public class SecurityConfig {
                         .antMatchers("/", "/login", "/register", "/register-admin",
                                 "/js/**", "/css/**",
                                 "/img/**", "/webjars/**").permitAll()
-                        //.antMatchers("/admin").hasRole("ADMIN")
+                        .antMatchers("/maintenance-users").hasRole("ADMIN")
                         //.antMatchers("/maintenance").hasRole("MAINTENANCE")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
