@@ -1,8 +1,8 @@
-package MaintenanceManager.MaintenanceManager.services.Scheduled;
+package MaintenanceManager.MaintenanceManager.services.scheduled;
 
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.services.Email.EmailService;
+import MaintenanceManager.MaintenanceManager.services.email.EmailService;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;

@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.services.Email;
+package MaintenanceManager.MaintenanceManager.services.email;
 import MaintenanceManager.MaintenanceManager.models.email.EmailContent;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
