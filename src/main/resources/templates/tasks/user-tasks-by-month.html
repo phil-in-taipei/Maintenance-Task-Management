@@ -15,9 +15,8 @@
     <div class="container border rounded text-center bg-light">
       <h2 th:text="${user.username} + ': ' + ${month} + ' ' + ${year}"></h2>
       <hr />
-      <div class="container border rounded text-center bg-light">
-          <div th:if="${tasks.size() > 0}"
-               class="table-responsive">
+      <div th:if="${tasks.size() > 0}">
+          <div class="table-responsive">
             <table class="table">
               <thead>
                 <tr>
@@ -39,9 +38,13 @@
               </tbody>
             </table>
           </div>
-          <div th:unless="${tasks.size() > 0}">
-            <h3>No Tasks Scheduled during this month!</h3>
-          </div>
+      </div>
+      <div th:unless="${tasks.size() > 0}">
+        <br />
+        <br />
+        <h3>No Tasks Scheduled during this month!</h3>
+        <br />
+        <br />
       </div>
     </div>
   </div>
