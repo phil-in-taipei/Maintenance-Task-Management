@@ -12,7 +12,7 @@
 	<artifactId>MaintenanceManager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>MaintenanceManager</name>
-	<description>Maintanence Task Manager written in Spring Boot</description>
+	<description>Maintenance Task Manager written in Spring Boot</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -42,10 +42,7 @@
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-		<dependency>
-			<groupId>org.thymeleaf.extras</groupId>
-			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
-		</dependency>
+
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>popper.js</artifactId>
@@ -104,6 +101,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>Maintenance</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
