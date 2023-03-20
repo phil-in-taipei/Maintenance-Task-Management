@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.weather;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -21,7 +22,11 @@ public class WeatherDataService {
     @Autowired
     WeatherApiService weatherApiService;
 
+    // this may later be used in a cronjob that reschedules Interval Task Group member
+    // tasks with rainy weather restrictions on rainy days by swapping the scheduling
+    // for next scheduled task in the group without a restriction
     @Loggable
+    @MethodPerformance
     public Integer getRainProbability(String dateString) {
         List<DailyForecast> dailyForecasts = weatherApiService
                 .getDailyWeatherForecastData(dateString);

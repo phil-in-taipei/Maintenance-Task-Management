@@ -1,6 +1,7 @@
 package MaintenanceManager.MaintenanceManager.services.scheduled;
 
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.email.EmailService;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
@@ -20,6 +21,7 @@ public class NotificationMessenger {
 
     // this is scheduled to occur at 5:00 am each day in the Taipei time zone
     @Loggable
+    @MethodPerformance
     // every two minutes when testing it out
     //@Scheduled(fixedRate = 120000000) public void sendDailyMaintenanceTasksReminder() {
     @Scheduled(cron = "0 0 5 * * *", zone = "Asia/Taipei") public void sendDailyMaintenanceTasksReminder() {

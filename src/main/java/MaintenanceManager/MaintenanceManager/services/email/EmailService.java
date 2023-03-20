@@ -1,4 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.email;
+import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.email.EmailContent;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
@@ -25,6 +27,8 @@ public class EmailService {
     @Value("${spring.mail.username}") private String sender;
 
     // simple helper method to send automated email with smtp
+    @Loggable
+    @MethodPerformance
     public void sendEMail(EmailContent emailContent)
     {
         try {
@@ -41,6 +45,8 @@ public class EmailService {
         }
     }
 
+    @Loggable
+    @MethodPerformance
     public void sendDailyReminderMessage(UserPrincipal user)
     {
 

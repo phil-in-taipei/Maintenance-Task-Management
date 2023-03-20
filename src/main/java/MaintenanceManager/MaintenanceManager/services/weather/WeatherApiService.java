@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.weather;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.weather.AccuweatherResponse;
 import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import org.springframework.cache.annotation.Cacheable;
@@ -29,6 +30,7 @@ public class WeatherApiService {
     RestTemplate restTemplate;
 
     @Loggable
+    @MethodPerformance
     public AccuweatherResponse fetchDailyForecastEntity() {
         String apiCallUrl = dailyForecastUrl + locationKey + "?apikey=" +
                 apikey + "&details=true&metric=true";
@@ -53,6 +55,7 @@ public class WeatherApiService {
     }
 
     @Loggable
+    @MethodPerformance
     @Cacheable(
             value = "dailyWeatherCache",
             key = "#dateString")

@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
@@ -37,6 +38,7 @@ public class MonthlyTaskSchedulingService {
     // the 2 methods below delete objects with orphanRemoval option in model
     // allowing for cascading deletion of related monthly task scheduler models
     @Loggable
+    @MethodPerformance
     @Transactional
     public void deleteMonthlyTaskScheduler(Long id) {
         monthlyTaskSchedulerRepo
@@ -44,6 +46,7 @@ public class MonthlyTaskSchedulingService {
     }
 
     @Loggable
+    @MethodPerformance
     @Transactional
     public void deleteMonthlyTaskAppliedQuarterly(Long id) {
         monthlyTaskAppliedQuarterlyRepo
@@ -52,6 +55,7 @@ public class MonthlyTaskSchedulingService {
 
     // gets all monthly task schedulers of a given user
     @Loggable
+    @MethodPerformance
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulers(Long userId) {
             return monthlyTaskSchedulerRepo
@@ -61,6 +65,7 @@ public class MonthlyTaskSchedulingService {
     // gets all monthly task schedulers which have NOT already been scheduled during
     // a given quarter/year by the user. This is for the selectors in the form template
     @Loggable
+    @MethodPerformance
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
             Long userId, QuarterlySchedulingEnum quarter, Integer year) {
@@ -79,6 +84,7 @@ public class MonthlyTaskSchedulingService {
     // gets record of all monthly task schedulers which have been applied quarterly
     // as MonthlyTaskAppliedQuarterly objects from database
     @Loggable
+    @MethodPerformance
     public List<MonthlyTaskAppliedQuarterly>
         getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
             return monthlyTaskAppliedQuarterlyRepo
@@ -104,6 +110,7 @@ public class MonthlyTaskSchedulingService {
     // maintenance user has already applied for a give quarter/year
     // (they are extracted from the MonthlyTaskAppliedQuarterly objects)
     @Loggable
+    @MethodPerformance
     public List<MonthlyTaskScheduler>
         getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -121,6 +128,7 @@ public class MonthlyTaskSchedulingService {
     // queries a monthly task scheduler by id. This is make sure it
     // exists prior to deletion for error handling
     @Loggable
+    @MethodPerformance
     public MonthlyTaskScheduler getMonthlyTaskScheduler(Long id) {
         return monthlyTaskSchedulerRepo.findById(id)
                 .orElse(null);
@@ -129,6 +137,7 @@ public class MonthlyTaskSchedulingService {
     // queries a MonthlyTaskAppliedQuarterly record object by id.
     // This is make sure it exists prior to deletion for error handling
     @Loggable
+    @MethodPerformance
     public MonthlyTaskAppliedQuarterly getMonthlyTaskAppliedQuarterly(Long id) {
         return monthlyTaskAppliedQuarterlyRepo.findById(id)
                 .orElse(null);
@@ -136,6 +145,7 @@ public class MonthlyTaskSchedulingService {
 
     // saves the monthly task schedulers which correspond to a set day of the month
     @Loggable
+    @MethodPerformance
     @Transactional
     public void saveMonthlyTaskScheduler(MonthlyTaskScheduler monthlyTaskScheduler)
             throws IllegalArgumentException {
@@ -146,6 +156,7 @@ public class MonthlyTaskSchedulingService {
     // and triggers the monthly task to be recursively scheduled on
     // the specified day of the month throughout the quarter
     @Loggable
+    @MethodPerformance
     @Transactional
     public void saveMonthlyTaskAppliedQuarterly(
             MonthlyTaskAppliedQuarterly monthlyTaskAppliedQuarterly)

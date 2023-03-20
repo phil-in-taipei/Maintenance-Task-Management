@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.utiltities;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
@@ -17,6 +18,7 @@ public class GenerateTaskBatchesService {
     // this takes in a list of dates, and standard task, and a user
     // and generates the same task on each of the dates in the list
     @Loggable
+    @MethodPerformance
     public List<MaintenanceTask> generateRecurringTasksByDateList(
             String taskName, UserPrincipal user,
             List<LocalDate> datesToScheduleTasks
@@ -35,6 +37,7 @@ public class GenerateTaskBatchesService {
     // It iterates through the list, while also iterating through the group of interval
     // tasks and generates a batch of tasks
     @Loggable
+    @MethodPerformance
     public List<MaintenanceTask> generateTaskBatchByDateListAndIntervalTaskList(
             IntervalTaskGroup intervalTaskGroup, List<LocalDate> schedulingDates
     ) {

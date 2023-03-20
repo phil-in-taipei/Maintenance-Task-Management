@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskSchedulerRepo;
@@ -35,12 +36,14 @@ public class WeeklyTaskSchedulingService {
     // the 2 methods below delete objects with orphanRemoval option in model
     // allowing for cascading deletion of related weekly task scheduler models
     @Loggable
+    @MethodPerformance
     @Transactional
     public void deleteWeeklyTaskScheduler(Long id) {
         weeklyTaskSchedulerRepo.deleteById(id);
     }
 
     @Loggable
+    @MethodPerformance
     @Transactional
     public void deleteWeeklyTaskAppliedQuarterly(Long id) {
         weeklyTaskAppliedQuarterlyRepo.deleteById(id);
@@ -48,6 +51,7 @@ public class WeeklyTaskSchedulingService {
 
     // gets all weekly task schedulers of a given user
     @Loggable
+    @MethodPerformance
     public List<WeeklyTaskScheduler> getAllUsersWeeklyTaskSchedulers(Long userId) {
         return weeklyTaskSchedulerRepo.findAllByUserIdOrderByDayOfWeekAsc(userId);
     }
@@ -55,6 +59,7 @@ public class WeeklyTaskSchedulingService {
     // gets record of all weekly task schedulers which have been applied quarterly
     // as WeeklyTaskAppliedQuarterly objects from database
     @Loggable
+    @MethodPerformance
     public List<WeeklyTaskAppliedQuarterly>
         getAllUsersWeeklyTasksAppliedQuarterly(Long userId) {
         return weeklyTaskAppliedQuarterlyRepo
@@ -64,6 +69,7 @@ public class WeeklyTaskSchedulingService {
     // gets all weekly task schedulers which have NOT already been scheduled during
     // a given quarter/year by the user. This is for the selectors in the form template
     @Loggable
+    @MethodPerformance
     public List<WeeklyTaskScheduler>
         getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(
             Long userId, QuarterlySchedulingEnum quarter, Integer year) {
@@ -82,6 +88,7 @@ public class WeeklyTaskSchedulingService {
     // maintenance user has already applied for a give quarter/year
     // (they are extracted from the WeeklyTaskAppliedQuarterly objects)
     @Loggable
+    @MethodPerformance
     public List<WeeklyTaskScheduler>
         getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -100,6 +107,7 @@ public class WeeklyTaskSchedulingService {
     // these are records of the weekly task schedulers having been applied
     // to a given year/quarter
     @Loggable
+    @MethodPerformance
     public List<WeeklyTaskAppliedQuarterly>
         getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
             QuarterlySchedulingEnum quarter, Integer year, Long userId
@@ -113,6 +121,7 @@ public class WeeklyTaskSchedulingService {
     // queries a weekly task scheduler by id. This is make sure it
     // exists prior to deletion for error handling
     @Loggable
+    @MethodPerformance
     public WeeklyTaskScheduler getWeeklyTaskScheduler(Long id) {
         return weeklyTaskSchedulerRepo.findById(id)
                 .orElse(null);
@@ -121,6 +130,7 @@ public class WeeklyTaskSchedulingService {
     // queries a WeeklyTaskAppliedQuarterly record object by id.
     // This is make sure it exists prior to deletion for error handling
     @Loggable
+    @MethodPerformance
     public WeeklyTaskAppliedQuarterly getWeeklyTaskAppliedQuarterly(Long id) {
         return weeklyTaskAppliedQuarterlyRepo.findById(id)
                 .orElse(null);
@@ -128,6 +138,7 @@ public class WeeklyTaskSchedulingService {
 
     // saves the weekly task schedulers which correspond to a set day of the week
     @Loggable
+    @MethodPerformance
     @Transactional
     public void saveWeeklyTaskScheduler(WeeklyTaskScheduler weeklyTaskScheduler)
             throws IllegalArgumentException {
@@ -138,6 +149,7 @@ public class WeeklyTaskSchedulingService {
     // and triggers the weekly task to be recursively scheduled on
     // the specified day of the week throughout the quarter
     @Loggable
+    @MethodPerformance
     @Transactional
     public void saveWeeklyTaskAppliedQuarterly(
             WeeklyTaskAppliedQuarterly weeklyTaskAppliedQuarterly)

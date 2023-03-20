@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.users;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
+import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.user.*;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
@@ -31,6 +32,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     UserMetaRepo userMetaRepo;
 
     @Loggable
+    @MethodPerformance
     public UserPrincipal createNewAdminUser(UserRegistration userRegistration) {
         // the ids of the different authorities are
         // set in the bootstrapping class
@@ -50,6 +52,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     }
 
     @Loggable
+    @MethodPerformance
     public UserPrincipal createNewMaintenanceUser(UserRegistration userRegistration) {
         // the ids of the different authorities are
         // set in the bootstrapping class
@@ -72,18 +75,21 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     // this is for the admin to view in a table of all
     // maintenance users
     @Loggable
+    @MethodPerformance
     public List<UserPrincipal> getAllMaintenanceUsers() {
         return
                 userPrincipalRepo.findByMaintenanceAuthority();
     }
 
     @Loggable
+    @MethodPerformance
     public UserPrincipal getUserById(Long id) {
         return userPrincipalRepo.findById(id)
                 .orElse(null);
     }
 
     @Loggable
+    @MethodPerformance
     @Override
     public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
         return userPrincipalRepo.findByUsername(username).orElseThrow(() ->
