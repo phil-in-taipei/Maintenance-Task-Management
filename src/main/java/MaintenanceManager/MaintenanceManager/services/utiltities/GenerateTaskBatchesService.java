@@ -1,4 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.utiltities;
+import MaintenanceManager.MaintenanceManager.logging.BatchLogger;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTask;
@@ -17,7 +18,8 @@ public class GenerateTaskBatchesService {
 
     // this takes in a list of dates, and standard task, and a user
     // and generates the same task on each of the dates in the list
-    @Loggable
+    //@Loggable
+    @BatchLogger // this logger is used to save resources and not print out the entire list of args
     @MethodPerformance
     public List<MaintenanceTask> generateRecurringTasksByDateList(
             String taskName, UserPrincipal user,
@@ -36,7 +38,8 @@ public class GenerateTaskBatchesService {
     // this takes in a list of dates, and a group of alternating interval tasks
     // It iterates through the list, while also iterating through the group of interval
     // tasks and generates a batch of tasks
-    @Loggable
+    //@Loggable
+    @BatchLogger // this logger is used to save resources and not print out the entire list of args
     @MethodPerformance
     public List<MaintenanceTask> generateTaskBatchByDateListAndIntervalTaskList(
             IntervalTaskGroup intervalTaskGroup, List<LocalDate> schedulingDates

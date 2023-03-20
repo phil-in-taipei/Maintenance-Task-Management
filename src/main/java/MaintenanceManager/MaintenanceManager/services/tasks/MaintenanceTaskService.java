@@ -1,10 +1,10 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
+import MaintenanceManager.MaintenanceManager.logging.BatchLogger;
 import MaintenanceManager.MaintenanceManager.logging.Loggable;
 import MaintenanceManager.MaintenanceManager.logging.MethodPerformance;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -101,7 +101,8 @@ public class MaintenanceTaskService {
     // MonthlySchedulers, WeeklySchedulers, and IntervalTaskGroups are applied quarterly
     // which triggers the creation of Lists of MaintenanceTasks scheduled on dates specified
     // in the respective schedulers during the quarter/year specified in the form
-    @Loggable
+    //@Loggable
+    @BatchLogger // this logger is used to save resources and not print out the entire list of args
     @MethodPerformance
     @Transactional
     public void saveBatchOfTasks(List<MaintenanceTask> tasks)
