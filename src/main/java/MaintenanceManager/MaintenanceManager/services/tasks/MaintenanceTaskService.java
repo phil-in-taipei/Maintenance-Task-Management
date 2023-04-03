@@ -111,12 +111,13 @@ public class MaintenanceTaskService {
     }
 
     // Method to save a single task
+    // changed from void to return in order to run unit test of method
     @Loggable
     @MethodPerformance
     @Transactional
-    public void saveTask(MaintenanceTask task)
+    public MaintenanceTask saveTask(MaintenanceTask task)
             throws IllegalArgumentException {
-        maintenanceTaskRepo.save(task);
+        return maintenanceTaskRepo.save(task);
     }
 
 
