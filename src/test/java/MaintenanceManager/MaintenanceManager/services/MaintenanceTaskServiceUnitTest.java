@@ -7,6 +7,7 @@ import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskR
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,46 +36,67 @@ public class MaintenanceTaskServiceUnitTest {
     @MockBean
     UserDetailsServiceImplementation userService;
 
-    /*
     @BeforeEach
     void init() {
         UserRegistration userRegistration = new UserRegistration();
-        userRegistration.setAge(20);
-        userRegistration.setEmail("testemail@gmx.com");
+        userRegistration.setSurname( "User");
+        userRegistration.setGivenName( "Test");
+        userRegistration.setEmail("test@gmx.com");
+        userRegistration.setAge(40);
+        userRegistration.setUsername("testuser");
         userRegistration.setPassword("testpassword");
         userRegistration.setPasswordConfirmation("testpassword");
-        userRegistration.setGivenName("Test");
-        userRegistration.setSurname("User");
-        userRegistration.setUsername("Test Maintenance User");
+        userService.createNewMaintenanceUser(userRegistration);
+    }
 
-        UserPrincipal userPrincipal = userService.createNewMaintenanceUser(
-                userRegistration
-        );
-    } */
-
-    /*
     @Test
-    public void testGetMaintenanceTaskSuccessBehavior() throws Exception {
+    public void testGetAllUserTasksByDateSuccessBehavior() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
                 .id(1L)
                 .taskName("Test Task 1")
                 .date(LocalDate.now())
-                .user(
-                .ingredients(Set.of(
-                        Ingredient.builder().amount("1").name("pasta").build(),
-                        Ingredient.builder().amount("1").name("pasta sauce").build())
-                )
-                .steps(Set.of(Step.builder()
-                        .description("Boil water").stepNumber(1)
-                        .description("Add and cook pasta").stepNumber(2)
-                        .description("Drain water from pasta").stepNumber(3)
-                        .description("Add sauce").stepNumber(4)
-                        .description("Enjoy!")
-                        .build()))
+                .user(testUser)
                 .build();
+        MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 2")
+                .date(LocalDate.now())
+                .user(testUser)
+                .build();
+        List<MaintenanceTask> tasksOnCurrentDate = new ArrayList<>();
+        tasksOnCurrentDate.add(maintenanceTask);
+        tasksOnCurrentDate.add(maintenanceTask2);
+        when(
+                maintenanceTaskRepo.findAllByUserIdAndDate(anyLong(),  eq(LocalDate.now()))
+        ).thenReturn(tasksOnCurrentDate);
+        assertThat(
+                maintenanceTaskService.getAllUserTasksByDate(1L, LocalDate.now()))
+                .isEqualTo(tasksOnCurrentDate);
+        assertThat(
+                maintenanceTaskService.getAllUserTasksByDate(1L, LocalDate.now()).size())
+                .isEqualTo(tasksOnCurrentDate.size());
+    }
 
-        when(recipeRepo.findById(anyLong())).thenReturn(Optional.of(pasta));
+    //getAllUncompletedPastUserTasks
 
-        assertThat(recipeService.getRecipeById(1L)).isEqualTo(pasta);
-    } */
+    @Test
+    public void testGetMaintenanceTaskSuccessBehavior() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 1")
+                .date(LocalDate.now())
+                .user(testUser)
+                .build();
+        when(maintenanceTaskRepo.findById(anyLong())).thenReturn(Optional.of(maintenanceTask));
+        assertThat(maintenanceTaskService.getMaintenanceTask(1L)).isEqualTo(maintenanceTask);
+    }
+
+    @Test
+    public void testGetMaintenanceTaskFailureBehavior() {
+        // this does not return an error (returns null if no task exists with the id)
+        when(maintenanceTaskRepo.findById(anyLong())).thenReturn(Optional.empty());
+        assertThat(maintenanceTaskService.getMaintenanceTask(2L)).isEqualTo(null);
+    }
 }
