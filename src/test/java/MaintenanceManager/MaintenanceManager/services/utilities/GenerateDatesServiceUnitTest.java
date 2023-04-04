@@ -1,13 +1,10 @@
 package MaintenanceManager.MaintenanceManager.services.utilities;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
-import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
 import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +13,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.when;
+
 
 @SpringBootTest(classes = MaintenanceManagerApplication.class)
 @ActiveProfiles("test")
@@ -78,17 +73,20 @@ public class GenerateDatesServiceUnitTest {
                 .isEqualTo(4);
         assertThat(
                 generateDatesService.getIntervalSchedulingDatesByQuarter(
-                                5, 2023, QuarterlySchedulingEnum.Q2).get(0).getMonthValue()
+                                5, 2023, QuarterlySchedulingEnum.Q2)
+                        .get(0).getMonthValue()
                         )
                 .isEqualTo(4);
         assertThat(
                 generateDatesService.getIntervalSchedulingDatesByQuarter(
-                        5, 2023, QuarterlySchedulingEnum.Q2).get(7).getMonthValue()
+                        5, 2023, QuarterlySchedulingEnum.Q2).get(7)
+                        .getMonthValue()
         )
                 .isEqualTo(5);
         assertThat(
                 generateDatesService.getIntervalSchedulingDatesByQuarter(
-                        5, 2023, QuarterlySchedulingEnum.Q2).get(7).getYear()
+                        5, 2023, QuarterlySchedulingEnum.Q2)
+                        .get(7).getYear()
         )
                 .isEqualTo(2023);
     }

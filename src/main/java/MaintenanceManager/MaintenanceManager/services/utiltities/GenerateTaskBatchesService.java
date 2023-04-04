@@ -49,7 +49,7 @@ public class GenerateTaskBatchesService {
 
         // this last index will be used as a switch when iterating through the sequence
         // of interval tasks. It will continue to go up by one index unless it is the
-        // last index in the list of interval tasks, at which point if will reset the index
+        // last index in the list of interval tasks, at which point it will reset the index
         // back to zero (and reiterate through the sequence of tasks)
         int lastIndexInIntervalTaskList = lengthOfIntervalTasks - 1;
 
@@ -59,8 +59,9 @@ public class GenerateTaskBatchesService {
         for (LocalDate date : schedulingDates) {
             IntervalTask intervalTask = intervalTasks.get(indexOfIntervalTaskList);
             MaintenanceTask maintenanceTask = new MaintenanceTask(
-                    intervalTask.getIntervalTaskName(), //intervalTask.getDescription(),
-                    date, intervalTaskGroup.getTaskGroupOwner(), intervalTask.getNoRainOnly(),
+                    intervalTask.getIntervalTaskName(),
+                    date, intervalTaskGroup.getTaskGroupOwner(),
+                    intervalTask.getNoRainOnly(),
                     intervalTaskGroup
             );
 
