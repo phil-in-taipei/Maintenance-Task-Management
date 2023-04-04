@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.services.utilities;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
+import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
 import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +28,28 @@ public class GenerateDatesServiceUnitTest {
     GenerateDatesService generateDatesService;
 
     @Test
+    public void testGetFirstDateForIntervalTaskByYearAndQuarter() {
+        assertThat(
+                generateDatesService.getFirstDateForIntervalTaskByYearAndQuarter(
+                                4, 2023, QuarterlySchedulingEnum.Q2)
+                        .getYear())
+                .isEqualTo(2023);
+        // April is the first month of Q2
+        assertThat(
+                generateDatesService.getFirstDateForIntervalTaskByYearAndQuarter(
+                                4, 2023, QuarterlySchedulingEnum.Q2)
+                        .getMonthValue())
+                .isEqualTo(4);
+        // this tests that the day of the week is in the proper range
+        // it should be one of the first four days of the week
+        assertThat(
+                generateDatesService.getFirstDateForIntervalTaskByYearAndQuarter(
+                                4, 2023, QuarterlySchedulingEnum.Q2)
+                        .getDayOfWeek())
+                .isNotEqualTo(DayOfWeek.FRIDAY);
+    }
+
+    @Test
     public void testGetFirstDayOfWeekByYearAndQuarter() {
         // first Wednesday of Q2 2023 is 4/5
         assertThat(
@@ -42,6 +65,55 @@ public class GenerateDatesServiceUnitTest {
                         DayOfWeek.WEDNESDAY, 2023, QuarterlySchedulingEnum.Q2).getDayOfMonth())
                 .isEqualTo(5);
     }
+
+    @Test
+    public void testGetIntervalSchedulingDatesByQuarter() {
+        // ask mentor about mocking getFirstDateForIntervalTaskByYearAndQuarter
+        // method (belongs to same class) inside test for this method
+        // in order to get a set reproducible list of dates to test
+        assertThat(
+                generateDatesService.getIntervalSchedulingDatesByQuarter(
+                                25, 2023, QuarterlySchedulingEnum.Q2)
+                        .size())
+                .isEqualTo(4);
+        assertThat(
+                generateDatesService.getIntervalSchedulingDatesByQuarter(
+                                5, 2023, QuarterlySchedulingEnum.Q2).get(0).getMonthValue()
+                        )
+                .isEqualTo(4);
+        assertThat(
+                generateDatesService.getIntervalSchedulingDatesByQuarter(
+                        5, 2023, QuarterlySchedulingEnum.Q2).get(7).getMonthValue()
+        )
+                .isEqualTo(5);
+        assertThat(
+                generateDatesService.getIntervalSchedulingDatesByQuarter(
+                        5, 2023, QuarterlySchedulingEnum.Q2).get(7).getYear()
+        )
+                .isEqualTo(2023);
+    }
+
+    @Test
+    public void testGetMonthlySchedulingDatesByQuarter() {
+        // 10th day of month in Q2 of 2023 should be the following:
+        // 4/10, 5/10, 6/10
+        List<LocalDate> dates = new ArrayList<>();
+        dates.add(LocalDate.now().withMonth(4).withDayOfMonth(10).withYear(2023));
+        dates.add(LocalDate.now().withMonth(5).withDayOfMonth(10).withYear(2023));
+        dates.add(LocalDate.now().withMonth(6).withDayOfMonth(10).withYear(2023));
+
+        assertThat(
+                generateDatesService.getMonthlySchedulingDatesByQuarter(
+                                2023, QuarterlySchedulingEnum.Q2, 10)
+                        .size())
+                .isEqualTo(3);
+        assertThat(
+                generateDatesService.getMonthlySchedulingDatesByQuarter(
+                        2023, QuarterlySchedulingEnum.Q2, 10)
+        ).isEqualTo(dates);
+
+    }
+
 
     @Test
     public void testGetWeeklySchedulingDatesByQuarter() {
@@ -72,6 +144,5 @@ public class GenerateDatesServiceUnitTest {
                         DayOfWeek.WEDNESDAY, 2023, QuarterlySchedulingEnum.Q2)
         ).isEqualTo(dates);
     }
-
 
 }
