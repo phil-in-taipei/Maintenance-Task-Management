@@ -1,14 +1,12 @@
-package MaintenanceManager.MaintenanceManager.services;
+package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
-import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
