@@ -20,7 +20,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -49,6 +48,44 @@ public class MaintenanceTaskServiceUnitTest {
         userRegistration.setPassword("testpassword");
         userRegistration.setPasswordConfirmation("testpassword");
         userService.createNewMaintenanceUser(userRegistration);
+    }
+
+    @AfterEach
+    void clearMockRepo() {
+        maintenanceTaskRepo.deleteAll();
+    }
+
+    @Test
+    public void testGetAllUncompletedPastUserTasksSuccessBehavior() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 1")
+                .date(LocalDate.now().minusDays(1))
+                .user(testUser)
+                .build();
+        MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 2")
+                .date(LocalDate.now().minusDays(2))
+                .user(testUser)
+                .build();
+        List<MaintenanceTask> tasksOnPreviousDates = new ArrayList<>();
+        tasksOnPreviousDates.add(maintenanceTask);
+        tasksOnPreviousDates.add(maintenanceTask2);
+        when(
+                maintenanceTaskRepo
+                        .findByStatusIsNotAndDateBeforeAndUserId(
+                                eq(TaskStatusEnum.COMPLETED),
+                                eq(LocalDate.now()), anyLong())
+        ).thenReturn(tasksOnPreviousDates);
+        assertThat(
+                maintenanceTaskService.getAllUncompletedPastUserTasks(
+                        1L))
+                .isEqualTo(tasksOnPreviousDates);
+        assertThat(
+                maintenanceTaskService.getAllUncompletedPastUserTasks(1L).size())
+                .isEqualTo(tasksOnPreviousDates.size());
     }
 
     @Test
@@ -80,39 +117,44 @@ public class MaintenanceTaskServiceUnitTest {
                 .isEqualTo(tasksOnCurrentDate.size());
     }
 
-    //getAllUncompletedPastUserTasks
     @Test
-    public void testGetAllUncompletedPastUserTasksSuccessBehavior() {
+    public void testGetAllAllUserTasksInDateRangeSuccess() {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        LocalDate today = LocalDate.now();
+        LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
+        LocalDate lastDayOfThisMonth = firstDayOfThisMonth.plusMonths(1)
+                .minusDays(1);
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
                 .id(1L)
                 .taskName("Test Task 1")
-                .date(LocalDate.now().minusDays(1))
+                .date(firstDayOfThisMonth.plusDays(2))
                 .user(testUser)
                 .build();
         MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
                 .id(1L)
                 .taskName("Test Task 2")
-                .date(LocalDate.now().minusDays(2))
+                .date(firstDayOfThisMonth.plusDays(3))
                 .user(testUser)
                 .build();
-        List<MaintenanceTask> tasksOnPreviousDates = new ArrayList<>();
-        tasksOnPreviousDates.add(maintenanceTask);
-        tasksOnPreviousDates.add(maintenanceTask2);
+        List<MaintenanceTask> tasksInCurrentMonth = new ArrayList<>();
+        tasksInCurrentMonth.add(maintenanceTask);
+        tasksInCurrentMonth.add(maintenanceTask2);
         when(
-                maintenanceTaskRepo
-                        .findByStatusIsNotAndDateBeforeAndUserId(
-                                eq(TaskStatusEnum.COMPLETED),
-                        eq(LocalDate.now()), anyLong())
-        ).thenReturn(tasksOnPreviousDates);
+                maintenanceTaskRepo.findAllByUserIdAndDateBetweenOrderByDateAsc(
+                        anyLong(),  eq(firstDayOfThisMonth), eq(lastDayOfThisMonth))
+        ).thenReturn(tasksInCurrentMonth);
         assertThat(
-                maintenanceTaskService.getAllUncompletedPastUserTasks(
-                        1L))
-                .isEqualTo(tasksOnPreviousDates);
+                maintenanceTaskService
+                        .getAllUserTasksInDateRange(1L, firstDayOfThisMonth,
+                                lastDayOfThisMonth))
+                .isEqualTo(tasksInCurrentMonth);
         assertThat(
-                maintenanceTaskService.getAllUncompletedPastUserTasks(1L).size())
-                .isEqualTo(tasksOnPreviousDates.size());
+                maintenanceTaskService
+                        .getAllUserTasksInDateRange(1L, firstDayOfThisMonth,
+                lastDayOfThisMonth).size())
+                .isEqualTo(tasksInCurrentMonth.size());
     }
+
 
     @Test
     public void testGetMaintenanceTaskSuccessBehavior() {
@@ -123,19 +165,24 @@ public class MaintenanceTaskServiceUnitTest {
                 .date(LocalDate.now())
                 .user(testUser)
                 .build();
-        when(maintenanceTaskRepo.findById(anyLong())).thenReturn(Optional.of(maintenanceTask));
-        assertThat(maintenanceTaskService.getMaintenanceTask(1L)).isEqualTo(maintenanceTask);
+        when(maintenanceTaskRepo.findById(anyLong()))
+                .thenReturn(Optional.of(maintenanceTask));
+        assertThat(maintenanceTaskService.getMaintenanceTask(1L))
+                .isEqualTo(maintenanceTask);
     }
 
     @Test
     public void testGetMaintenanceTaskFailureBehavior() {
         // this does not return an error (returns null if no task exists with the id)
-        when(maintenanceTaskRepo.findById(anyLong())).thenReturn(Optional.empty());
-        assertThat(maintenanceTaskService.getMaintenanceTask(2L)).isEqualTo(null);
+        when(maintenanceTaskRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+        assertThat(maintenanceTaskService.getMaintenanceTask(2L))
+                .isEqualTo(null);
     }
 
     @Test
-    public void testSaveMaintenanceTaskSuccessBehavior() throws IllegalArgumentException {
+    public void testSaveMaintenanceTaskSuccessBehavior()
+            throws IllegalArgumentException {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
                 .id(1L)
@@ -149,7 +196,6 @@ public class MaintenanceTaskServiceUnitTest {
                 .isEqualTo(maintenanceTask);
     }
 
-    /*
     @Test
     public void testSaveMaintenanceTaskFailureBehavior() throws IllegalArgumentException {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
@@ -159,11 +205,23 @@ public class MaintenanceTaskServiceUnitTest {
                 .date(LocalDate.now())
                 .user(testUser)
                 .build();
-        maintenanceTask.setTaskName("");
+        MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 2 (same id)")
+                .date(LocalDate.now())
+                .user(testUser)
+                .build();
+        maintenanceTaskService.saveTask(maintenanceTask);
+        when(maintenanceTaskRepo.save(any(MaintenanceTask.class)))
+                .thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
-            maintenanceTaskService.saveTask(maintenanceTask);
+            maintenanceTaskService.saveTask(maintenanceTask2);
         });
-    } */
+
+
+    }
+
+
 
     }
 
