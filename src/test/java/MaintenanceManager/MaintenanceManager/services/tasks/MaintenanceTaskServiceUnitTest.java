@@ -194,6 +194,8 @@ public class MaintenanceTaskServiceUnitTest {
                 .isEqualTo(maintenanceTask);
     }
 
+    // this tests that when a maintenance task is saved unsuccessfully
+    // an illegal argument exception is thrown
     @Test
     public void testSaveMaintenanceTaskFailureBehavior() throws IllegalArgumentException {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
@@ -203,17 +205,10 @@ public class MaintenanceTaskServiceUnitTest {
                 .date(LocalDate.now())
                 .user(testUser)
                 .build();
-        MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
-                .id(1L)
-                .taskName("Test Task 2 (same id)")
-                .date(LocalDate.now())
-                .user(testUser)
-                .build();
-        maintenanceTaskService.saveTask(maintenanceTask);
         when(maintenanceTaskRepo.save(any(MaintenanceTask.class)))
                 .thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
-            maintenanceTaskService.saveTask(maintenanceTask2);
+            maintenanceTaskService.saveTask(maintenanceTask);
         });
     }
 

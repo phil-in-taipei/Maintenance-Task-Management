@@ -1,12 +1,17 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
+import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
+import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
+import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
+import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
+import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateTaskBatchesService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +39,9 @@ public class MonthlyTaskSchedulingServiceUnitTest {
     MaintenanceTaskService maintenanceTaskService;
 
     @MockBean
+    MonthlyTaskAppliedQuarterlyRepo monthlyTaskAppliedQuarterlyRepo;
+
+    @MockBean
     MonthlyTaskSchedulerRepo monthlyTaskSchedulerRepo;
 
     @Autowired
@@ -59,6 +67,103 @@ public class MonthlyTaskSchedulingServiceUnitTest {
     void clearMockRepos() {
         maintenanceTaskRepo.deleteAll();
         monthlyTaskSchedulerRepo.deleteAll();
+        monthlyTaskAppliedQuarterlyRepo.deleteAll();
+    }
+
+    // test getMonthlyTaskScheduler behavior: returns null for incorrect query id
+    @Test
+    public void testGetMonthlyTaskSchedulerFailureBehavior() {
+        when(monthlyTaskSchedulerRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+        assertThat(monthlyTaskSchedulingService.getMonthlyTaskScheduler(2L))
+                .isEqualTo(null);
+    }
+
+    // test getMonthlyTaskScheduler behavior for correct query id
+    @Test
+    public void testGetMonthlyTaskSchedulerSuccessBehavior() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        when(monthlyTaskSchedulerRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testMonthlyTaskScheduler));
+        assertThat(monthlyTaskSchedulingService.getMonthlyTaskScheduler(1L))
+                .isEqualTo(testMonthlyTaskScheduler);
+    }
+
+    // this tests that when a monthly task applied quarterly is
+    // saved unsuccessfully an illegal argument exception is thrown
+    @Test
+    public void testSaveMonthlyTaskAppliedQuarterlyFailureBehavior()
+            throws IllegalArgumentException {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MonthlyTaskScheduler monthlyTaskScheduler = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly =
+                MonthlyTaskAppliedQuarterly
+                        .builder()
+                        .monthlyTaskScheduler(monthlyTaskScheduler)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+
+        when(monthlyTaskAppliedQuarterlyRepo.save(
+                any(MonthlyTaskAppliedQuarterly.class)))
+                .thenThrow(IllegalArgumentException.class);
+        assertThrows(IllegalArgumentException.class, () -> {
+            monthlyTaskSchedulingService
+                    .saveMonthlyTaskAppliedQuarterly(
+                            testMonthlyTaskAppliedQuarterly);
+        });
+    }
+
+    // test success behavior saveMonthlyTaskAppliedQuarterly returns
+    // object with fields matching object which was saved
+    @Test
+    public void testSaveMonthlyTaskAppliedQuarterlySuccessBehavior()
+            throws IllegalArgumentException {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MonthlyTaskScheduler monthlyTaskScheduler = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly =
+                MonthlyTaskAppliedQuarterly
+                .builder()
+                .monthlyTaskScheduler(monthlyTaskScheduler)
+                .year(2023)
+                .quarter(QuarterlySchedulingEnum.Q2)
+                .build();
+        when(monthlyTaskAppliedQuarterlyRepo.save(
+                any(MonthlyTaskAppliedQuarterly.class)))
+                .thenReturn(testMonthlyTaskAppliedQuarterly);
+        assertThat(monthlyTaskSchedulingService
+                .saveMonthlyTaskAppliedQuarterly(
+                        testMonthlyTaskAppliedQuarterly))
+                .isEqualTo(testMonthlyTaskAppliedQuarterly);
+        assertThat(monthlyTaskSchedulingService
+                .saveMonthlyTaskAppliedQuarterly(
+                        testMonthlyTaskAppliedQuarterly).getYear())
+                .isEqualTo(2023);
+        assertThat(monthlyTaskSchedulingService
+                .saveMonthlyTaskAppliedQuarterly(
+                        testMonthlyTaskAppliedQuarterly).getQuarter())
+                .isEqualTo(QuarterlySchedulingEnum.Q2);
+        assertThat(monthlyTaskSchedulingService
+                .saveMonthlyTaskAppliedQuarterly(
+                        testMonthlyTaskAppliedQuarterly).getMonthlyTaskScheduler()
+                .getMonthlyTaskName())
+                .isEqualTo("Test Monthly Task Scheduler");
     }
 
     // this tests that when a monthly task scheduler is saved unsuccessfully
@@ -75,7 +180,8 @@ public class MonthlyTaskSchedulingServiceUnitTest {
         when(monthlyTaskSchedulerRepo.save(any(MonthlyTaskScheduler.class)))
                 .thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class, () -> {
-            monthlyTaskSchedulingService.saveMonthlyTaskScheduler(testMonthlyTaskScheduler);
+            monthlyTaskSchedulingService
+                    .saveMonthlyTaskScheduler(testMonthlyTaskScheduler);
         });
     }
 

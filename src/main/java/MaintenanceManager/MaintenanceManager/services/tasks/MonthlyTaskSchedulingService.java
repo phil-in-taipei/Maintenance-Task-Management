@@ -160,7 +160,7 @@ public class MonthlyTaskSchedulingService {
     @Loggable
     @MethodPerformance
     @Transactional
-    public void saveMonthlyTaskAppliedQuarterly(
+    public MonthlyTaskAppliedQuarterly saveMonthlyTaskAppliedQuarterly(
             MonthlyTaskAppliedQuarterly monthlyTaskAppliedQuarterly)
             throws IllegalArgumentException {
         // Preparing to save Monthly task scheduler applied quarterly object
@@ -182,6 +182,6 @@ public class MonthlyTaskSchedulingService {
         // Batch Save tasks in list
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
         // Save the submitted quarterly applied monthly task scheduler
-        monthlyTaskAppliedQuarterlyRepo.save(monthlyTaskAppliedQuarterly);
+        return monthlyTaskAppliedQuarterlyRepo.save(monthlyTaskAppliedQuarterly);
     }
 }
