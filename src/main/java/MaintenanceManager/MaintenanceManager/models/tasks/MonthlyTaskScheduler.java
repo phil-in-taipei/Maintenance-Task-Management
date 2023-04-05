@@ -46,6 +46,8 @@ public class MonthlyTaskScheduler {
         String ordinalNumber = "th";
         if (dayOfMonth == 1 || dayOfMonth == 21 || dayOfMonth == 31) {
             ordinalNumber = "st";
+        } if (dayOfMonth == 2 || dayOfMonth == 22) {
+            ordinalNumber = "nd";
         } if (dayOfMonth == 3 || dayOfMonth == 23) {
             ordinalNumber = "rd";
         }

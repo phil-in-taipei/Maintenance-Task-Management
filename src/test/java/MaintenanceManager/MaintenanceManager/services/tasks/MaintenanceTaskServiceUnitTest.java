@@ -215,11 +215,7 @@ public class MaintenanceTaskServiceUnitTest {
         assertThrows(IllegalArgumentException.class, () -> {
             maintenanceTaskService.saveTask(maintenanceTask2);
         });
-
-
     }
 
-
-
-    }
+}
 

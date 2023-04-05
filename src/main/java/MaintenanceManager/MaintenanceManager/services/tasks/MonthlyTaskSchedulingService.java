@@ -144,12 +144,14 @@ public class MonthlyTaskSchedulingService {
     }
 
     // saves the monthly task schedulers which correspond to a set day of the month
+    // return type is not void for testing
     @Loggable
     @MethodPerformance
     @Transactional
-    public void saveMonthlyTaskScheduler(MonthlyTaskScheduler monthlyTaskScheduler)
+    public MonthlyTaskScheduler saveMonthlyTaskScheduler(
+            MonthlyTaskScheduler monthlyTaskScheduler)
             throws IllegalArgumentException {
-                monthlyTaskSchedulerRepo.save(monthlyTaskScheduler);
+               return monthlyTaskSchedulerRepo.save(monthlyTaskScheduler);
     }
 
     // saves a monthly task scheduler quarterly/yearly application
