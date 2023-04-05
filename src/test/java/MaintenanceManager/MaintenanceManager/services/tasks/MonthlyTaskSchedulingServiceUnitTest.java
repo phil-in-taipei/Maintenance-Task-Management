@@ -1,6 +1,5 @@
 package MaintenanceManager.MaintenanceManager.services.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
@@ -10,8 +9,7 @@ import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskR
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
-import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateDatesService;
-import MaintenanceManager.MaintenanceManager.services.utiltities.GenerateTaskBatchesService;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,9 +31,6 @@ public class MonthlyTaskSchedulingServiceUnitTest {
 
     @MockBean
     MaintenanceTaskRepo maintenanceTaskRepo;
-
-    @MockBean
-    MaintenanceTaskService maintenanceTaskService;
 
     @MockBean
     MonthlyTaskAppliedQuarterlyRepo monthlyTaskAppliedQuarterlyRepo;
@@ -68,6 +62,172 @@ public class MonthlyTaskSchedulingServiceUnitTest {
         maintenanceTaskRepo.deleteAll();
         monthlyTaskSchedulerRepo.deleteAll();
         monthlyTaskAppliedQuarterlyRepo.deleteAll();
+    }
+
+    @Test
+    public void testGetAllMonthlyTasksAlreadyScheduledForQuarterAndYear() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly =
+                MonthlyTaskAppliedQuarterly
+                        .builder()
+                        .monthlyTaskScheduler(testMonthlyTaskScheduler)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        MonthlyTaskScheduler testMonthlyTaskScheduler2 = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly2 =
+                MonthlyTaskAppliedQuarterly
+                        .builder()
+                        .monthlyTaskScheduler(testMonthlyTaskScheduler2)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        List<MonthlyTaskAppliedQuarterly> usersMonthlyTasksAppliedQuarterly = new ArrayList<>();
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly);
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly2);
+        List<MonthlyTaskScheduler> userMonthlyTaskSchedulersAppliedToTest = new ArrayList<>();
+        userMonthlyTaskSchedulersAppliedToTest.add(testMonthlyTaskScheduler);
+        userMonthlyTaskSchedulersAppliedToTest.add(testMonthlyTaskScheduler2);
+        when(monthlyTaskAppliedQuarterlyRepo
+                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId(
+                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyLong()))
+                .thenReturn(usersMonthlyTasksAppliedQuarterly);
+        assertThat(monthlyTaskSchedulingService
+                .getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
+                        QuarterlySchedulingEnum.Q2, 2023, 1L))
+                .isEqualTo(userMonthlyTaskSchedulersAppliedToTest);
+        assertThat(monthlyTaskSchedulingService
+                .getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
+                        QuarterlySchedulingEnum.Q2, 2023, 1L).size())
+                .isEqualTo(userMonthlyTaskSchedulersAppliedToTest.size());
+    }
+
+    @Test
+    public void testGetAllUsersMonthlyTasksAppliedQuarterly() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly =
+                MonthlyTaskAppliedQuarterly
+                        .builder()
+                        .monthlyTaskScheduler(testMonthlyTaskScheduler)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        MonthlyTaskScheduler testMonthlyTaskScheduler2 = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly2 =
+                MonthlyTaskAppliedQuarterly
+                        .builder()
+                        .monthlyTaskScheduler(testMonthlyTaskScheduler2)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        List<MonthlyTaskAppliedQuarterly> usersMonthlyTasksAppliedQuarterly = new ArrayList<>();
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly);
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly2);
+        when(monthlyTaskAppliedQuarterlyRepo
+                .findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(anyLong()))
+                .thenReturn(usersMonthlyTasksAppliedQuarterly);
+        assertThat(monthlyTaskSchedulingService
+                .getAllUsersMonthlyTasksAppliedQuarterly(1L))
+                .isEqualTo(usersMonthlyTasksAppliedQuarterly);
+        assertThat(monthlyTaskSchedulingService
+                .getAllUsersMonthlyTasksAppliedQuarterly(1L).size())
+                .isEqualTo(usersMonthlyTasksAppliedQuarterly.size());
+    }
+
+    @Test
+    public void testGetAllUsersMonthlyTaskSchedulers() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskScheduler testMonthlyTaskScheduler2 = MonthlyTaskScheduler.builder()
+                .id(2L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        List<MonthlyTaskScheduler> usersMonthlyTaskSchedulers = new ArrayList<>();
+        usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler);
+        usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler2);
+        when(monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(anyLong()))
+                .thenReturn(usersMonthlyTaskSchedulers);
+        assertThat(monthlyTaskSchedulingService
+                .getAllUsersMonthlyTaskSchedulers(1L))
+                .isEqualTo(usersMonthlyTaskSchedulers);
+        assertThat(monthlyTaskSchedulingService
+                .getAllUsersMonthlyTaskSchedulers(1L).size())
+                .isEqualTo(usersMonthlyTaskSchedulers.size());
+    }
+
+    @Test
+    public void testGetUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly =
+                MonthlyTaskAppliedQuarterly
+                        .builder()
+                        .monthlyTaskScheduler(testMonthlyTaskScheduler)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        MonthlyTaskScheduler testMonthlyTaskScheduler2 = MonthlyTaskScheduler.builder()
+                .id(1L)
+                .monthlyTaskName("Test Monthly Task Scheduler")
+                .dayOfMonth(1)
+                .user(testUser)
+                .build();
+        MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly2 =
+                MonthlyTaskAppliedQuarterly
+                        .builder()
+                        .monthlyTaskScheduler(testMonthlyTaskScheduler2)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        List<MonthlyTaskAppliedQuarterly> usersMonthlyTasksAppliedQuarterly = new ArrayList<>();
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly);
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly2);
+        when(monthlyTaskAppliedQuarterlyRepo
+                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId(
+                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyLong()))
+                .thenReturn(usersMonthlyTasksAppliedQuarterly);
+        assertThat(monthlyTaskSchedulingService
+                .getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
+                        QuarterlySchedulingEnum.Q2, 2023, 1L))
+                .isEqualTo(usersMonthlyTasksAppliedQuarterly);
+        assertThat(monthlyTaskSchedulingService
+                .getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
+                        QuarterlySchedulingEnum.Q2, 2023, 1L).size())
+                .isEqualTo(usersMonthlyTasksAppliedQuarterly.size());
     }
 
     // test getMonthlyTaskScheduler behavior: returns null for incorrect query id

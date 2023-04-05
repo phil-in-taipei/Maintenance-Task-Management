@@ -116,7 +116,7 @@ public class MaintenanceTaskServiceUnitTest {
     }
 
     @Test
-    public void testGetAllAllUserTasksInDateRangeSuccess() {
+    public void testGetAllAllUserTasksInDateRange() {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
         LocalDate today = LocalDate.now();
         LocalDate firstDayOfThisMonth = today.withDayOfMonth(1);
