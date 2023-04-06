@@ -140,9 +140,9 @@ public class WeeklyTaskSchedulingService {
     @Loggable
     @MethodPerformance
     @Transactional
-    public void saveWeeklyTaskScheduler(WeeklyTaskScheduler weeklyTaskScheduler)
+    public WeeklyTaskScheduler saveWeeklyTaskScheduler(WeeklyTaskScheduler weeklyTaskScheduler)
             throws IllegalArgumentException {
-        weeklyTaskSchedulerRepo.save(weeklyTaskScheduler);
+        return weeklyTaskSchedulerRepo.save(weeklyTaskScheduler);
     }
 
     // saves a weekly task scheduler quarterly/yearly application
@@ -151,7 +151,7 @@ public class WeeklyTaskSchedulingService {
     @Loggable
     @MethodPerformance
     @Transactional
-    public void saveWeeklyTaskAppliedQuarterly(
+    public WeeklyTaskAppliedQuarterly saveWeeklyTaskAppliedQuarterly(
             WeeklyTaskAppliedQuarterly weeklyTaskAppliedQuarterly)
             throws IllegalArgumentException {
         WeeklyTaskScheduler scheduler = weeklyTaskAppliedQuarterly.getWeeklyTaskScheduler();
@@ -177,6 +177,6 @@ public class WeeklyTaskSchedulingService {
         // Saves the batch of generated tasks for the quarter/year
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
         // Saves the quarterly-applied weekly task scheduler
-        weeklyTaskAppliedQuarterlyRepo.save(weeklyTaskAppliedQuarterly);
+        return weeklyTaskAppliedQuarterlyRepo.save(weeklyTaskAppliedQuarterly);
     }
 }

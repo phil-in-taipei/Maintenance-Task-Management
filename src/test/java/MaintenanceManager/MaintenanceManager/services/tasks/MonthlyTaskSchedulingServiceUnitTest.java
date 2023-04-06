@@ -81,7 +81,7 @@ public class MonthlyTaskSchedulingServiceUnitTest {
                         .quarter(QuarterlySchedulingEnum.Q2)
                         .build();
         MonthlyTaskScheduler testMonthlyTaskScheduler2 = MonthlyTaskScheduler.builder()
-                .id(1L)
+                .id(2L)
                 .monthlyTaskName("Test Monthly Task Scheduler")
                 .dayOfMonth(1)
                 .user(testUser)
