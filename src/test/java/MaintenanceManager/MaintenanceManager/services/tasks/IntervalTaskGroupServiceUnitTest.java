@@ -5,6 +5,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskGroupRepo;
+import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.junit.jupiter.api.AfterEach;
@@ -34,6 +35,8 @@ public class IntervalTaskGroupServiceUnitTest {
     IntervalTaskAppliedQuarterlyRepo intervalTaskAppliedQuarterlyRepo;
 
     @MockBean
+    IntervalTaskRepo intervalTaskRepo;
+    @MockBean
     IntervalTaskGroupRepo intervalTaskGroupRepo;
 
     @Autowired
@@ -60,6 +63,79 @@ public class IntervalTaskGroupServiceUnitTest {
         maintenanceTaskRepo.deleteAll();
         intervalTaskAppliedQuarterlyRepo.deleteAll();
         intervalTaskGroupRepo.deleteAll();
+    }
+
+    // rather than raising an error, this method returns null -- it is used
+    // to check if an object exists prior to deletion, so this just tests
+    // the expected return of a null value for query of non-existent id
+    @Test
+    public void testGetIntervalTaskFailureBehavior() {
+        when(intervalTaskRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+        assertThat(intervalTaskGroupService.getIntervalTask(2L))
+                .isEqualTo(null);
+    }
+
+    // test getIntervalTask behavior for correct query id
+    // it is first constructed/saved as part of an interval
+    // task group to mimic how it would be created/saved in the app
+    @Test
+    public void testGetIntervalTaskSuccessBehavior() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        IntervalTask testIntervalTask = IntervalTask.builder()
+                .id(1L)
+                .intervalTaskName("Test Interval Task")
+                .noRainOnly(false)
+                .build();
+        List<IntervalTask> testIntervalTasks = new ArrayList<>();
+        testIntervalTasks.add(testIntervalTask);
+        IntervalTaskGroup testIntervalTaskGroup = IntervalTaskGroup
+                .builder()
+                .id(1L)
+                .intervalInDays(3)
+                .intervalTasks(testIntervalTasks)
+                .taskGroupName("Test Interval Task Group")
+                .taskGroupOwner(testUser)
+                .build();
+        when(intervalTaskRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testIntervalTask));
+        assertThat(intervalTaskGroupService.getIntervalTask(1L))
+                .isEqualTo(testIntervalTask);
+    }
+
+    // rather than raising an error, this method returns null -- it is used
+    // to check if an object exists prior to deletion, so this just tests
+    // the expected return of a null value for query of non-existent id
+    @Test
+    public void testGetIntervalTaskGroupFailureBehavior() {
+        when(intervalTaskGroupRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+        assertThat(intervalTaskGroupService.getIntervalTaskGroup(2L))
+                .isEqualTo(null);
+    }
+
+    // test getIntervalTaskGroup behavior for correct query id
+    @Test
+    public void testGetIntervalTaskGroupSuccessBehavior() {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        IntervalTask testIntervalTask = IntervalTask.builder()
+                .intervalTaskName("Test Interval Task")
+                .noRainOnly(false)
+                .build();
+        List<IntervalTask> testIntervalTasks = new ArrayList<>();
+        testIntervalTasks.add(testIntervalTask);
+        IntervalTaskGroup testIntervalTaskGroup = IntervalTaskGroup
+                .builder()
+                .id(1L)
+                .intervalInDays(3)
+                .intervalTasks(testIntervalTasks)
+                .taskGroupName("Test Interval Task Group")
+                .taskGroupOwner(testUser)
+                .build();
+        when(intervalTaskGroupRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testIntervalTaskGroup));
+        assertThat(intervalTaskGroupService.getIntervalTaskGroup(1L))
+                .isEqualTo(testIntervalTaskGroup);
     }
 
     // tests throwing an error in case the interval task group does not save properly
