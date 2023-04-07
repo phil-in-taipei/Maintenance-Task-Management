@@ -167,6 +167,9 @@ public class IntervalTaskGroupService {
     }
 
     // saves one task scheduler which will belong to the interval task groups
+    // note: This appears to not be used (try deleting method in another branch)
+    // using the method below allows for a verification that the interval task group exists
+    // prior to submitting, so it is used instead of this method
     @Loggable
     @MethodPerformance
     @Transactional
@@ -176,12 +179,14 @@ public class IntervalTaskGroupService {
     }
 
     // saves group of task schedulers which are alternatively applied at specified daily intervals
+    // this method is also called to save interval tasks belonging to the group
+    // this allows for a verification that the interval task group exists
     @Loggable
     @MethodPerformance
     @Transactional
-    public void saveIntervalTaskGroup(IntervalTaskGroup intervalTaskGroup)
+    public IntervalTaskGroup saveIntervalTaskGroup(IntervalTaskGroup intervalTaskGroup)
             throws IllegalArgumentException {
-        intervalTaskGroupRepo.save(intervalTaskGroup);
+        return intervalTaskGroupRepo.save(intervalTaskGroup);
     }
 
     // saves an interval task group quarterly/yearly application and triggers the
@@ -189,11 +194,12 @@ public class IntervalTaskGroupService {
     @Loggable
     @MethodPerformance
     @Transactional
-    public void saveIntervalTaskGroupAppliedQuarterly(
+    public IntervalTaskGroupAppliedQuarterly saveIntervalTaskGroupAppliedQuarterly(
             IntervalTaskGroupAppliedQuarterly intervalTaskGroupAppliedQuarterly)
             throws IllegalArgumentException {
         //Preparing to save quarterly-applied interval task groups
-        IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly.getIntervalTaskGroup();
+        IntervalTaskGroup intervalTaskGroup = intervalTaskGroupAppliedQuarterly
+                .getIntervalTaskGroup();
 
         // tasks will alternatively be saved every n-th interval day
         // throughout the quarter/year specified in the submitted object
@@ -205,13 +211,15 @@ public class IntervalTaskGroupService {
                 );
         // generating tasks to be scheduled on the dates in scheduling dates list
         List<MaintenanceTask> batchOfTasks =
-                generateTaskBatchesService.generateTaskBatchByDateListAndIntervalTaskList(
+                generateTaskBatchesService
+                        .generateTaskBatchByDateListAndIntervalTaskList(
                     intervalTaskGroup, schedulingDates
                 );
 
         // Saving batch of tasks
         maintenanceTaskService.saveBatchOfTasks(batchOfTasks);
         // saving quarterly-applied interval task group object
-        intervalTaskAppliedQuarterlyRepo.save(intervalTaskGroupAppliedQuarterly);
+        return intervalTaskAppliedQuarterlyRepo
+                .save(intervalTaskGroupAppliedQuarterly);
     }
 }
