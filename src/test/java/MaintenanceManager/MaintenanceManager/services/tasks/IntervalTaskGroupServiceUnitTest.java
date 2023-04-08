@@ -107,6 +107,77 @@ public class IntervalTaskGroupServiceUnitTest {
     // to check if an object exists prior to deletion, so this just tests
     // the expected return of a null value for query of non-existent id
     @Test
+    public void testGetIntervalTaskGroupAppliedQuarterlyFailureBehavior()
+            throws IllegalArgumentException {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        IntervalTask testIntervalTask = IntervalTask.builder()
+                .intervalTaskName("Test Interval Task")
+                .noRainOnly(false)
+                .build();
+        List<IntervalTask> testIntervalTasks = new ArrayList<>();
+        testIntervalTasks.add(testIntervalTask);
+        IntervalTaskGroup testIntervalTaskGroup = IntervalTaskGroup
+                .builder()
+                .id(1L)
+                .intervalInDays(3)
+                .intervalTasks(testIntervalTasks)
+                .taskGroupName("Test Interval Task Group")
+                .taskGroupOwner(testUser)
+                .build();
+        IntervalTaskGroupAppliedQuarterly testITGAQ =
+                IntervalTaskGroupAppliedQuarterly.builder()
+                        .id(1L)
+                        .intervalTaskGroup(testIntervalTaskGroup)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        when(intervalTaskAppliedQuarterlyRepo.findById(anyLong()))
+                .thenReturn(Optional.empty());
+        assertThat(intervalTaskGroupService
+                .getIntervalTaskGroupAppliedQuarterly(2L))
+                .isEqualTo(null);
+    }
+
+    // test getIntervalTaskGroupAppliedQuarterly 
+    // behavior for correct query id
+    @Test
+    public void testGetIntervalTaskGroupAppliedQuarterlySuccessBehavior()
+            throws IllegalArgumentException {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        IntervalTask testIntervalTask = IntervalTask.builder()
+                .intervalTaskName("Test Interval Task")
+                .noRainOnly(false)
+                .build();
+        List<IntervalTask> testIntervalTasks = new ArrayList<>();
+        testIntervalTasks.add(testIntervalTask);
+        IntervalTaskGroup testIntervalTaskGroup = IntervalTaskGroup
+                .builder()
+                .id(1L)
+                .intervalInDays(3)
+                .intervalTasks(testIntervalTasks)
+                .taskGroupName("Test Interval Task Group")
+                .taskGroupOwner(testUser)
+                .build();
+        IntervalTaskGroupAppliedQuarterly testITGAQ =
+                IntervalTaskGroupAppliedQuarterly.builder()
+                        .intervalTaskGroup(testIntervalTaskGroup)
+                        .year(2023)
+                        .quarter(QuarterlySchedulingEnum.Q2)
+                        .build();
+        when(intervalTaskAppliedQuarterlyRepo.findById(anyLong()))
+                .thenReturn(Optional.of(testITGAQ));
+        assertThat(intervalTaskGroupService.getIntervalTaskGroupAppliedQuarterly(1L))
+                .isEqualTo(testITGAQ);
+        assertThat(intervalTaskGroupService
+                .getIntervalTaskGroupAppliedQuarterly(1L)
+                .getIntervalTaskGroup().getTaskGroupName())
+                .isEqualTo("Test Interval Task Group");
+    }
+
+    // rather than raising an error, this method returns null -- it is used
+    // to check if an object exists prior to deletion, so this just tests
+    // the expected return of a null value for query of non-existent id
+    @Test
     public void testGetIntervalTaskGroupFailureBehavior() {
         when(intervalTaskGroupRepo.findById(anyLong()))
                 .thenReturn(Optional.empty());
