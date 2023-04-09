@@ -32,9 +32,12 @@ public class HomeController {
     // from an external api (Accuweather)
     @GetMapping("/")
     public String homePage(Model model) {
-        List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
-        model.addAttribute("weather", weather);
-        return "index";
+        // the weather forecast data is disabled because the api key is about to expire
+        //List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
+        //model.addAttribute("weather", weather);
+        //return "index";
+        // another index page without weather display is rendered
+        return "index-no-weather";
     }
 
     // landing page for after user has logged in. It will display the tasks which are uncompleted
@@ -50,14 +53,17 @@ public class HomeController {
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
                 user.getId(), LocalDate.now());
         SearchTasksByDate searchTasksByDate = new SearchTasksByDate();
-        Integer chanceOfRain = weatherDataService.getRainProbability(LocalDate.now().toString());
+        //Integer chanceOfRain = weatherDataService.getRainProbability(LocalDate.now().toString());
         // the chance of rain in landing: to display warning about weather dependent tasks
         List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
         model.addAttribute("uncompletedTasks", uncompletedTasks);
         model.addAttribute("dailyTasks", maintenanceTasks);
         model.addAttribute("user", user);
-        model.addAttribute("weather", weather);
-        model.addAttribute("chanceOfRain", chanceOfRain);
-        return "landing";
+        // the weather forecast data is disabled because the api key is about to expire
+        //model.addAttribute("weather", weather);
+        //.addAttribute("chanceOfRain", chanceOfRain);
+        //return "landing";
+        // another landing page without weather data is rendered
+        return "landing-no-weather";
     }
 }

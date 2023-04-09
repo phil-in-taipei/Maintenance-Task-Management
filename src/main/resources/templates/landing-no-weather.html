@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Landing Page</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <br />
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <br />
+        <br />
+        <div class="container border rounded text-center bg-light">
+            <br />
+            <h1>Welcome Admin!</h1>
+            <br />
+        </div>
+        <br />
+        <br />
+    </div>
+    <br />
+    <div sec:authorize="hasRole('ROLE_MAINTENANCE')">
+        <hr th:if="${dailyTasks.size() > 0}" />
+        <div th:if="${dailyTasks.size() > 0}"
+             class="container border rounded text-center bg-light">
+            <br />
+            <h1>Daily Tasks</h1>
+            <hr />
+            <button class="btn btn-primary" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#collapseDailyTasks"
+                    aria-expanded="false" aria-controls="collapseExample">
+                View Daily Tasks
+            </button>
+            <br/><br/>
+            <div class="collapse" id="collapseDailyTasks">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Rain Restriction</th>
+                        <th scope="col">Confirm Completion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="task : ${dailyTasks}">
+                        <td th:text="${task.date}"></td>
+                        <td>
+                            <a th:text="${task.taskName}"
+                               th:href="@{'/task-detail/' + ${task.id}}"></a>
+                        </td>
+                        <td>
+                            <a th:text="${task.taskName}"
+                               th:href="@{'/task-detail/' + ${task.id}}"></a>
+                        </td>
+                        <td th:text="${task.noRainOnly}"></td>
+                        <td>
+                            <span th:if="${task.status.name() == 'COMPLETED'}">COMPLETED</span>
+                            <span th:unless="${task.status.name() == 'COMPLETED'}">
+                                <a th:text="${task.status}"
+                                   th:href="@{'/confirm-task-completion/' + ${task.id}}"></a>
+                                 </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <div th:if="${uncompletedTasks.size() > 0}"
+             class="container border rounded text-center bg-light">
+            <br />
+            <h1>Uncompleted Tasks</h1>
+            <hr />
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapseUncompletedTasks" aria-expanded="false"
+                    aria-controls="collapseExample">
+                View Uncompleted Tasks
+            </button>
+            <br/><br/>
+            <div class="collapse" id="collapseUncompletedTasks">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Confirm Completion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="task : ${uncompletedTasks}">
+                        <td th:text="${task.date}"></td>
+                        <td>
+                            <a th:text="${task.taskName}"
+                               th:href="@{'/task-detail/' + ${task.id}}"></a>
+                        </td>
+                        <td>
+                            <span th:if="${task.status.name() == 'COMPLETED'}">COMPLETED</span>
+                            <span th:unless="${task.status.name() == 'COMPLETED'}">
+                        <a th:text="${task.status}"
+                           th:href="@{'/confirm-task-completion/' + ${task.id}}"></a>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
+</body>
+</html>

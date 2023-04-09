@@ -138,7 +138,7 @@ public class IntervalTaskGroupServiceUnitTest {
                 .isEqualTo(null);
     }
 
-    // test getIntervalTaskGroupAppliedQuarterly 
+    // test getIntervalTaskGroupAppliedQuarterly
     // behavior for correct query id
     @Test
     public void testGetIntervalTaskGroupAppliedQuarterlySuccessBehavior()
