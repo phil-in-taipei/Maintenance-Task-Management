@@ -55,7 +55,7 @@ public class HomeController {
         SearchTasksByDate searchTasksByDate = new SearchTasksByDate();
         //Integer chanceOfRain = weatherDataService.getRainProbability(LocalDate.now().toString());
         // the chance of rain in landing: to display warning about weather dependent tasks
-        List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
+        //List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
         model.addAttribute("uncompletedTasks", uncompletedTasks);
         model.addAttribute("dailyTasks", maintenanceTasks);
         model.addAttribute("user", user);
