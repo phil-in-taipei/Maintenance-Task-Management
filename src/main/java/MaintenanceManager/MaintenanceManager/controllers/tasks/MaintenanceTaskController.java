@@ -3,10 +3,10 @@ package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskReschedule;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskSubmit;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchMonthAndYear;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
+//import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchMonthAndYear;
+//import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.services.tasks.IntervalTaskGroupService;
+//import MaintenanceManager.MaintenanceManager.services.tasks.IntervalTaskGroupService;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -92,6 +92,8 @@ public class MaintenanceTaskController {
         return "redirect:/tasks-by-month";
     }
 
+    // this is just for testing/debugging. Not used in actual app
+    /*
     @GetMapping("/tasks")
     public String showAllUserTasks(Authentication authentication, Model model) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
@@ -99,7 +101,7 @@ public class MaintenanceTaskController {
         model.addAttribute("tasks", tasks);
         model.addAttribute("user", user);
         return "tasks/tasks";
-    }
+    } */
 
     @GetMapping("/tasks-by-month")
     public String showAllUserTasksByMonth(Authentication authentication, Model model) {

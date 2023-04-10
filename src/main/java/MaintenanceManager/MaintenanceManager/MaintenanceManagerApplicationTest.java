@@ -5,6 +5,7 @@ import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
+import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
@@ -27,6 +28,9 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
     private AuthorityRepo authorityRepo;
 
     @Autowired
+    MaintenanceTaskRepo maintenanceTaskRepo;
+
+    @Autowired
     private UserPrincipalRepo userPrincipalRepo;
 
     @Autowired
@@ -40,6 +44,7 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        maintenanceTaskRepo.deleteAll();
         if (userPrincipalRepo.findAll().isEmpty()) {
             System.out.println("The user repo is empty");
             UserRegistration maintenanceUserRegistration = new UserRegistration();

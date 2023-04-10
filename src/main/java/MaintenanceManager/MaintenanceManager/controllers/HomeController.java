@@ -22,11 +22,12 @@ public class HomeController {
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
 
-    @Autowired
-    WeatherApiService weatherApiService;
+    // the weather forecast data is disabled because the api key is about to expire
+    //@Autowired
+    //WeatherApiService weatherApiService;
 
-    @Autowired
-    WeatherDataService weatherDataService;
+    //@Autowired
+    //WeatherDataService weatherDataService;
 
     // this page displays basic information of the web app and the daily weather forecast
     // from an external api (Accuweather)
