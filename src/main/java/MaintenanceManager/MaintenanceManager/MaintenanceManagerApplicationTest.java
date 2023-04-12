@@ -6,6 +6,7 @@ import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
+import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
@@ -32,6 +33,9 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
     MaintenanceTaskRepo maintenanceTaskRepo;
 
     @Autowired
+    MonthlyTaskAppliedQuarterlyRepo monthlyTaskAppliedQuarterlyRepo;
+
+    @Autowired
     MonthlyTaskSchedulerRepo monthlyTaskSchedulerRepo;
 
     @Autowired
@@ -50,6 +54,7 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
     public void run(String... args) throws Exception {
         maintenanceTaskRepo.deleteAll(); // remove this line from here and put at
         // the end of the test classes
+        monthlyTaskAppliedQuarterlyRepo.deleteAll(); // remove later
         monthlyTaskSchedulerRepo.deleteAll(); // remove this line from here and put at
         // the end of the test classes
 

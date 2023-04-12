@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
+import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -52,6 +53,22 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
                 .andExpect(redirectedUrl("/monthly-tasks"));
     }
 
+    @Test
+    @Order(4)
+    @WithUserDetails("Test Maintenance User1")
+    public void testSaveNewQuarterlyMonthlyTask() throws Exception  {
+        MonthlyTaskScheduler testMonthlyTaskScheduler = monthlyTaskSchedulerRepo.findAll().get(0);
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        MockHttpServletRequestBuilder createTask = post("/submit-quarterly-monthly-tasks-scheduled/"
+                + quarter + "/" + thisYear +"/")
+                .param("monthlyTaskScheduler", testMonthlyTaskScheduler.getId().toString());
+        mockMvc.perform(createTask)
+                .andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/quarterly-monthly-tasks-scheduled"));
+    }
+
    @Test
    @Order(2)
    @WithUserDetails("Test Maintenance User1")
@@ -72,6 +89,27 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
                        containsString("Test monthly task scheduler")))
                .andExpect(view().name("tasks/monthly-task-schedulers"));
    }
+
+    @Test
+    @Order(5)
+    @WithUserDetails("Test Maintenance User1")
+    public void testShowAllUserQuarterlyMonthlyTasks() throws Exception{
+        mockMvc
+                .perform(get("/quarterly-monthly-tasks-scheduled"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                // these are the expected model attributes
+                .andExpect(model().attributeExists("qMonthlyTasks"))
+                .andExpect(model().attributeExists("user"))
+                // this substring is the title of the task created in the
+                // testSaveNewMonthlyTaskScheduler
+                // method below, so it makes sure that the expected object is
+                // displayed on the page
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test monthly task scheduler")))
+                .andExpect(view().name("tasks/quarterly-monthly-tasks-scheduled"));
+    }
 
    // test endpoint to display form to create a new monthly task scheduler
    @Test
