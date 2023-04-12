@@ -29,7 +29,7 @@ public class MaintenanceTaskController {
         MaintenanceTask task = maintenanceTaskService.getMaintenanceTask(taskId);
         if (task != null) {
             maintenanceTaskService.confirmTaskCompletion(task);
-            System.out.println("This is the task date: " + task.getDate().toString());
+            //System.out.println("This is the task date: " + task.getDate().toString());
         }
         return "redirect:/tasks-by-month";
     }
@@ -46,7 +46,7 @@ public class MaintenanceTaskController {
         if (maintenanceTaskService.getMaintenanceTask(taskId) == null) {
             model.addAttribute("message",
                     "Cannot delete, task with id: " + taskId + " does not exist.");
-            return "error";
+            return "error/error";
         }
         maintenanceTaskService.deleteMaintenanceTask(taskId);
         return "redirect:/tasks-by-month";

@@ -44,7 +44,9 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        maintenanceTaskRepo.deleteAll();
+        maintenanceTaskRepo.deleteAll(); // remove this line from here and put at
+        // the end of the test classes
+
         if (userPrincipalRepo.findAll().isEmpty()) {
             System.out.println("The user repo is empty");
             UserRegistration maintenanceUserRegistration = new UserRegistration();
