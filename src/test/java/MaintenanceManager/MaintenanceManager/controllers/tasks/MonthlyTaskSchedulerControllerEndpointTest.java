@@ -72,4 +72,19 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
                        containsString("Test monthly task scheduler")))
                .andExpect(view().name("tasks/monthly-task-schedulers"));
    }
+
+   // test endpoint to display form to create a new monthly task scheduler
+   @Test
+   @Order(3)
+   @WithUserDetails("Test Maintenance User1")
+   public void testShowCreateMonthlyTaskFormPage() throws Exception {
+       mockMvc
+               .perform(get("/create-monthly-task-scheduler"))
+               //.andDo(print())
+               .andExpect(MockMvcResultMatchers.content()
+                       .contentType("text/html;charset=UTF-8"))
+               .andExpect(status().is2xxSuccessful())
+               .andExpect(model().attributeExists("monthlyTaskScheduler"))
+               .andExpect(view().name("tasks/create-monthly-task-scheduler"));;
+   }
 }
