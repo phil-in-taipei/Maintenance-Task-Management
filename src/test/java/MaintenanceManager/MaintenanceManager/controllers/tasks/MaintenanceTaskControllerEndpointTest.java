@@ -2,9 +2,7 @@ package MaintenanceManager.MaintenanceManager.controllers.tasks;
 
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
-import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -40,6 +38,20 @@ public class MaintenanceTaskControllerEndpointTest {
     @Autowired
     MockMvc mockMvc;
 
+    // test endpoint to change task status to 'completed'. Only one task should be in the test
+    // database, and it is created in the testSaveNewTask method below (executed first)
+    @Test
+    @Order(7)
+    @WithUserDetails("Test Maintenance User1")
+    public void testConfirmTaskCompletion() throws Exception {
+        MaintenanceTask testTask = maintenanceTaskRepo.findAll().get(0);
+        MockHttpServletRequestBuilder rescheduleTask = post(
+                "/confirm-task-completion/" + testTask.getId());
+        mockMvc.perform(rescheduleTask)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tasks-by-month"));
+    }
+
     // test endpoint to delete task. Only one task should be in the test
     // database, and it is created in the testSaveNewTask method below (executed first)
     // this should be the 2nd to last test method executed, so that the task still
@@ -74,20 +86,6 @@ public class MaintenanceTaskControllerEndpointTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString(message)))
                 .andExpect(view().name("error/error"));
-    }
-
-    // test endpoint to change task status to 'completed'. Only one task should be in the test
-    // database, and it is created in the testSaveNewTask method below (executed first)
-    @Test
-    @Order(7)
-    @WithUserDetails("Test Maintenance User1")
-    public void testConfirmTaskCompletion() throws Exception {
-        MaintenanceTask testTask = maintenanceTaskRepo.findAll().get(0);
-        MockHttpServletRequestBuilder rescheduleTask = post(
-                "/confirm-task-completion/" + testTask.getId());
-        mockMvc.perform(rescheduleTask)
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/tasks-by-month"));
     }
 
     // test endpoint to submit rescheduled task. Only one task should be in the test
@@ -147,6 +145,29 @@ public class MaintenanceTaskControllerEndpointTest {
         mockMvc.perform(createTask)
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tasks-by-month"));
+    }
+
+    @Test
+    @Order(4)
+    @WithUserDetails("Test Maintenance User1")
+    public void testShowAllUserTasksByMonth() throws Exception {
+        mockMvc
+                .perform(get("/tasks-by-month"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                // these are the expected model attributes
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("month"))
+                .andExpect(model().attributeExists("tasks"))
+                .andExpect(model().attributeExists("user"))
+                // this substring is the title of the task created in the testPostToTaskURL
+                // method below, so it makes sure that the expected object for that date is
+                // displayed on the page -- because the task is scheduled for the current day,
+                // and this page shows tasks for the current month
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test task")))
+                .andExpect(view().name("tasks/tasks-by-month"));
     }
 
     // test endpoint to display form to create a new maintenance task
@@ -212,7 +233,7 @@ public class MaintenanceTaskControllerEndpointTest {
     @Test
     @Order(3)
     @WithUserDetails("Test Maintenance User1")
-    public void testTasksByDateURLModelsAndView() throws Exception {
+    public void testShowUserTasksByDate() throws Exception {
         String today = LocalDate.now().toString();
         mockMvc
                 .perform(get("/tasks-by-date/" + today))
@@ -230,28 +251,5 @@ public class MaintenanceTaskControllerEndpointTest {
                 // displayed on the page
                 .andExpect(MockMvcResultMatchers.content().string(containsString("Test task")))
                 .andExpect(view().name("tasks/tasks-by-date"));
-    }
-
-    @Test
-    @Order(4)
-    @WithUserDetails("Test Maintenance User1")
-    public void testTasksByMonthURLModelsAndView() throws Exception {
-        mockMvc
-                .perform(get("/tasks-by-month"))
-                .andExpect(MockMvcResultMatchers.content()
-                        .contentType("text/html;charset=UTF-8"))
-                .andExpect(status().is2xxSuccessful())
-                // these are the expected model attributes
-                .andExpect(model().attributeExists("year"))
-                .andExpect(model().attributeExists("month"))
-                .andExpect(model().attributeExists("tasks"))
-                .andExpect(model().attributeExists("user"))
-                // this substring is the title of the task created in the testPostToTaskURL
-                // method below, so it makes sure that the expected object for that date is
-                // displayed on the page -- because the task is scheduled for the current day,
-                // and this page shows tasks for the current month
-                .andExpect(MockMvcResultMatchers.content().string(
-                        containsString("Test task")))
-                .andExpect(view().name("tasks/tasks-by-month"));
     }
 }
