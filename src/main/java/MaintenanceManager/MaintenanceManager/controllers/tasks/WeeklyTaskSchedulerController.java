@@ -62,7 +62,7 @@ public class WeeklyTaskSchedulerController {
             @PathVariable(name = "id") Long id, Model model) {
         if (weeklyTaskSchedulingService.getWeeklyTaskScheduler(id) == null) {
             model.addAttribute("message",
-                    "Cannot delete, monthly task with id: " +
+                    "Cannot delete, weekly task with id: " +
                             id + " does not exist.");
             return "error/error";
         }
@@ -77,7 +77,7 @@ public class WeeklyTaskSchedulerController {
             @PathVariable(name = "id") Long id, Model model) {
         if (weeklyTaskSchedulingService.getWeeklyTaskAppliedQuarterly(id) == null) {
             model.addAttribute("message",
-                    "Cannot delete, monthly task applied quarterly with id: " +
+                    "Cannot delete, weekly task applied quarterly with id: " +
                             id + " does not exist.");
             return "error/error";
         }

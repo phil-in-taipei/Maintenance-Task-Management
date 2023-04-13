@@ -5,9 +5,7 @@ import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
-import MaintenanceManager.MaintenanceManager.repositories.tasks.MaintenanceTaskRepo;
-import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskAppliedQuarterlyRepo;
-import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
+import MaintenanceManager.MaintenanceManager.repositories.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
@@ -44,6 +42,12 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
     @Autowired
     private UserDetailsServiceImplementation userService;
 
+    @Autowired
+    WeeklyTaskAppliedQuarterlyRepo weeklyTaskAppliedQuarterlyRepo;
+
+    @Autowired
+    WeeklyTaskSchedulerRepo weeklyTaskSchedulerRepo;
+
     public static void main(String[] args) {
         SpringApplication
                 .run(MaintenanceManagerApplication.class, args);
@@ -56,6 +60,9 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
         // the end of the test classes
         monthlyTaskAppliedQuarterlyRepo.deleteAll(); // remove later
         monthlyTaskSchedulerRepo.deleteAll(); // remove this line from here and put at
+        // the end of the test classes
+        weeklyTaskAppliedQuarterlyRepo.deleteAll(); // remove later
+        weeklyTaskSchedulerRepo.deleteAll(); // remove this line from here and put at
         // the end of the test classes
 
         if (userPrincipalRepo.findAll().isEmpty()) {
