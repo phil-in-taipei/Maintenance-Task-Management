@@ -1,6 +1,7 @@
 package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
+import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskAppliedQuarterlyRepo;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskGroupRepo;
 import org.junit.jupiter.api.MethodOrderer;
@@ -101,8 +102,30 @@ public class IntervalTaskGroupControllerEndpointTest {
                 .andExpect(redirectedUrl("/interval-task-groups"));
     }
 
+    // this will test saving an interval task group applied quarterly. It will apply the interval
+    // task group created in the testSaveNewIntervalTaskGroup and apply it to the first
+    // quarter of the current year
     @Test
     @Order(4)
+    @WithUserDetails("Test Maintenance User1")
+    public void saveNewQuarterlyIntervalTaskGroup() throws Exception  {
+        IntervalTaskGroup testIntervalTaskGroup = intervalTaskGroupRepo.findAll().get(0);
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        MockHttpServletRequestBuilder createQITG =
+                post("/submit-quarterly-interval-task-group-scheduled/"
+                        + quarter + "/" + thisYear +"/")
+                        .param("intervalTaskGroup",
+                                testIntervalTaskGroup.getId().toString());
+        mockMvc.perform(createQITG)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(
+                        "/quarterly-interval-task-groups-scheduled"));
+    }
+
+    @Test
+    @Order(5)
     @WithUserDetails("Test Maintenance User1")
     public void testShowAllUserIntervalTaskGroups() throws Exception {
         mockMvc
@@ -122,10 +145,93 @@ public class IntervalTaskGroupControllerEndpointTest {
                 .andExpect(view().name("tasks/interval-task-groups"));
     }
 
+    @Test
+    @Order(6)
+    @WithUserDetails("Test Maintenance User1")
+    public void testShowAllUserQuarterlyIntervalTaskGroups() throws Exception{
+        mockMvc
+                .perform(get("/quarterly-interval-task-groups-scheduled"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                // these are the expected model attributes
+                .andExpect(model().attributeExists("qITG"))
+                .andExpect(model().attributeExists("user"))
+                // this substring is the title of the task created in the
+                // testSaveNewIntervalTaskGroup
+                // method below, so it makes sure that the expected object is
+                // displayed on the page
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test interval task group")))
+                .andExpect(view().name(
+                        "tasks/quarterly-interval-task-groups-scheduled"));
+    }
+
+    // tests the endpoint of the form for the interval task group to be applied to a specific quarter/year
+    // in this case, it is the current year and quarter 2, so the "Test interval task group" should
+    // display as one of the options of an ITG which can be applied in the template selector
+    @Test
+    @Order(8)
+    @WithUserDetails("Test Maintenance User1")
+    public void showApplyITGSchedulerFormPage() throws Exception {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q2";
+        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
+                post("/apply-interval-task-group-schedulers")
+                        .param("year", String.valueOf(thisYear))
+                        .param("quarter", quarter);
+
+        mockMvc
+                .perform(applyMonthlyTaskScheduler)
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("intervalTaskGroups"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("quarter"))
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("qITG"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test interval task group")))
+                .andExpect(view().name(
+                        "tasks/apply-interval-task-group-schedulers"));
+    }
+
+    // tests that no interval task groups can be selected for Q1 of the current year
+    // because the only interval task group has already been applied to that quarter/year
+    @Test
+    @Order(8)
+    @WithUserDetails("Test Maintenance User1")
+    public void showApplyITGSchedulerFormPageNonAvailable() throws Exception {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
+                post("/apply-interval-task-group-schedulers")
+                        .param("year", String.valueOf(thisYear))
+                        .param("quarter", quarter);
+
+        mockMvc
+                .perform(applyMonthlyTaskScheduler)
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("intervalTaskGroups"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("quarter"))
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("qITG"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("None Available")))
+                .andExpect(view().name(
+                        "tasks/apply-interval-task-group-schedulers"));
+    }
+
 
     // test endpoint to display form to create a new interval task group
     @Test
-    @Order(5)
+    @Order(7)
     @WithUserDetails("Test Maintenance User1")
     public void testShowCreateIntervalTaskGroupFormPage() throws Exception {
         mockMvc

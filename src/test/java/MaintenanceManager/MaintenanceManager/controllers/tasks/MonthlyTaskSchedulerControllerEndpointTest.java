@@ -133,6 +133,9 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
                 .andExpect(redirectedUrl("/monthly-tasks"));
     }
 
+    // this will test saving a monthly task scheduler applied quarterly. It will apply the monthly
+    // task scheduler created in the testSaveNewMonthlyTaskScheduler and apply it to the first
+    // quarter of the current year
     @Test
     @Order(4)
     @WithUserDetails("Test Maintenance User1")
