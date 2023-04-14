@@ -116,7 +116,7 @@ public class IntervalTaskGroupController {
             @PathVariable(name = "id") Long id, Model model) {
         if (intervalTaskGroupService.getIntervalTaskGroupAppliedQuarterly(id) == null) {
             model.addAttribute("message",
-                    "Cannot delete, interval task group " +
+                    "Cannot delete, interval task group" +
                             " applied quarterly with id: " +
                             id + " does not exist.");
             return "error/error";
@@ -208,7 +208,7 @@ public class IntervalTaskGroupController {
                 intervalTaskGroupService.getIntervalTaskGroup(taskGroupId);
         //System.out.println("This is the interval task group: " + intervalTaskGroup);
         if (intervalTaskGroup == null) {
-            mav.setViewName("error");
+            mav.setViewName("error/error");
             mav.addObject("message",
                     "Interval Task Group with id "
                             + taskGroupId + " does not exist."
