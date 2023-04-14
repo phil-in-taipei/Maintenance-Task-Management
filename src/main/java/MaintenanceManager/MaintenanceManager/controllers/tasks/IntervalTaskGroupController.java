@@ -166,16 +166,26 @@ public class IntervalTaskGroupController {
             @PathVariable(name = "taskGroupId") Long taskGroupId,
             @ModelAttribute("intervalTask")
             IntervalTask intervalTask, Model model
-            ) {
+            ) throws IllegalArgumentException {
         try {
             IntervalTaskGroup intervalTaskGroup =
                     intervalTaskGroupService.getIntervalTaskGroup(taskGroupId);
-            List<IntervalTask> intervalTasks = intervalTaskGroup.getIntervalTasks();
-            //intervalTask.setNoRainOnly(false);
-            intervalTasks.add(intervalTask);
-            intervalTaskGroup.setIntervalTasks(intervalTasks);
-            intervalTaskGroupService.saveIntervalTaskGroup(intervalTaskGroup);
+            if (intervalTaskGroup == null) {
+                // if the id does not exist, it is redirected to an error page with a message
+                model.addAttribute(
+                        "message",
+                        "Could not save interval task, Group ID: "
+                                + taskGroupId + " does not exist.");
+                return "error/error";
+            } else {
+                List<IntervalTask> intervalTasks = intervalTaskGroup.getIntervalTasks();
+                //intervalTask.setNoRainOnly(false);
+                intervalTasks.add(intervalTask);
+                intervalTaskGroup.setIntervalTasks(intervalTasks);
+                intervalTaskGroupService.saveIntervalTaskGroup(intervalTaskGroup);
+            }
         } catch (IllegalArgumentException e) {
+            // this is a general catch-all for errors
             model.addAttribute(
                     "message",
                     "Could not save interval task, "
@@ -196,7 +206,7 @@ public class IntervalTaskGroupController {
         ModelAndView mav = new ModelAndView("tasks/interval-task-group");
         IntervalTaskGroup intervalTaskGroup =
                 intervalTaskGroupService.getIntervalTaskGroup(taskGroupId);
-        System.out.println("This is the interval task group: " + intervalTaskGroup);
+        //System.out.println("This is the interval task group: " + intervalTaskGroup);
         if (intervalTaskGroup == null) {
             mav.setViewName("error");
             mav.addObject("message",

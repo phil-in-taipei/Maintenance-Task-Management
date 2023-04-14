@@ -24,8 +24,15 @@ import java.util.Arrays;
 @SpringBootApplication
 @Profile("test")
 public class MaintenanceManagerApplicationTest implements CommandLineRunner {
+
     @Autowired
-    private AuthorityRepo authorityRepo;
+    IntervalTaskAppliedQuarterlyRepo intervalTaskAppliedQuarterlyRepo;
+
+    @Autowired
+    IntervalTaskGroupRepo intervalTaskGroupRepo;
+
+    @Autowired
+    IntervalTaskRepo intervalTaskRepo;
 
     @Autowired
     MaintenanceTaskRepo maintenanceTaskRepo;
@@ -56,6 +63,9 @@ public class MaintenanceManagerApplicationTest implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) throws Exception {
+        intervalTaskAppliedQuarterlyRepo.deleteAll();
+        intervalTaskGroupRepo.deleteAll();
+        intervalTaskRepo.deleteAll();
         maintenanceTaskRepo.deleteAll(); // remove this line from here and put at
         // the end of the test classes
         monthlyTaskAppliedQuarterlyRepo.deleteAll(); // remove later
