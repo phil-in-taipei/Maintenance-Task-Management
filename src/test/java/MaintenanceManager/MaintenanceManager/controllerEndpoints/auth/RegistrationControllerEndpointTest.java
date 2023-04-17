@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllers.auth;
+package MaintenanceManager.MaintenanceManager.controllerEndpoints.auth;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

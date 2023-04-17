@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllers.tasks;
+package MaintenanceManager.MaintenanceManager.controllerEndpoints.tasks;
 
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchMonthAndYear;

@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllers.users;
+package MaintenanceManager.MaintenanceManager.controllerEndpoints.users;
 
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;

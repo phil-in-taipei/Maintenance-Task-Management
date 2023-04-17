@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllers.tasks;
+package MaintenanceManager.MaintenanceManager.controllerEndpoints.tasks;
 
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;

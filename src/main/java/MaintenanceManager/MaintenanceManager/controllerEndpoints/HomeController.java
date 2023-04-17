@@ -1,11 +1,8 @@
-package MaintenanceManager.MaintenanceManager.controllers;
+package MaintenanceManager.MaintenanceManager.controllerEndpoints;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.models.weather.DailyForecast;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
-import MaintenanceManager.MaintenanceManager.services.weather.WeatherApiService;
-import MaintenanceManager.MaintenanceManager.services.weather.WeatherDataService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllers.auth;
+package MaintenanceManager.MaintenanceManager.controllerEndpoints.auth;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,7 +1,5 @@
-package MaintenanceManager.MaintenanceManager.controllers.tasks;
+package MaintenanceManager.MaintenanceManager.controllerEndpoints.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
-import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
-import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.WeeklyTaskAppliedQuarterlyRepo;
