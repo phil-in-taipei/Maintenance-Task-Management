@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
@@ -41,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(MaintenanceTaskController.class)
+//@AutoConfigureMockMvc(addFilters = false)
 @ContextConfiguration(classes = {MaintenanceManagerApplication.class})
 @ActiveProfiles("test")
 public class MaintenanceTaskControllerUnitTest {
@@ -55,8 +57,8 @@ public class MaintenanceTaskControllerUnitTest {
     @MockBean
     AuthorityRepo authorityRepo;
 
-    //@MockBean
-    //UserPrincipalRepo userPrincipalRepo;
+    @MockBean
+    UserPrincipalRepo userPrincipalRepo;
 
     @MockBean
     MaintenanceTaskService maintenanceTaskService;
@@ -135,7 +137,8 @@ public class MaintenanceTaskControllerUnitTest {
     //@ParameterizedTest
    // @WithUserDetails("Test Maintenance User1")
    //@WithSecurityContext;
-    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    //@WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    //@AutoConfigureMockMvc(secure = false)
     public void testShowUserTasksByDate() throws Exception {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
         String today = LocalDate.now().toString();
@@ -160,13 +163,14 @@ public class MaintenanceTaskControllerUnitTest {
                 .thenReturn(testUser);
         when(maintenanceTaskService.getAllUserTasksByDate(anyLong(), eq(LocalDate.now())))
                 .thenReturn(tasksOnCurrentDate);
-        mockMvc.perform(get("/tasks-by-date/" + today))
-        //mockMvc.perform(MockMvcRequestBuilders.request(
-        //        HttpMethod.GET, "/tasks-by-date/" + today)
+        //mockMvc.perform(get("/tasks-by-date/" + today))/
+         mockMvc.perform(MockMvcRequestBuilders.request(
+                HttpMethod.GET, "/tasks-by-date/" + today)
 
-                // ADD this line
-                //.with(user("Test Maintenance User1").password("testpassword")))
-                .andDo(print())
+                // this will not work because user details here cannot be cast to the
+                 // custom UserPrincipal
+                .with(user("testuser").password("testpassword")))
+                //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())
