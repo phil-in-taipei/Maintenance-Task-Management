@@ -17,6 +17,7 @@ import java.util.List;
 
 @Service
 public class WeatherApiService {
+    /*
     @Value("${api_key}")
     private String apikey;
 
@@ -63,5 +64,5 @@ public class WeatherApiService {
         //System.out.println("*************Cached Method called at: " + dateString + "*****************");
         return fetchDailyForecastEntity().getDailyForecasts();
     }
-
+    */
 }

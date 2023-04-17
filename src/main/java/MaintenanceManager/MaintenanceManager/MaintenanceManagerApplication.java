@@ -24,10 +24,11 @@ public class MaintenanceManagerApplication implements CommandLineRunner {
 				.run(MaintenanceManagerApplication.class, args);
 	}
 
-	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
-	}
+	// this is commented out as long as the weather api is disabled
+	//@Bean
+	//public RestTemplate restTemplate(RestTemplateBuilder builder) {
+	//	return builder.build();
+	//}
 
 	@Override
 	public void run(String... args) throws Exception {
