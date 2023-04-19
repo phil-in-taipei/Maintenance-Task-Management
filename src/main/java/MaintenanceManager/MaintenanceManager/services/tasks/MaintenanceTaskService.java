@@ -60,10 +60,10 @@ public class MaintenanceTaskService {
     // gets all Maintenance Tasks scheduled for a user on a given date
     @Loggable
     @MethodPerformance
-    public List<MaintenanceTask> getAllUserTasksByDate(
-            Long userId, LocalDate date) {
-
-        return maintenanceTaskRepo.findAllByUserIdAndDate(userId, date);
+    public List<MaintenanceTask> getAllUserTasksByDate( //  Long userId,
+            String username, LocalDate date) {
+        return maintenanceTaskRepo.findAllByUserUsernameAndDate(username, date);
+        //return maintenanceTaskRepo.findAllByUserIdAndDate(userId, date);
     }
 
     // gets all user tasks which have a foreign key relation with an interval task group

@@ -9,6 +9,7 @@ import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskServi
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,11 +45,12 @@ public class SearchTasksController {
             @ModelAttribute("rescheduledTask")
             SearchTasksByDate searchTasksByDate,
             Model model, Authentication authentication) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         LocalDate queryDate = LocalDate.parse(searchTasksByDate.getDate());
 
         List<MaintenanceTask> tasks = maintenanceTaskService
-                .getAllUserTasksByDate(user.getId(), queryDate);
+                .getAllUserTasksByDate(userDetails.getUsername(), queryDate); //user.getId()
 
         model.addAttribute("tasks", tasks);
         LocalDate dayBefore = queryDate.minusDays(1);
@@ -56,7 +58,7 @@ public class SearchTasksController {
         model.addAttribute("dayAfter", dayAfter.toString());
         model.addAttribute("dayBefore", dayBefore.toString());
         model.addAttribute("date", queryDate.toString()); //searchTasksByDate.getDate()
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDetails); //user
         return "tasks/tasks-by-date";
     }
 

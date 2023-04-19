@@ -73,7 +73,6 @@ public class MaintenanceTaskControllerUnitTest {
     }
 
     @Test
-    //@WithUserDetails("Test Maintenance User1")
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowTaskDetailPage() throws Exception {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
@@ -107,8 +106,7 @@ public class MaintenanceTaskControllerUnitTest {
     }
 
     @Test
-    @WithMockUser(roles = {"USER", "MAINTENANCE"})
-   // @WithUserDetails("Test Maintenance User1")
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowTaskDetailErrorPage() throws Exception {
         when(maintenanceTaskService.getMaintenanceTask(anyLong()))
                 .thenReturn(null);
@@ -127,11 +125,7 @@ public class MaintenanceTaskControllerUnitTest {
     }
 
     @Test
-    //@ParameterizedTest
-   // @WithUserDetails("Test Maintenance User1")
-   //@WithSecurityContext;
-    //@WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
-    //@AutoConfigureMockMvc(secure = false)
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowUserTasksByDate() throws Exception {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
         String today = LocalDate.now().toString();
@@ -154,16 +148,9 @@ public class MaintenanceTaskControllerUnitTest {
         tasksOnCurrentDate.add(maintenanceTask2);
         when(userService.loadUserByUsername(anyString()))
                 .thenReturn(testUser);
-        when(maintenanceTaskService.getAllUserTasksByDate(anyLong(), eq(LocalDate.now())))
+        when(maintenanceTaskService.getAllUserTasksByDate(anyString(), eq(LocalDate.now())))
                 .thenReturn(tasksOnCurrentDate);
-        //mockMvc.perform(get("/tasks-by-date/" + today))/
-         mockMvc.perform(MockMvcRequestBuilders.request(
-                HttpMethod.GET, "/tasks-by-date/" + today)
-
-                // this will not work because user details here cannot be cast to the
-                 // custom UserPrincipal
-                .with(user("testuser").password("testpassword")))
-                //.andDo(print())
+        mockMvc.perform(get("/tasks-by-date/" + today))
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())

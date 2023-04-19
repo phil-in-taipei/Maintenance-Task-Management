@@ -17,6 +17,10 @@ public interface MaintenanceTaskRepo extends JpaRepository<MaintenanceTask, Long
 
     List<MaintenanceTask> findAllByUserIdAndDate(Long id, LocalDate date);
 
+    // this version is for unit test of controller -- MockUser can get UserDetails username string
+    // but not the id, so querying by username, makes the controller unit testable
+    List<MaintenanceTask> findAllByUserUsernameAndDate(String id, LocalDate date);
+
     // modify to after date
     List<MaintenanceTask> findAllByUserIdAndIntervalTaskGroupId(Long userId, Long iTgId);
 }

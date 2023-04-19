@@ -10,6 +10,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -127,11 +128,12 @@ public class MaintenanceTaskController {
     public String showUserTasksByDate (
             @PathVariable(name = "date") String date,
             Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         LocalDate queryDate = LocalDate.parse(date);
 
         List<MaintenanceTask> tasks = maintenanceTaskService
-                .getAllUserTasksByDate(user.getId(), queryDate);
+                .getAllUserTasksByDate(userDetails.getUsername(), queryDate); //user.getId()
 
         LocalDate dayBefore = queryDate.minusDays(1);
         LocalDate dayAfter = queryDate.plusDays(1);
@@ -139,7 +141,7 @@ public class MaintenanceTaskController {
         model.addAttribute("dayBefore", dayBefore.toString());
         model.addAttribute("tasks", tasks);
         model.addAttribute("date", queryDate);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDetails); //user
         return "tasks/tasks-by-date";
     }
 

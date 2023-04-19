@@ -103,15 +103,15 @@ public class MaintenanceTaskServiceUnitTest {
                 .build();
         List<MaintenanceTask> tasksOnCurrentDate = new ArrayList<>();
         tasksOnCurrentDate.add(maintenanceTask);
-        tasksOnCurrentDate.add(maintenanceTask2);
+        tasksOnCurrentDate.add(maintenanceTask2); //maintenanceTaskRepo.findAllByUserIdAndDate(anyLong()
         when(
-                maintenanceTaskRepo.findAllByUserIdAndDate(anyLong(),  eq(LocalDate.now()))
+                maintenanceTaskRepo.findAllByUserUsernameAndDate(anyString(),  eq(LocalDate.now()))
         ).thenReturn(tasksOnCurrentDate);
         assertThat(
-                maintenanceTaskService.getAllUserTasksByDate(1L, LocalDate.now()))
+                maintenanceTaskService.getAllUserTasksByDate("testuser", LocalDate.now()))
                 .isEqualTo(tasksOnCurrentDate);
         assertThat(
-                maintenanceTaskService.getAllUserTasksByDate(1L, LocalDate.now()).size())
+                maintenanceTaskService.getAllUserTasksByDate("testuser", LocalDate.now()).size())
                 .isEqualTo(tasksOnCurrentDate.size());
     }
 

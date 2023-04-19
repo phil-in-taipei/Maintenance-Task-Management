@@ -3,6 +3,7 @@ import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchTasksByDate;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,11 +46,12 @@ public class HomeController {
     public String landingPage(Authentication authentication, Model model) {
         // get user info
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // get all uncompleted past tasks
         List<MaintenanceTask> uncompletedTasks = maintenanceTaskService.getAllUncompletedPastUserTasks(user.getId());
         // get all user's tasks for the current date
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
-                user.getId(), LocalDate.now());
+                userDetails.getUsername(), LocalDate.now()); //user.getId()
         SearchTasksByDate searchTasksByDate = new SearchTasksByDate();
         //Integer chanceOfRain = weatherDataService.getRainProbability(LocalDate.now().toString());
         // the chance of rain in landing: to display warning about weather dependent tasks

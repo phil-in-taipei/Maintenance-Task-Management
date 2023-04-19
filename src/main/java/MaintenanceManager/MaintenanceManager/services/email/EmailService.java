@@ -54,7 +54,7 @@ public class EmailService {
 
         // This is the result of the query for user's tasks today
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
-                user.getId(), today);
+                user.getUsername(), today); // user.getId();
 
         String formattedDate = today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL));
 
