@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllerEndpoints.tasks;
+package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;

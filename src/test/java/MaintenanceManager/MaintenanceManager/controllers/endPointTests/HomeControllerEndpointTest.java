@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllerEndpoints;
+package MaintenanceManager.MaintenanceManager.controllers.endPointTests;
 
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import org.junit.jupiter.api.Test;

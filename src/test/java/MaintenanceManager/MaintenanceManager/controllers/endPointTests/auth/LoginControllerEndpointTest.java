@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllerEndpoints.auth;
+package MaintenanceManager.MaintenanceManager.controllers.endPointTests.auth;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import org.junit.jupiter.api.*;
 import org.springframework.security.test.context.support.WithUserDetails;
@@ -85,7 +85,7 @@ public class LoginControllerEndpointTest {
     public void testLogoutSuccess() throws Exception {
         mockMvc
                 .perform(post("/logout"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
 }

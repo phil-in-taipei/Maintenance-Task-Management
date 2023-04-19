@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllerEndpoints.tasks;
+package MaintenanceManager.MaintenanceManager.controllers.endPointTests.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.repositories.tasks.IntervalTaskAppliedQuarterlyRepo;

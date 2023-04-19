@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllerEndpoints.users;
+package MaintenanceManager.MaintenanceManager.controllers.endPointTests.users;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;

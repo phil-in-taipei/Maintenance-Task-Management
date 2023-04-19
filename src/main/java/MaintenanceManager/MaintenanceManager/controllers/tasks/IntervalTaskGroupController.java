@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllerEndpoints.tasks;
+package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;

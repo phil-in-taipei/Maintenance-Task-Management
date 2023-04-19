@@ -1,7 +1,7 @@
-package MaintenanceManager.MaintenanceManager.controllers;
+package MaintenanceManager.MaintenanceManager.controllers.unitTests.tasks;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
-import MaintenanceManager.MaintenanceManager.controllerEndpoints.tasks.MaintenanceTaskController;
+import MaintenanceManager.MaintenanceManager.controllers.tasks.MaintenanceTaskController;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
@@ -12,23 +12,16 @@ import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskServi
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithSecurityContext;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

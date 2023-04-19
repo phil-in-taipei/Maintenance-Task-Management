@@ -1,4 +1,4 @@
-package MaintenanceManager.MaintenanceManager.controllerEndpoints.auth;
+package MaintenanceManager.MaintenanceManager.controllers.endPointTests.auth;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
