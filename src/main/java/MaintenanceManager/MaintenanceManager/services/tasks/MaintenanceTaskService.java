@@ -83,9 +83,12 @@ public class MaintenanceTaskService {
     // which have not been completed. Used for display on landing page
     @Loggable
     @MethodPerformance
-    public List<MaintenanceTask> getAllUncompletedPastUserTasks(Long userId) {
-        return maintenanceTaskRepo.findByStatusIsNotAndDateBeforeAndUserId(
-                TaskStatusEnum.COMPLETED, LocalDate.now(), userId);
+    public List<MaintenanceTask> getAllUncompletedPastUserTasks(String username) {
+        //return maintenanceTaskRepo.findByStatusIsNotAndDateBeforeAndUserId(
+        //        TaskStatusEnum.COMPLETED, LocalDate.now(), userId);
+        return maintenanceTaskRepo.findByStatusIsNotAndDateBeforeAndUserUsername(
+                TaskStatusEnum.COMPLETED, LocalDate.now(), username
+        );
     }
 
     // Gets a maintenance task by id. Used to check a task exists prior to deletion and to get a

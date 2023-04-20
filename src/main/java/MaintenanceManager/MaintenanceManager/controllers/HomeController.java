@@ -45,10 +45,11 @@ public class HomeController {
     @GetMapping("/landing")
     public String landingPage(Authentication authentication, Model model) {
         // get user info
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         // get all uncompleted past tasks
-        List<MaintenanceTask> uncompletedTasks = maintenanceTaskService.getAllUncompletedPastUserTasks(user.getId());
+        List<MaintenanceTask> uncompletedTasks = maintenanceTaskService
+                .getAllUncompletedPastUserTasks(userDetails.getUsername());
         // get all user's tasks for the current date
         List<MaintenanceTask> maintenanceTasks = maintenanceTaskService.getAllUserTasksByDate(
                 userDetails.getUsername(), LocalDate.now()); //user.getId()
@@ -58,7 +59,7 @@ public class HomeController {
         //List<DailyForecast> weather = weatherApiService.getDailyWeatherForecastData(LocalDate.now().toString());
         model.addAttribute("uncompletedTasks", uncompletedTasks);
         model.addAttribute("dailyTasks", maintenanceTasks);
-        model.addAttribute("user", user);
+        model.addAttribute("user", userDetails);
         // the weather forecast data is disabled because the api key is about to expire
         //model.addAttribute("weather", weather);
         //.addAttribute("chanceOfRain", chanceOfRain);

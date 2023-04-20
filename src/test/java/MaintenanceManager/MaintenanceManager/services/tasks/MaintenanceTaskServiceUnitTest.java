@@ -73,16 +73,17 @@ public class MaintenanceTaskServiceUnitTest {
         tasksOnPreviousDates.add(maintenanceTask2);
         when(
                 maintenanceTaskRepo
-                        .findByStatusIsNotAndDateBeforeAndUserId(
+                        .findByStatusIsNotAndDateBeforeAndUserUsername(
                                 eq(TaskStatusEnum.COMPLETED),
-                                eq(LocalDate.now()), anyLong())
+                                eq(LocalDate.now()), anyString())
         ).thenReturn(tasksOnPreviousDates);
         assertThat(
                 maintenanceTaskService.getAllUncompletedPastUserTasks(
-                        1L))
+                        "testuser")) // 1L
                 .isEqualTo(tasksOnPreviousDates);
         assertThat(
-                maintenanceTaskService.getAllUncompletedPastUserTasks(1L).size())
+                maintenanceTaskService.getAllUncompletedPastUserTasks("testuser")
+                        .size())
                 .isEqualTo(tasksOnPreviousDates.size());
     }
 
