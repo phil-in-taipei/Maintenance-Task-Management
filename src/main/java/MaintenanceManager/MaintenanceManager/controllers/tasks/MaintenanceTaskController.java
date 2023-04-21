@@ -106,7 +106,8 @@ public class MaintenanceTaskController {
 
     @GetMapping("/tasks-by-month")
     public String showAllUserTasksByMonth(Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
         LocalDate today = LocalDate.now();
         Month month = today.getMonth();
         Year year = Year.of(today.getYear());
@@ -114,8 +115,8 @@ public class MaintenanceTaskController {
         LocalDate monthEnd = today.plusMonths(1)
                 .withDayOfMonth(1).minusDays(1);
         List<MaintenanceTask> tasks = maintenanceTaskService
-                .getAllUserTasksInDateRange(
-                user.getId(), monthBegin, monthEnd);
+                .getAllUserTasksInDateRange( //user.getId()
+                user.getUsername(), monthBegin, monthEnd);
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("tasks", tasks);

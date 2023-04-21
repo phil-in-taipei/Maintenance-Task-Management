@@ -24,6 +24,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +72,63 @@ public class MaintenanceTaskControllerUnitTest {
         userRegistration.setPassword("testpassword");
         userRegistration.setPasswordConfirmation("testpassword");
         userService.createNewMaintenanceUser(userRegistration);
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowAllUserTasksByMonth() throws Exception {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        LocalDate today = LocalDate.now();
+        int thisMonthInt = today.getMonthValue();
+        int thisYearInt = today.getYear();
+        LocalDate monthBegin = today.withDayOfMonth(1);
+        LocalDate monthEnd = today.plusMonths(1).withDayOfMonth(1).minusDays(1);
+        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 1")
+                .status(TaskStatusEnum.COMPLETED)
+                .date(LocalDate.of(thisYearInt, 1, thisMonthInt))
+                .user(testUser)
+                .build();
+        MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
+                .id(2L)
+                .taskName("Test Task 2")
+                .status(TaskStatusEnum.COMPLETED)
+                .date(LocalDate.of(thisYearInt, 5, thisMonthInt))
+                .user(testUser)
+                .build();
+        List<MaintenanceTask> tasksInCurrentMonth = new ArrayList<>();
+        tasksInCurrentMonth.add(maintenanceTask);
+        tasksInCurrentMonth.add(maintenanceTask2);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(maintenanceTaskService.getAllUserTasksInDateRange(anyString(), eq(monthBegin), eq(monthEnd)))
+                .thenReturn(tasksInCurrentMonth);
+        mockMvc
+                .perform(get("/tasks-by-month"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                // these are the expected model attributes
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("month"))
+                .andExpect(model().attributeExists("tasks"))
+                .andExpect(model().attributeExists("user"))
+                // this is the substring of the current year
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(String.valueOf(thisYearInt))))
+                //this is the substring of the current month
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(String.valueOf(thisMonthInt))))
+                // these substrings are the titles of the tasks created during the current month
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Task 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Task 2")))
+                // this is the substring of the username
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("testuser")))
+                .andExpect(view().name("tasks/tasks-by-month"));
     }
 
     @Test

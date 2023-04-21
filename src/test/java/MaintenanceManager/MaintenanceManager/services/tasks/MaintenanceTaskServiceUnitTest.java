@@ -138,18 +138,20 @@ public class MaintenanceTaskServiceUnitTest {
         List<MaintenanceTask> tasksInCurrentMonth = new ArrayList<>();
         tasksInCurrentMonth.add(maintenanceTask);
         tasksInCurrentMonth.add(maintenanceTask2);
-        when(
-                maintenanceTaskRepo.findAllByUserIdAndDateBetweenOrderByDateAsc(
-                        anyLong(),  eq(firstDayOfThisMonth), eq(lastDayOfThisMonth))
+        //maintenanceTaskRepo.findAllByUserIdAndDateBetweenOrderByDateAsc(
+        //                        anyLong(),  eq(firstDayOfThisMonth), eq(lastDayOfThisMonth)
+        when(maintenanceTaskRepo.findAllByUserUsernameAndDateBetweenOrderByDateAsc(
+                anyString(),  eq(firstDayOfThisMonth), eq(lastDayOfThisMonth)
+                )
         ).thenReturn(tasksInCurrentMonth);
         assertThat(
-                maintenanceTaskService
-                        .getAllUserTasksInDateRange(1L, firstDayOfThisMonth,
+                maintenanceTaskService // 1L
+                        .getAllUserTasksInDateRange("testuser", firstDayOfThisMonth,
                                 lastDayOfThisMonth))
                 .isEqualTo(tasksInCurrentMonth);
         assertThat(
                 maintenanceTaskService
-                        .getAllUserTasksInDateRange(1L, firstDayOfThisMonth,
+                        .getAllUserTasksInDateRange("testuser", firstDayOfThisMonth,
                 lastDayOfThisMonth).size())
                 .isEqualTo(tasksInCurrentMonth.size());
     }

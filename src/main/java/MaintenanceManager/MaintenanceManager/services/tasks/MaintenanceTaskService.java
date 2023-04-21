@@ -50,11 +50,15 @@ public class MaintenanceTaskService {
     // later could be used for weekly/quarterly/yearly search
     @Loggable
     @MethodPerformance
-    public List<MaintenanceTask> getAllUserTasksInDateRange(
-            Long userId, LocalDate firstDate, LocalDate lastDate) {
+    public List<MaintenanceTask> getAllUserTasksInDateRange( // Long userId
+           String username, LocalDate firstDate, LocalDate lastDate) {
 
+        //return maintenanceTaskRepo
+        //        .findAllByUserIdAndDateBetweenOrderByDateAsc(userId, firstDate, lastDate);
         return maintenanceTaskRepo
-                .findAllByUserIdAndDateBetweenOrderByDateAsc(userId, firstDate, lastDate);
+                .findAllByUserUsernameAndDateBetweenOrderByDateAsc(
+                        username, firstDate, lastDate
+                );
     }
 
     // gets all Maintenance Tasks scheduled for a user on a given date

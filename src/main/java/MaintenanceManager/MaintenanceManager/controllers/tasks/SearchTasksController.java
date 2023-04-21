@@ -80,7 +80,8 @@ public class SearchTasksController {
             @ModelAttribute("searchMonthAndYear")
             SearchMonthAndYear searchMonthAndYear,
             Model model, Authentication authentication) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
         Month month = searchMonthAndYear.getMonth();
         int queryMonth = month.getValue();
         int queryYear = searchMonthAndYear.getYear();
@@ -95,8 +96,8 @@ public class SearchTasksController {
         // the first and last days of the month are query arguments in the service
         // to provide all tasks scheduled by the user in the date range
         List<MaintenanceTask> tasks = maintenanceTaskService
-                .getAllUserTasksInDateRange(
-                        user.getId(), monthBegin, monthEnd);
+                .getAllUserTasksInDateRange( // user.getId()
+                        user.getUsername(), monthBegin, monthEnd);
         model.addAttribute("searchMonthAndYear",
                 new SearchMonthAndYear());
         model.addAttribute("monthOptions", monthOptions);
@@ -142,8 +143,8 @@ public class SearchTasksController {
                 .withDayOfMonth(1).minusDays(1);
         Month[] monthOptions = Month.values();
         List<MaintenanceTask> tasks = maintenanceTaskService
-                .getAllUserTasksInDateRange(
-                        user.getId(), monthBegin, monthEnd);
+                .getAllUserTasksInDateRange( //
+                        user.getUsername(), monthBegin, monthEnd);
         model.addAttribute("searchMonthAndYear",
                 new SearchMonthAndYear());
         model.addAttribute("monthOptions", monthOptions);

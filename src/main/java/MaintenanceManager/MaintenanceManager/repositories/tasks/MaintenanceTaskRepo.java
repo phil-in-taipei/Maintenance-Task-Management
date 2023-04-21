@@ -13,6 +13,11 @@ public interface MaintenanceTaskRepo extends JpaRepository<MaintenanceTask, Long
     List<MaintenanceTask> findAllByUserIdOrderByDateAsc(Long id);
     List<MaintenanceTask> findAllByUserIdAndDateBetweenOrderByDateAsc(
             Long id, LocalDate firstDate, LocalDate lastDate);
+
+    // this version is for unit test of controller -- MockUser can get UserDetails username string
+    // but not the id, so querying by username, makes the controller unit testable
+    List<MaintenanceTask> findAllByUserUsernameAndDateBetweenOrderByDateAsc(
+            String username, LocalDate firstDate, LocalDate lastDate);
     List<MaintenanceTask> findByStatusIsNotAndDateBeforeAndUserId(
             TaskStatusEnum status, LocalDate date, Long userId);
 
