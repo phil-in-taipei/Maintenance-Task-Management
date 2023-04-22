@@ -11,15 +11,18 @@ import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -32,7 +35,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -76,6 +79,45 @@ public class MaintenanceTaskControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteTask() throws Exception {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 1")
+                .status(TaskStatusEnum.COMPLETED)
+                .date(LocalDate.now())
+                .user(testUser)
+                .build();
+        when(maintenanceTaskService.getMaintenanceTask(anyLong()))
+                .thenReturn(maintenanceTask);
+       mockMvc.
+               perform(request(HttpMethod.GET, "/delete-single-task/1"))
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tasks-by-month"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteTaskFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, task with id: "
+                + nonExistentID + " does not exist";
+        when(maintenanceTaskService.getMaintenanceTask(anyLong()))
+                .thenReturn(null);
+
+        mockMvc
+                .perform(request(HttpMethod.GET, "/delete-single-task/12920"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserTasksByMonth() throws Exception {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
         LocalDate today = LocalDate.now();
@@ -102,7 +144,8 @@ public class MaintenanceTaskControllerUnitTest {
         tasksInCurrentMonth.add(maintenanceTask2);
         when(userService.loadUserByUsername(anyString()))
                 .thenReturn(testUser);
-        when(maintenanceTaskService.getAllUserTasksInDateRange(anyString(), eq(monthBegin), eq(monthEnd)))
+        when(maintenanceTaskService.getAllUserTasksInDateRange(anyString(),
+                eq(monthBegin), eq(monthEnd)))
                 .thenReturn(tasksInCurrentMonth);
         mockMvc
                 .perform(get("/tasks-by-month"))
