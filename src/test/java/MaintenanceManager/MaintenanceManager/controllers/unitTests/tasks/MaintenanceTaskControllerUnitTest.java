@@ -79,6 +79,25 @@ public class MaintenanceTaskControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testConfirmTaskCompletion() throws Exception {
+        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        MaintenanceTask testTask = MaintenanceTask.builder()
+                .id(1L)
+                .taskName("Test Task 1")
+                .status(TaskStatusEnum.COMPLETED)
+                .date(LocalDate.now())
+                .user(testUser)
+                .build();
+        when(maintenanceTaskService.getMaintenanceTask(anyLong()))
+                .thenReturn(testTask);
+        mockMvc.
+                perform(request(HttpMethod.GET, "/confirm-task-completion/1"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tasks-by-month"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteTask() throws Exception {
         UserPrincipal testUser = userService.loadUserByUsername("testuser");
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
