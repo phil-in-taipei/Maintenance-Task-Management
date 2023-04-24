@@ -7,6 +7,7 @@ import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.MonthlyTaskSchedulingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,8 @@ public class MonthlyTaskSchedulerController {
             @ModelAttribute("monthlyTaskQuarterAndYear")
             SearchQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
         System.out.println("This is the quarter: " + QuarterlySchedulingEnum.valueOf(
                 monthlyTaskQuarterAndYear.getQuarter()));
         System.out.println("This is the year: " +
@@ -35,7 +37,8 @@ public class MonthlyTaskSchedulerController {
         List<MonthlyTaskScheduler> availableMonthlyTasks =
                 monthlyTaskSchedulingService
                         .getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
-                                user.getId(), QuarterlySchedulingEnum.valueOf(
+                               user.getUsername(),
+                                QuarterlySchedulingEnum.valueOf( // user.getId()
                                         monthlyTaskQuarterAndYear.getQuarter()),
                                         monthlyTaskQuarterAndYear.getYear()
                         );
@@ -114,10 +117,11 @@ public class MonthlyTaskSchedulerController {
     @GetMapping("/monthly-tasks")
     public String showAllUserMonthlyTasks(
             Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails user = (UserDetails) authentication.getPrincipal();
         List<MonthlyTaskScheduler> monthlyTasks =
                 monthlyTaskSchedulingService
-                        .getAllUsersMonthlyTaskSchedulers(user.getId());
+                        .getAllUsersMonthlyTaskSchedulers(user.getUsername()); // user.getId()
         model.addAttribute("monthlyTasks", monthlyTasks);
         model.addAttribute("user", user);
         model.addAttribute("monthlyTaskQuarterAndYear",

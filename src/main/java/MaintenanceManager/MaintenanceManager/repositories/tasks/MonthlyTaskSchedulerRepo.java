@@ -8,5 +8,9 @@ import java.util.List;
 
 @Repository
 public interface MonthlyTaskSchedulerRepo extends JpaRepository<MonthlyTaskScheduler, Long> {
-    List<MonthlyTaskScheduler> findAllByUserIdOrderByDayOfMonthAsc(Long id);
+    List<MonthlyTaskScheduler> findAllByUserIdOrderByDayOfMonthAsc(
+            Long id);
+
+    List<MonthlyTaskScheduler> findAllByUserUsernameOrderByDayOfMonthAsc(
+            String username);
 }

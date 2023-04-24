@@ -4,6 +4,7 @@ import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.MaintenanceTaskController;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
+import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
@@ -48,9 +49,6 @@ public class MaintenanceTaskControllerUnitTest {
     @Autowired
     MockMvc mockMvc;
 
-
-    //@Autowired
-    //RestTemplate restTemplate;
 
     @MockBean
     AuthorityRepo authorityRepo;
@@ -143,7 +141,8 @@ public class MaintenanceTaskControllerUnitTest {
         int thisMonthInt = today.getMonthValue();
         int thisYearInt = today.getYear();
         LocalDate monthBegin = today.withDayOfMonth(1);
-        LocalDate monthEnd = today.plusMonths(1).withDayOfMonth(1).minusDays(1);
+        LocalDate monthEnd = today.plusMonths(1).
+                withDayOfMonth(1).minusDays(1);
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
                 .id(1L)
                 .taskName("Test Task 1")
@@ -284,8 +283,10 @@ public class MaintenanceTaskControllerUnitTest {
                 // this substrings are the titles of the task created above
                 // method below, so it makes sure that the expected object for that date is
                 // displayed on the page
-                .andExpect(MockMvcResultMatchers.content().string(containsString("Test Task 1")))
-                .andExpect(MockMvcResultMatchers.content().string(containsString("Test Task 2")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Task 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Task 2")))
                 .andExpect(view().name("tasks/tasks-by-date"));
     }
 }

@@ -57,9 +57,11 @@ public class MonthlyTaskSchedulingService {
     @Loggable
     @MethodPerformance
     public List<MonthlyTaskScheduler>
-        getAllUsersMonthlyTaskSchedulers(Long userId) {
+        getAllUsersMonthlyTaskSchedulers(String username) { // Long userId
+            //return monthlyTaskSchedulerRepo
+            //        .findAllByUserIdOrderByDayOfMonthAsc(userId);
             return monthlyTaskSchedulerRepo
-                    .findAllByUserIdOrderByDayOfMonthAsc(userId);
+                    .findAllByUserUsernameOrderByDayOfMonthAsc(username);
     }
 
     // gets all monthly task schedulers which have NOT already been scheduled during
@@ -68,12 +70,12 @@ public class MonthlyTaskSchedulingService {
     @MethodPerformance
     public List<MonthlyTaskScheduler>
         getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
-            Long userId, QuarterlySchedulingEnum quarter, Integer year) {
+            String username, QuarterlySchedulingEnum quarter, Integer year) {
         List<MonthlyTaskScheduler> allUsersMonthlyTasks =
-                getAllUsersMonthlyTaskSchedulers(userId);
+                getAllUsersMonthlyTaskSchedulers(username); // userId
         List<MonthlyTaskScheduler> alreadyScheduledMonthlyTasks
                 = getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
-                        quarter, year, userId);
+                        quarter, year, username);
         for (MonthlyTaskScheduler aSMTS : alreadyScheduledMonthlyTasks) {
             allUsersMonthlyTasks.remove(aSMTS);
         }
@@ -97,12 +99,12 @@ public class MonthlyTaskSchedulingService {
     // to a given year/quarter
     @Loggable
     public List<MonthlyTaskAppliedQuarterly>
-        getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
-            QuarterlySchedulingEnum quarter, Integer year, Long userId
+        getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear( //Long userId
+            QuarterlySchedulingEnum quarter, Integer year, String username
     ) {
         return monthlyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId(
-                quarter, year, userId
+                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserUsername(
+                quarter, year, username
         );
     }
 
@@ -112,12 +114,12 @@ public class MonthlyTaskSchedulingService {
     @Loggable
     @MethodPerformance
     public List<MonthlyTaskScheduler>
-        getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
-            QuarterlySchedulingEnum quarter, Integer year, Long userId
+        getAllMonthlyTasksAlreadyScheduledForQuarterAndYear( // Long userId
+            QuarterlySchedulingEnum quarter, Integer year, String username
     ) {
         List<MonthlyTaskAppliedQuarterly> qMTAQs =
                 getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
-                quarter, year, userId);
+                quarter, year, username);
         List<MonthlyTaskScheduler> alreadyScheduledMonthlyTasks = new ArrayList<>();
         for (MonthlyTaskAppliedQuarterly mTAQ : qMTAQs) {
             alreadyScheduledMonthlyTasks.add(mTAQ.getMonthlyTaskScheduler());

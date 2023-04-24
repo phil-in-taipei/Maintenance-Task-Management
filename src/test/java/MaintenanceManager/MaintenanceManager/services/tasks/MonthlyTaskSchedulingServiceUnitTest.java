@@ -100,16 +100,16 @@ public class MonthlyTaskSchedulingServiceUnitTest {
         userMonthlyTaskSchedulersAppliedToTest.add(testMonthlyTaskScheduler);
         userMonthlyTaskSchedulersAppliedToTest.add(testMonthlyTaskScheduler2);
         when(monthlyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId(
-                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyLong()))
+                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserUsername(
+                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyString()))
                 .thenReturn(usersMonthlyTasksAppliedQuarterly);
         assertThat(monthlyTaskSchedulingService
                 .getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L))
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser")) // 1L
                 .isEqualTo(userMonthlyTaskSchedulersAppliedToTest);
         assertThat(monthlyTaskSchedulingService
                 .getAllMonthlyTasksAlreadyScheduledForQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L).size())
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser").size())
                 .isEqualTo(userMonthlyTaskSchedulersAppliedToTest.size());
     }
 
@@ -174,13 +174,13 @@ public class MonthlyTaskSchedulingServiceUnitTest {
         List<MonthlyTaskScheduler> usersMonthlyTaskSchedulers = new ArrayList<>();
         usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler);
         usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler2);
-        when(monthlyTaskSchedulerRepo.findAllByUserIdOrderByDayOfMonthAsc(anyLong()))
+        when(monthlyTaskSchedulerRepo.findAllByUserUsernameOrderByDayOfMonthAsc(anyString()))
                 .thenReturn(usersMonthlyTaskSchedulers);
         assertThat(monthlyTaskSchedulingService
-                .getAllUsersMonthlyTaskSchedulers(1L))
+                .getAllUsersMonthlyTaskSchedulers("testuser"))
                 .isEqualTo(usersMonthlyTaskSchedulers);
         assertThat(monthlyTaskSchedulingService
-                .getAllUsersMonthlyTaskSchedulers(1L).size())
+                .getAllUsersMonthlyTaskSchedulers("testuser").size())
                 .isEqualTo(usersMonthlyTaskSchedulers.size());
     }
 
@@ -217,16 +217,16 @@ public class MonthlyTaskSchedulingServiceUnitTest {
         usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly);
         usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly2);
         when(monthlyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserId(
-                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyLong()))
+                .findAllByQuarterAndYearAndMonthlyTaskScheduler_UserUsername(
+                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyString()))
                 .thenReturn(usersMonthlyTasksAppliedQuarterly);
         assertThat(monthlyTaskSchedulingService
                 .getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L))
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser"))
                 .isEqualTo(usersMonthlyTasksAppliedQuarterly);
         assertThat(monthlyTaskSchedulingService
                 .getUsersMonthlyTasksAppliedQuarterlyByQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L).size())
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser").size())
                 .isEqualTo(usersMonthlyTasksAppliedQuarterly.size());
     }
 
