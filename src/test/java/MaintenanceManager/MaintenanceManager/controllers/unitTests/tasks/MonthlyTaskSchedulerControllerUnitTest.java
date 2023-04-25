@@ -1,24 +1,20 @@
 package MaintenanceManager.MaintenanceManager.controllers.unitTests.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
-import MaintenanceManager.MaintenanceManager.controllers.tasks.MaintenanceTaskController;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.MonthlyTaskSchedulerController;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.user.*;
 
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
-import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.tasks.MonthlyTaskSchedulingService;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
