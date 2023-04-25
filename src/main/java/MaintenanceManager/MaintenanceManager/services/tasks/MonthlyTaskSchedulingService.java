@@ -88,10 +88,10 @@ public class MonthlyTaskSchedulingService {
     @Loggable
     @MethodPerformance
     public List<MonthlyTaskAppliedQuarterly>
-        getAllUsersMonthlyTasksAppliedQuarterly(Long userId) {
+        getAllUsersMonthlyTasksAppliedQuarterly(String username) { // Long userId
             return monthlyTaskAppliedQuarterlyRepo
-                .findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
-                        userId);
+                .findAllByMonthlyTaskScheduler_UserUsernameOrderByYearAscQuarterAsc(
+                        username);
     }
 
     // gets record of all user's MonthlyTaskAppliedQuarterly objects

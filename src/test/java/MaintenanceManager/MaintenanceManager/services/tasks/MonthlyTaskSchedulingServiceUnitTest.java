@@ -146,13 +146,13 @@ public class MonthlyTaskSchedulingServiceUnitTest {
         usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly);
         usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly2);
         when(monthlyTaskAppliedQuarterlyRepo
-                .findAllByMonthlyTaskScheduler_UserIdOrderByYearAscQuarterAsc(anyLong()))
+                .findAllByMonthlyTaskScheduler_UserUsernameOrderByYearAscQuarterAsc(anyString()))
                 .thenReturn(usersMonthlyTasksAppliedQuarterly);
         assertThat(monthlyTaskSchedulingService
-                .getAllUsersMonthlyTasksAppliedQuarterly(1L))
+                .getAllUsersMonthlyTasksAppliedQuarterly("testuser")) //1L
                 .isEqualTo(usersMonthlyTasksAppliedQuarterly);
         assertThat(monthlyTaskSchedulingService
-                .getAllUsersMonthlyTasksAppliedQuarterly(1L).size())
+                .getAllUsersMonthlyTasksAppliedQuarterly("testuser").size())
                 .isEqualTo(usersMonthlyTasksAppliedQuarterly.size());
     }
 
@@ -174,7 +174,8 @@ public class MonthlyTaskSchedulingServiceUnitTest {
         List<MonthlyTaskScheduler> usersMonthlyTaskSchedulers = new ArrayList<>();
         usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler);
         usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler2);
-        when(monthlyTaskSchedulerRepo.findAllByUserUsernameOrderByDayOfMonthAsc(anyString()))
+        when(monthlyTaskSchedulerRepo.
+                findAllByUserUsernameOrderByDayOfMonthAsc(anyString()))
                 .thenReturn(usersMonthlyTaskSchedulers);
         assertThat(monthlyTaskSchedulingService
                 .getAllUsersMonthlyTaskSchedulers("testuser"))

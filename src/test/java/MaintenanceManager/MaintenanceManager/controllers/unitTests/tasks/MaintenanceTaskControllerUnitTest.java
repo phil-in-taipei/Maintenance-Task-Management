@@ -85,18 +85,26 @@ public class MaintenanceTaskControllerUnitTest {
             .password("testpassword")
             .build();
 
+    MaintenanceTask testTask = MaintenanceTask.builder()
+            .id(1L)
+            .taskName("Test Task 1")
+            .status(TaskStatusEnum.COMPLETED)
+            .date(LocalDate.now())
+            .user(testUser)
+            .build();
+
+    MaintenanceTask testTask2 = MaintenanceTask.builder()
+            .id(2L)
+            .taskName("Test Task 2")
+            .status(TaskStatusEnum.COMPLETED)
+            .date(LocalDate.now())
+            .user(testUser)
+            .build();
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testConfirmTaskCompletion() throws Exception {
-        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
-        MaintenanceTask testTask = MaintenanceTask.builder()
-                .id(1L)
-                .taskName("Test Task 1")
-                .status(TaskStatusEnum.COMPLETED)
-                .date(LocalDate.now())
-                .user(testUser)
-                .build();
+
         when(maintenanceTaskService.getMaintenanceTask(anyLong()))
                 .thenReturn(testTask);
         mockMvc.
@@ -108,16 +116,8 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteTask() throws Exception {
-        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
-        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
-                .id(1L)
-                .taskName("Test Task 1")
-                .status(TaskStatusEnum.COMPLETED)
-                .date(LocalDate.now())
-                .user(testUser)
-                .build();
         when(maintenanceTaskService.getMaintenanceTask(anyLong()))
-                .thenReturn(maintenanceTask);
+                .thenReturn(testTask);
        mockMvc.
                perform(request(HttpMethod.GET, "/delete-single-task/1"))
                 //.andDo(print())
@@ -147,30 +147,17 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserTasksByMonth() throws Exception {
-        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         LocalDate today = LocalDate.now();
         int thisMonthInt = today.getMonthValue();
         int thisYearInt = today.getYear();
         LocalDate monthBegin = today.withDayOfMonth(1);
         LocalDate monthEnd = today.plusMonths(1).
                 withDayOfMonth(1).minusDays(1);
-        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
-                .id(1L)
-                .taskName("Test Task 1")
-                .status(TaskStatusEnum.COMPLETED)
-                .date(LocalDate.of(thisYearInt, 1, thisMonthInt))
-                .user(testUser)
-                .build();
-        MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
-                .id(2L)
-                .taskName("Test Task 2")
-                .status(TaskStatusEnum.COMPLETED)
-                .date(LocalDate.of(thisYearInt, 5, thisMonthInt))
-                .user(testUser)
-                .build();
+        testTask.setDate(LocalDate.of(thisYearInt, 1, thisMonthInt));
+        testTask2.setDate(LocalDate.of(thisYearInt, 5, thisMonthInt));
         List<MaintenanceTask> tasksInCurrentMonth = new ArrayList<>();
-        tasksInCurrentMonth.add(maintenanceTask);
-        tasksInCurrentMonth.add(maintenanceTask2);
+        tasksInCurrentMonth.add(testTask);
+        tasksInCurrentMonth.add(testTask2);
         when(userService.loadUserByUsername(anyString()))
                 .thenReturn(testUser);
         when(maintenanceTaskService.getAllUserTasksInDateRange(anyString(),
@@ -206,17 +193,9 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowTaskDetailPage() throws Exception {
-        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         String today = LocalDate.now().toString();
-        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
-                .id(1L)
-                .taskName("Test Task 1")
-                .status(TaskStatusEnum.COMPLETED)
-                .date(LocalDate.now())
-                .user(testUser)
-                .build();
         when(maintenanceTaskService.getMaintenanceTask(anyLong()))
-                .thenReturn(maintenanceTask);
+                .thenReturn(testTask);
 
         mockMvc
                 .perform(get("/task-detail/" + 1))
@@ -258,25 +237,10 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowUserTasksByDate() throws Exception {
-        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         String today = LocalDate.now().toString();
-        MaintenanceTask maintenanceTask = MaintenanceTask.builder()
-                .id(1L)
-                .taskName("Test Task 1")
-                .status(TaskStatusEnum.COMPLETED)
-                .date(LocalDate.now())
-                .user(testUser)
-                .build();
-        MaintenanceTask maintenanceTask2 = MaintenanceTask.builder()
-                .id(2L)
-                .taskName("Test Task 2")
-                .status(TaskStatusEnum.COMPLETED)
-                .date(LocalDate.now())
-                .user(testUser)
-                .build();
         List<MaintenanceTask> tasksOnCurrentDate = new ArrayList<>();
-        tasksOnCurrentDate.add(maintenanceTask);
-        tasksOnCurrentDate.add(maintenanceTask2);
+        tasksOnCurrentDate.add(testTask);
+        tasksOnCurrentDate.add(testTask2);
         when(userService.loadUserByUsername(anyString()))
                 .thenReturn(testUser);
         when(maintenanceTaskService.getAllUserTasksByDate(anyString(), eq(LocalDate.now())))

@@ -2,9 +2,7 @@ package MaintenanceManager.MaintenanceManager.controllers.unitTests.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.MaintenanceTaskController;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.MonthlyTaskSchedulerController;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
-import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
-import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
+import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.user.*;
 
 import MaintenanceManager.MaintenanceManager.repositories.tasks.MonthlyTaskSchedulerRepo;
@@ -85,32 +83,41 @@ public class MonthlyTaskSchedulerControllerUnitTest {
             .password("testpassword")
             .build();
 
+    MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
+            .id(1L)
+            .monthlyTaskName("Test Monthly Task Scheduler 1")
+            .dayOfMonth(1)
+            .user(testUser)
+            .build();
+    MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly =
+            MonthlyTaskAppliedQuarterly
+                    .builder()
+                    .monthlyTaskScheduler(testMonthlyTaskScheduler)
+                    .year(2023)
+                    .quarter(QuarterlySchedulingEnum.Q2)
+                    .build();
+    MonthlyTaskScheduler testMonthlyTaskScheduler2 = MonthlyTaskScheduler.builder()
+            .id(1L)
+            .monthlyTaskName("Test Monthly Task Scheduler 2")
+            .dayOfMonth(1)
+            .user(testUser)
+            .build();
+    MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly2 =
+            MonthlyTaskAppliedQuarterly
+                    .builder()
+                    .monthlyTaskScheduler(testMonthlyTaskScheduler2)
+                    .year(2023)
+                    .quarter(QuarterlySchedulingEnum.Q2)
+                    .build();
+
 
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserMonthlyTasks() throws Exception {
-        MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
-                .id(1L)
-                .monthlyTaskName("Test Monthly Task Scheduler 1")
-                .dayOfMonth(1)
-                .user(testUser)
-                .build();
-        System.out.println("This is the first monthly task scheduler:");
-        System.out.println(testMonthlyTaskScheduler);
-        MonthlyTaskScheduler testMonthlyTaskScheduler2 = MonthlyTaskScheduler.builder()
-                .id(2L)
-                .monthlyTaskName("Test Monthly Task Scheduler 2")
-                .dayOfMonth(1)
-                .user(testUser)
-                .build();
-        System.out.println("This is the second monthly task scheduler:");
-        System.out.println(testMonthlyTaskScheduler2);
         List<MonthlyTaskScheduler> usersMonthlyTaskSchedulers = new ArrayList<>();
         usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler);
         usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler2);
-        System.out.println("This is the test user:");
-        System.out.println(testUser);
         when(userService.loadUserByUsername(anyString()))
                 .thenReturn(testUser);
         when(monthlyTaskSchedulingService
@@ -118,7 +125,7 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .thenReturn(usersMonthlyTaskSchedulers);
         mockMvc
                 .perform(get("/monthly-tasks"))
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())
@@ -134,5 +141,34 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString("Test Monthly Task Scheduler 2")))
                 .andExpect(view().name("tasks/monthly-task-schedulers"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowAllUserQuarterlyMonthlyTasks() throws Exception{
+        List<MonthlyTaskAppliedQuarterly> usersMonthlyTasksAppliedQuarterly = new ArrayList<>();
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly);
+        usersMonthlyTasksAppliedQuarterly.add(testMonthlyTaskAppliedQuarterly2);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(monthlyTaskSchedulingService
+                .getAllUsersMonthlyTasksAppliedQuarterly(anyString()))
+                .thenReturn(usersMonthlyTasksAppliedQuarterly);
+        mockMvc
+                .perform(get("/quarterly-monthly-tasks-scheduled"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                // these are the expected model attributes
+                .andExpect(model().attributeExists("qMonthlyTasks"))
+                .andExpect(model().attributeExists("user"))
+                // these substrings are the titles of the tasks created above
+                // , so it makes sure that the expected object is
+                // displayed on the page
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Monthly Task Scheduler 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Monthly Task Scheduler 2")))
+                .andExpect(view().name("tasks/quarterly-monthly-tasks-scheduled"));
     }
 }

@@ -140,10 +140,12 @@ public class MonthlyTaskSchedulerController {
     @GetMapping("/quarterly-monthly-tasks-scheduled")
     public String showAllUserQuarterlyMonthlyTasks(
             Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<MonthlyTaskAppliedQuarterly> qMonthlyTasks =
                 monthlyTaskSchedulingService
-                        .getAllUsersMonthlyTasksAppliedQuarterly(user.getId());
+                        .getAllUsersMonthlyTasksAppliedQuarterly(userDetails.getUsername());
         model.addAttribute("qMonthlyTasks", qMonthlyTasks);
         model.addAttribute("user", user);
         return "tasks/quarterly-monthly-tasks-scheduled";
