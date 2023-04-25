@@ -1,6 +1,7 @@
 package MaintenanceManager.MaintenanceManager.controllers.unitTests.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.MaintenanceTaskController;
+import MaintenanceManager.MaintenanceManager.controllers.tasks.MonthlyTaskSchedulerController;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
@@ -38,7 +39,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(MaintenanceTaskController.class)
+@WebMvcTest(MonthlyTaskSchedulerController.class)
 @ContextConfiguration(classes = {MaintenanceManagerApplication.class})
 @ActiveProfiles("test")
 public class MonthlyTaskSchedulerControllerUnitTest {
@@ -88,7 +89,6 @@ public class MonthlyTaskSchedulerControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
-    //@WithUserDetails("testuser")
     public void testShowAllUserMonthlyTasks() throws Exception {
         MonthlyTaskScheduler testMonthlyTaskScheduler = MonthlyTaskScheduler.builder()
                 .id(1L)
@@ -126,11 +126,13 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(model().attributeExists("monthlyTasks"))
                 .andExpect(model().attributeExists("monthlyTaskQuarterAndYear"))
                 .andExpect(model().attributeExists("user"))
-                // this substring is the title of the task created in the testSaveNewMonthlyTaskScheduler
+                // this substring is the title of the task created above
                 // method below, so it makes sure that the expected object is
                 // displayed on the page
                 .andExpect(MockMvcResultMatchers.content().string(
-                        containsString("Test monthly task scheduler")))
+                        containsString("Test Monthly Task Scheduler 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Monthly Task Scheduler 2")))
                 .andExpect(view().name("tasks/monthly-task-schedulers"));
     }
 }

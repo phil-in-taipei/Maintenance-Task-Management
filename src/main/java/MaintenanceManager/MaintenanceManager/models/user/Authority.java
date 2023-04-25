@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Authority implements GrantedAuthority {
+public class Authority  implements GrantedAuthority {
     @Id
     @GeneratedValue
     private Long id;
