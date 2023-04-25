@@ -8,6 +8,7 @@ import MaintenanceManager.MaintenanceManager.models.tasks.forms.MaintenanceTaskS
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 //import MaintenanceManager.MaintenanceManager.services.tasks.IntervalTaskGroupService;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
+import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,6 +25,9 @@ public class MaintenanceTaskController {
 
     @Autowired
     MaintenanceTaskService maintenanceTaskService;
+
+    @Autowired
+    UserDetailsServiceImplementation userService;
 
     @RequestMapping("/confirm-task-completion/{taskId}")
     public String confirmTaskCompletion(@PathVariable(name = "taskId") Long taskId) {
@@ -78,7 +82,9 @@ public class MaintenanceTaskController {
             Authentication authentication) {
         try {
             LocalDate date = LocalDate.parse(maintenanceTaskForm.getDate());
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
             MaintenanceTask maintenanceTask = new MaintenanceTask(
                     maintenanceTaskForm.getTaskName(),
                     date, user);

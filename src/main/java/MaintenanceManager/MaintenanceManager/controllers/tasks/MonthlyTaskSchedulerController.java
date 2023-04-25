@@ -5,6 +5,7 @@ import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnu
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.MonthlyTaskSchedulingService;
+import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,9 @@ public class MonthlyTaskSchedulerController {
 
     @Autowired
     MonthlyTaskSchedulingService monthlyTaskSchedulingService;
+
+    @Autowired
+    UserDetailsServiceImplementation userService;
 
     // directs user to form to apply monthly schedulers
     // to a specific quarter/year. It will also trigger batch scheduling
@@ -118,10 +122,11 @@ public class MonthlyTaskSchedulerController {
     public String showAllUserMonthlyTasks(
             Authentication authentication, Model model) {
         //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        UserDetails user = (UserDetails) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<MonthlyTaskScheduler> monthlyTasks =
                 monthlyTaskSchedulingService
-                        .getAllUsersMonthlyTaskSchedulers(user.getUsername()); // user.getId()
+                        .getAllUsersMonthlyTaskSchedulers(userDetails.getUsername()); // user.getId()
         model.addAttribute("monthlyTasks", monthlyTasks);
         model.addAttribute("user", user);
         model.addAttribute("monthlyTaskQuarterAndYear",

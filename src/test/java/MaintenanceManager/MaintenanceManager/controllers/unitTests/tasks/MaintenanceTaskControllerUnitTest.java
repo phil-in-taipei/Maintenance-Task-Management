@@ -4,16 +4,16 @@ import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.MaintenanceTaskController;
 import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.TaskStatusEnum;
-import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
-import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
-import MaintenanceManager.MaintenanceManager.models.user.UserRegistration;
+import MaintenanceManager.MaintenanceManager.models.user.*;
 import MaintenanceManager.MaintenanceManager.repositories.user.AuthorityRepo;
 import MaintenanceManager.MaintenanceManager.repositories.user.UserPrincipalRepo;
 import MaintenanceManager.MaintenanceManager.services.tasks.MaintenanceTaskService;
 import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,6 +31,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -62,23 +63,33 @@ public class MaintenanceTaskControllerUnitTest {
     @MockBean
     UserDetailsServiceImplementation userService;
 
-    @BeforeEach
-    void init() {
-        UserRegistration userRegistration = new UserRegistration();
-        userRegistration.setSurname( "User");
-        userRegistration.setGivenName( "Test");
-        userRegistration.setEmail("test@gmx.com");
-        userRegistration.setAge(40);
-        userRegistration.setUsername("testuser");
-        userRegistration.setPassword("testpassword");
-        userRegistration.setPasswordConfirmation("testpassword");
-        userService.createNewMaintenanceUser(userRegistration);
-    }
+    UserMeta userMeta = UserMeta.builder()
+            .id(1L)
+            .email("testuser@gmx.com")
+            .surname("Test")
+            .givenName("User")
+            .age(50)
+            .build();
+    Authority authority1 = Authority.builder().authority(AuthorityEnum.ROLE_USER).build();
+    Authority authority2 = Authority.builder().authority(AuthorityEnum.ROLE_MAINTENANCE).build();
+    List<Authority> authorities = Arrays.asList(authority1, authority2);
+    UserPrincipal testUser = UserPrincipal.builder()
+            .id(1L)
+            .enabled(true)
+            .credentialsNonExpired(true)
+            .accountNonExpired(true)
+            .accountNonLocked(true)
+            .username("testuser")
+            .authorities(authorities)
+            .userMeta(userMeta)
+            .password("testpassword")
+            .build();
+
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testConfirmTaskCompletion() throws Exception {
-        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         MaintenanceTask testTask = MaintenanceTask.builder()
                 .id(1L)
                 .taskName("Test Task 1")
@@ -97,7 +108,7 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteTask() throws Exception {
-        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
                 .id(1L)
                 .taskName("Test Task 1")
@@ -136,7 +147,7 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserTasksByMonth() throws Exception {
-        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         LocalDate today = LocalDate.now();
         int thisMonthInt = today.getMonthValue();
         int thisYearInt = today.getYear();
@@ -195,7 +206,7 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowTaskDetailPage() throws Exception {
-        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         String today = LocalDate.now().toString();
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
                 .id(1L)
@@ -247,7 +258,7 @@ public class MaintenanceTaskControllerUnitTest {
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowUserTasksByDate() throws Exception {
-        UserPrincipal testUser = userService.loadUserByUsername("testuser");
+        //UserPrincipal testUser = userService.loadUserByUsername("testuser");
         String today = LocalDate.now().toString();
         MaintenanceTask maintenanceTask = MaintenanceTask.builder()
                 .id(1L)
