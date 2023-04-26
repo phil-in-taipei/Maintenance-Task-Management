@@ -41,12 +41,11 @@ public class MonthlyTaskSchedulerControllerUnitTest {
     @Autowired
     MockMvc mockMvc;
 
-
     @MockBean
     AuthorityRepo authorityRepo;
 
-   @MockBean
-   MaintenanceTaskService maintenanceTaskService;
+    @MockBean
+    MaintenanceTaskService maintenanceTaskService;
 
     @MockBean
     MonthlyTaskSchedulerRepo monthlyTaskSchedulerRepo;

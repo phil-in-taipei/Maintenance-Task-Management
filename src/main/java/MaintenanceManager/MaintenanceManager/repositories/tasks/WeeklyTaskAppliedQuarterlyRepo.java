@@ -14,6 +14,14 @@ public interface WeeklyTaskAppliedQuarterlyRepo
             Long userId);
 
     List<WeeklyTaskAppliedQuarterly>
-        findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId( // OrderByYearAscQuarterAsc
+    findAllByWeeklyTaskScheduler_UserUsernameOrderByYearAscQuarterAsc(
+            String username);
+
+    List<WeeklyTaskAppliedQuarterly>
+        findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId(
             QuarterlySchedulingEnum quarter, Integer year, Long userId);
+
+    List<WeeklyTaskAppliedQuarterly>
+    findAllByQuarterAndYearAndWeeklyTaskScheduler_UserUsername(
+            QuarterlySchedulingEnum quarter, Integer year, String username);
 }

@@ -52,8 +52,10 @@ public class WeeklyTaskSchedulingService {
     // gets all weekly task schedulers of a given user
     @Loggable
     @MethodPerformance
-    public List<WeeklyTaskScheduler> getAllUsersWeeklyTaskSchedulers(Long userId) {
-        return weeklyTaskSchedulerRepo.findAllByUserIdOrderByDayOfWeekAsc(userId);
+    public List<WeeklyTaskScheduler> getAllUsersWeeklyTaskSchedulers(
+            String username) { //Long userId
+        return weeklyTaskSchedulerRepo
+                .findAllByUserUsernameOrderByDayOfWeekAsc(username);
     }
 
     // gets record of all weekly task schedulers which have been applied quarterly
@@ -61,9 +63,10 @@ public class WeeklyTaskSchedulingService {
     @Loggable
     @MethodPerformance
     public List<WeeklyTaskAppliedQuarterly>
-        getAllUsersWeeklyTasksAppliedQuarterly(Long userId) {
+        getAllUsersWeeklyTasksAppliedQuarterly(String username) { //
         return weeklyTaskAppliedQuarterlyRepo
-                .findAllByWeeklyTaskScheduler_UserIdOrderByYearAscQuarterAsc(userId);
+                .findAllByWeeklyTaskScheduler_UserUsernameOrderByYearAscQuarterAsc(
+                        username);
     }
 
     // gets all weekly task schedulers which have NOT already been scheduled during
@@ -72,12 +75,12 @@ public class WeeklyTaskSchedulingService {
     @MethodPerformance
     public List<WeeklyTaskScheduler>
         getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(
-            Long userId, QuarterlySchedulingEnum quarter, Integer year) {
+            String username, QuarterlySchedulingEnum quarter, Integer year) {
         List<WeeklyTaskScheduler> allUsersWeeklyTasks =
-                getAllUsersWeeklyTaskSchedulers(userId);
+                getAllUsersWeeklyTaskSchedulers(username);
         List<WeeklyTaskScheduler> alreadyScheduledWeeklyTasks
                 = getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
-                quarter, year, userId);
+                quarter, year, username);
         for (WeeklyTaskScheduler aSWTS : alreadyScheduledWeeklyTasks) {
             allUsersWeeklyTasks.remove(aSWTS);
         }
@@ -91,11 +94,11 @@ public class WeeklyTaskSchedulingService {
     @MethodPerformance
     public List<WeeklyTaskScheduler>
         getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
-            QuarterlySchedulingEnum quarter, Integer year, Long userId
+            QuarterlySchedulingEnum quarter, Integer year, String username
     ) {
         List<WeeklyTaskAppliedQuarterly> qWTAQs =
                 getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
-                        quarter, year, userId);
+                        quarter, year, username);
         List<WeeklyTaskScheduler> alreadyScheduledWeeklyTasks = new ArrayList<>();
         for (WeeklyTaskAppliedQuarterly wTAQ : qWTAQs) {
             alreadyScheduledWeeklyTasks.add(wTAQ.getWeeklyTaskScheduler());
@@ -110,11 +113,11 @@ public class WeeklyTaskSchedulingService {
     @MethodPerformance
     public List<WeeklyTaskAppliedQuarterly>
         getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
-            QuarterlySchedulingEnum quarter, Integer year, Long userId
+            QuarterlySchedulingEnum quarter, Integer year, String username
     ) {
         return weeklyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId(
-                        quarter, year, userId
+                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserUsername(
+                        quarter, year, username
                 );
     }
 

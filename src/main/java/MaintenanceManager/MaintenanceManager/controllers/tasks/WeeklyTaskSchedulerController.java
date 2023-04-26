@@ -3,8 +3,10 @@ import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.WeeklyTaskSchedulingService;
+import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,9 @@ import java.time.DayOfWeek;
 import java.util.List;
 @Controller
 public class WeeklyTaskSchedulerController {
+
+    @Autowired
+    UserDetailsServiceImplementation userService;
 
     @Autowired
     WeeklyTaskSchedulingService weeklyTaskSchedulingService;
@@ -31,7 +36,7 @@ public class WeeklyTaskSchedulerController {
         List<WeeklyTaskScheduler> availableWeeklyTasks =
                 weeklyTaskSchedulingService
                     .getAllUsersWeeklyTaskSchedulersAvailableForQuarterAndYear(
-                    user.getId(), QuarterlySchedulingEnum.valueOf(
+                    user.getUsername(), QuarterlySchedulingEnum.valueOf(
                         weeklyTaskQuarterAndYear.getQuarter()),
                     weeklyTaskQuarterAndYear.getYear()
         );
@@ -108,9 +113,11 @@ public class WeeklyTaskSchedulerController {
     // shows all weekly task schedulers which have been created by the authenticated user
     @GetMapping("/weekly-tasks")
     public String showAllUserWeeklyTasks(Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<WeeklyTaskScheduler> weeklyTasks =
-                weeklyTaskSchedulingService.getAllUsersWeeklyTaskSchedulers(user.getId());
+                weeklyTaskSchedulingService
+                        .getAllUsersWeeklyTaskSchedulers(user.getUsername());
 
         model.addAttribute("weeklyTasks", weeklyTasks);
         model.addAttribute("user", user);
@@ -123,9 +130,11 @@ public class WeeklyTaskSchedulerController {
     // of the week throughout the quarter
     @GetMapping("/quarterly-weekly-tasks-scheduled")
     public String showAllUserQuarterlyWeeklyTasks(Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<WeeklyTaskAppliedQuarterly> qWeeklyTasks =
-                weeklyTaskSchedulingService.getAllUsersWeeklyTasksAppliedQuarterly(user.getId());
+                weeklyTaskSchedulingService.getAllUsersWeeklyTasksAppliedQuarterly(
+                        userDetails.getUsername());
         model.addAttribute("qWeeklyTasks", qWeeklyTasks);
         model.addAttribute("user", user);
         return "tasks/quarterly-weekly-tasks-scheduled";

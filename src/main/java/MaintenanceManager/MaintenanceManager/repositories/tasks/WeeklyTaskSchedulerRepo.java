@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface WeeklyTaskSchedulerRepo extends JpaRepository<WeeklyTaskScheduler, Long> {
     List<WeeklyTaskScheduler> findAllByUserIdOrderByDayOfWeekAsc(Long id);
+
+    List<WeeklyTaskScheduler> findAllByUserUsernameOrderByDayOfWeekAsc(String username);
 }

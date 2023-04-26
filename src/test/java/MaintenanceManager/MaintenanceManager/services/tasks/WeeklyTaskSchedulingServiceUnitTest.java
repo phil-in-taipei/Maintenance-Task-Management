@@ -98,16 +98,16 @@ public class WeeklyTaskSchedulingServiceUnitTest {
         userWeeklyTaskSchedulersAppliedToTest.add(weeklyTaskScheduler);
         userWeeklyTaskSchedulersAppliedToTest.add(weeklyTaskScheduler2);
         when(weeklyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId(
-                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyLong()))
+                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserUsername(
+                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyString()))
                 .thenReturn(usersWeeklyTasksAppliedQuarterly);
         assertThat(weeklyTaskSchedulingService
                 .getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L))
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser"))
                 .isEqualTo(userWeeklyTaskSchedulersAppliedToTest);
         assertThat(weeklyTaskSchedulingService
                 .getAllWeeklyTasksAlreadyScheduledForQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L).size())
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser").size())
                 .isEqualTo(userWeeklyTaskSchedulersAppliedToTest.size());
     }
 
@@ -144,14 +144,14 @@ public class WeeklyTaskSchedulingServiceUnitTest {
         usersWeeklyTasksAppliedQuarterly.add(testWeeklyTaskAppliedQuarterly);
         usersWeeklyTasksAppliedQuarterly.add(testWeeklyTaskAppliedQuarterly2);
         when(weeklyTaskAppliedQuarterlyRepo
-                .findAllByWeeklyTaskScheduler_UserIdOrderByYearAscQuarterAsc(
-                        anyLong()))
+                .findAllByWeeklyTaskScheduler_UserUsernameOrderByYearAscQuarterAsc(
+                        anyString()))
                 .thenReturn(usersWeeklyTasksAppliedQuarterly);
         assertThat(weeklyTaskSchedulingService
-                .getAllUsersWeeklyTasksAppliedQuarterly(1L))
+                .getAllUsersWeeklyTasksAppliedQuarterly("testuser"))
                 .isEqualTo(usersWeeklyTasksAppliedQuarterly);
         assertThat(weeklyTaskSchedulingService
-                .getAllUsersWeeklyTasksAppliedQuarterly(1L).size())
+                .getAllUsersWeeklyTasksAppliedQuarterly("testuser").size())
                 .isEqualTo(usersWeeklyTasksAppliedQuarterly.size());
     }
 
@@ -173,13 +173,13 @@ public class WeeklyTaskSchedulingServiceUnitTest {
         List<WeeklyTaskScheduler> userWeeklyTaskSchedulers = new ArrayList<>();
         userWeeklyTaskSchedulers.add(weeklyTaskScheduler);
         userWeeklyTaskSchedulers.add(weeklyTaskScheduler2);
-        when(weeklyTaskSchedulerRepo.findAllByUserIdOrderByDayOfWeekAsc(anyLong()))
+        when(weeklyTaskSchedulerRepo.findAllByUserUsernameOrderByDayOfWeekAsc(anyString()))
                 .thenReturn(userWeeklyTaskSchedulers);
         assertThat(weeklyTaskSchedulingService
-                .getAllUsersWeeklyTaskSchedulers(1L))
+                .getAllUsersWeeklyTaskSchedulers("testuser"))
                 .isEqualTo(userWeeklyTaskSchedulers);
         assertThat(weeklyTaskSchedulingService
-                .getAllUsersWeeklyTaskSchedulers(1L).size())
+                .getAllUsersWeeklyTaskSchedulers("testuser").size())
                 .isEqualTo(userWeeklyTaskSchedulers.size());
     }
 
@@ -216,16 +216,16 @@ public class WeeklyTaskSchedulingServiceUnitTest {
         usersWeeklyTasksAppliedQuarterly.add(testWeeklyTaskAppliedQuarterly);
         usersWeeklyTasksAppliedQuarterly.add(testWeeklyTaskAppliedQuarterly2);
         when(weeklyTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserId(
-                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyLong()))
+                .findAllByQuarterAndYearAndWeeklyTaskScheduler_UserUsername(
+                        eq(QuarterlySchedulingEnum.Q2), eq(2023), anyString()))
                 .thenReturn(usersWeeklyTasksAppliedQuarterly);
         assertThat(weeklyTaskSchedulingService
                 .getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L))
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser"))
                 .isEqualTo(usersWeeklyTasksAppliedQuarterly);
         assertThat(weeklyTaskSchedulingService
                 .getUsersWeeklyTasksAppliedQuarterlyByQuarterAndYear(
-                        QuarterlySchedulingEnum.Q2, 2023, 1L).size())
+                        QuarterlySchedulingEnum.Q2, 2023, "testuser").size())
                 .isEqualTo(usersWeeklyTasksAppliedQuarterly.size());
     }
 
