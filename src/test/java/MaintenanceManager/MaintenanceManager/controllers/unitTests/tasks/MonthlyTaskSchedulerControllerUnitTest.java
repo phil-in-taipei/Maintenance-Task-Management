@@ -14,11 +14,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
@@ -87,6 +89,7 @@ public class MonthlyTaskSchedulerControllerUnitTest {
     MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly =
             MonthlyTaskAppliedQuarterly
                     .builder()
+                    .id(1L)
                     .monthlyTaskScheduler(testMonthlyTaskScheduler)
                     .year(2023)
                     .quarter(QuarterlySchedulingEnum.Q2)
@@ -100,12 +103,82 @@ public class MonthlyTaskSchedulerControllerUnitTest {
     MonthlyTaskAppliedQuarterly testMonthlyTaskAppliedQuarterly2 =
             MonthlyTaskAppliedQuarterly
                     .builder()
+                    .id(2L)
                     .monthlyTaskScheduler(testMonthlyTaskScheduler2)
                     .year(2023)
                     .quarter(QuarterlySchedulingEnum.Q2)
                     .build();
 
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteMonthlyMaintenanceTask() throws Exception {
+        when(monthlyTaskSchedulingService
+                .getMonthlyTaskScheduler(anyLong()))
+                .thenReturn(testMonthlyTaskScheduler);
+        mockMvc.
+                perform(request(HttpMethod.GET, "/delete-monthly-task-scheduler/"
+                        + testMonthlyTaskScheduler.getId()))
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/monthly-tasks"));
+    }
 
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteMonthlyMaintenanceTaskFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, monthly task with id: "
+               + nonExistentID + " does not exist";
+        when(monthlyTaskSchedulingService
+                .getMonthlyTaskScheduler(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-monthly-task-scheduler/"
+                        + nonExistentID))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteMonthlyTaskAppliedQuarterly() throws Exception {
+        when(monthlyTaskSchedulingService
+                .getMonthlyTaskAppliedQuarterly(anyLong()))
+                .thenReturn(testMonthlyTaskAppliedQuarterly);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-monthly-task-applied-quarterly/"
+                        + testMonthlyTaskAppliedQuarterly.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/quarterly-monthly-tasks-scheduled"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteMonthlyTaskAppliedQuarterlyFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, monthly task applied quarterly with id: "
+                + nonExistentID + " does not exist";
+        when(monthlyTaskSchedulingService
+                .getMonthlyTaskAppliedQuarterly(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-monthly-task-applied-quarterly/"
+                                + nonExistentID))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
