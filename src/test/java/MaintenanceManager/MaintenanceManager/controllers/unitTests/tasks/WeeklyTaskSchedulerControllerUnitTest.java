@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,9 +31,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(WeeklyTaskSchedulerController.class)
@@ -88,6 +91,7 @@ public class WeeklyTaskSchedulerControllerUnitTest {
     WeeklyTaskAppliedQuarterly testWeeklyTaskAppliedQuarterly1
             = WeeklyTaskAppliedQuarterly
             .builder()
+            .id(1L)
             .weeklyTaskScheduler(testWeeklyTaskScheduler1)
             .year(2023)
             .quarter(QuarterlySchedulingEnum.Q2)
@@ -101,10 +105,82 @@ public class WeeklyTaskSchedulerControllerUnitTest {
     WeeklyTaskAppliedQuarterly testWeeklyTaskAppliedQuarterly2
             = WeeklyTaskAppliedQuarterly
             .builder()
+            .id(2L)
             .weeklyTaskScheduler(testWeeklyTaskScheduler2)
             .year(2023)
             .quarter(QuarterlySchedulingEnum.Q2)
             .build();
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteWeeklyMaintenanceTask() throws Exception {
+        when(weeklyTaskSchedulingService
+                .getWeeklyTaskScheduler(anyLong()))
+                .thenReturn(testWeeklyTaskScheduler1);
+        mockMvc.
+                perform(request(HttpMethod.GET, "/delete-weekly-task-scheduler/"
+                        + testWeeklyTaskScheduler1.getId()))
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/weekly-tasks"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteWeeklyMaintenanceTaskFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, weekly task with id: "
+                + nonExistentID + " does not exist";
+        when(weeklyTaskSchedulingService
+                .getWeeklyTaskScheduler(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-weekly-task-scheduler/"
+                                + nonExistentID))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteWeeklyTaskAppliedQuarterly() throws Exception {
+        when(weeklyTaskSchedulingService
+                .getWeeklyTaskAppliedQuarterly(anyLong()))
+                .thenReturn(testWeeklyTaskAppliedQuarterly1);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-weekly-task-applied-quarterly/"
+                                + testWeeklyTaskAppliedQuarterly1.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/quarterly-weekly-tasks-scheduled"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteWeeklyTaskAppliedQuarterlyFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, weekly task applied quarterly with id: "
+                + nonExistentID + " does not exist";
+        when(weeklyTaskSchedulingService
+                .getWeeklyTaskAppliedQuarterly(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-weekly-task-applied-quarterly/"
+                                + nonExistentID))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
