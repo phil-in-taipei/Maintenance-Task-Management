@@ -123,6 +123,78 @@ public class IntervalTaskGroupControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTaskGroup() throws Exception {
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(testIntervalTaskGroup);
+        mockMvc.
+                perform(request(HttpMethod.GET, "/delete-interval-task-group/"
+                        + testIntervalTaskGroup.getId()))
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/interval-task-groups"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTaskGroupFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, interval task group with id: "
+                + nonExistentID + " does not exist";
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-interval-task-group/"
+                                + nonExistentID))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTaskGroupAppliedQuarterly() throws Exception {
+        when(intervalTaskGroupService
+                .getIntervalTaskGroupAppliedQuarterly(anyLong()))
+                .thenReturn(testITGAQ1);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-interval-task-group-applied-quarterly/"
+                                + testITGAQ1.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(
+                        "/quarterly-interval-task-groups-scheduled"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTaskGroupAppliedQuarterlyFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, interval task group applied quarterly with id: "
+                + nonExistentID + " does not exist";
+        when(intervalTaskGroupService
+                .getIntervalTaskGroupAppliedQuarterly(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-interval-task-group-applied-quarterly/"
+                                + nonExistentID))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserIntervalTaskGroups() throws Exception {
         List<IntervalTask> testIntervalTasks = new ArrayList<>();
         List<IntervalTaskGroup> testIntervalTaskGroups = new ArrayList<>();

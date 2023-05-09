@@ -154,11 +154,14 @@ public class IntervalTaskGroupController {
     // this links to a page with a table showing all users' interval task groups
     // the member interval tasks are accessible via link on the page
     @GetMapping("/interval-task-groups")
-    public String showAllUserIntervalTaskGroups(Authentication authentication, Model model) {
+    public String showAllUserIntervalTaskGroups(
+            Authentication authentication, Model model) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
+        UserPrincipal user = userService
+                .loadUserByUsername(userDetails.getUsername());
         List<IntervalTaskGroup> intervalTaskGroups  =
-                intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getUsername()); //
+                intervalTaskGroupService
+                        .getAllUsersIntervalTaskGroups(user.getUsername());
         model.addAttribute("intervalTaskGroups", intervalTaskGroups);
         model.addAttribute("user", user);
         model.addAttribute("intervalTaskQuarterAndYear",
