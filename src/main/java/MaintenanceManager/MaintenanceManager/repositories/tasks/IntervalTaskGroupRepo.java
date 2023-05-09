@@ -10,4 +10,6 @@ import java.util.List;
 public interface IntervalTaskGroupRepo extends JpaRepository<IntervalTaskGroup, Long> {
     List<IntervalTaskGroup> findAllByTaskGroupOwnerId(Long id);
 
+    List<IntervalTaskGroup> findAllByTaskGroupOwnerUsername(String username);
+
 }

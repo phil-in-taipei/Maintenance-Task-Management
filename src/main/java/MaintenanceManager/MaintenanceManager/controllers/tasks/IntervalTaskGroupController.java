@@ -3,8 +3,10 @@ import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.IntervalTaskGroupService;
+import MaintenanceManager.MaintenanceManager.services.users.UserDetailsServiceImplementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class IntervalTaskGroupController {
     @Autowired
     IntervalTaskGroupService intervalTaskGroupService;
 
+    @Autowired
+    UserDetailsServiceImplementation userService;
+
 
     // directs user to form to apply interval task groups schedulers
     // to a specific quarter/year. It will also trigger batch scheduling
@@ -28,11 +33,11 @@ public class IntervalTaskGroupController {
             Model model, Authentication authentication) {
         UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
 
-      intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getId());
+      intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getUsername()); //user.getId()
         List<IntervalTaskGroup> availableIntervalTaskGroups =
                 intervalTaskGroupService
                         .getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
-                            user.getId(), QuarterlySchedulingEnum.valueOf(
+                                user.getUsername(), QuarterlySchedulingEnum.valueOf( // user.getId()
                                     monthlyTaskQuarterAndYear.getQuarter()),
                             monthlyTaskQuarterAndYear.getYear()
                 );
@@ -150,9 +155,10 @@ public class IntervalTaskGroupController {
     // the member interval tasks are accessible via link on the page
     @GetMapping("/interval-task-groups")
     public String showAllUserIntervalTaskGroups(Authentication authentication, Model model) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<IntervalTaskGroup> intervalTaskGroups  =
-                intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getId());
+                intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getUsername()); //
         model.addAttribute("intervalTaskGroups", intervalTaskGroups);
         model.addAttribute("user", user);
         model.addAttribute("intervalTaskQuarterAndYear",

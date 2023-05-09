@@ -73,8 +73,10 @@ public class IntervalTaskGroupService {
     // gets all interval task groups of a given user
     @Loggable
     @MethodPerformance
-    public List<IntervalTaskGroup> getAllUsersIntervalTaskGroups(Long userId) {
-        return intervalTaskGroupRepo.findAllByTaskGroupOwnerId(userId);
+    public List<IntervalTaskGroup> getAllUsersIntervalTaskGroups(String username) { // Long userId
+        //return intervalTaskGroupRepo.findAllByTaskGroupOwnerId(username);
+        return intervalTaskGroupRepo.findAllByTaskGroupOwnerUsername(username);
+
     }
 
     // gets all interval task groups which have NOT already been scheduled during
@@ -82,13 +84,13 @@ public class IntervalTaskGroupService {
     @Loggable
     @MethodPerformance
     public List<IntervalTaskGroup>
-        getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
-                Long userId, QuarterlySchedulingEnum quarter, Integer year) {
+        getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear( //Long userId
+                String username, QuarterlySchedulingEnum quarter, Integer year) {
             List<IntervalTaskGroup> allUsersITGs =
-                    getAllUsersIntervalTaskGroups(userId);
+                    getAllUsersIntervalTaskGroups(username); //userId
             List<IntervalTaskGroup> alreadyScheduledITGS
                     = getAllITGsAlreadyScheduledForQuarterAndYear(
-                    quarter, year, userId);
+                    quarter, year, username);
             for (IntervalTaskGroup aSITG : alreadyScheduledITGS) {
                 allUsersITGs.remove(aSITG);
             }
@@ -112,12 +114,16 @@ public class IntervalTaskGroupService {
     @MethodPerformance
     public List<IntervalTaskGroupAppliedQuarterly>
         getUsersIntervalTaskGroupsAppliedQuarterlyByQuarterAndYear(
-                QuarterlySchedulingEnum quarter, Integer year, Long userId
+                QuarterlySchedulingEnum quarter, Integer year, String username//Long userId
         ) {
         return intervalTaskAppliedQuarterlyRepo
-                .findAllByQuarterAndYearAndIntervalTaskGroup_TaskGroupOwnerId(
-                        quarter, year, userId
+                .findAllByQuarterAndYearAndIntervalTaskGroup_TaskGroupOwnerUsername(
+                        quarter, year, username
                 );
+        //return intervalTaskAppliedQuarterlyRepo
+        //        .findAllByQuarterAndYearAndIntervalTaskGroup_TaskGroupOwnerId(
+        //                quarter, year, userId
+        //        );
     }
 
     // gets all interval task groups which have already been scheduled in a quarter
@@ -126,11 +132,11 @@ public class IntervalTaskGroupService {
     @MethodPerformance
     List<IntervalTaskGroup>
         getAllITGsAlreadyScheduledForQuarterAndYear(
-                QuarterlySchedulingEnum quarter, Integer year, Long userId
+                QuarterlySchedulingEnum quarter, Integer year, String username //Long userId
         ) {
             List<IntervalTaskGroupAppliedQuarterly> qITGAQs =
                     getUsersIntervalTaskGroupsAppliedQuarterlyByQuarterAndYear(
-                            quarter, year, userId);
+                            quarter, year, username); //userId
             List<IntervalTaskGroup> alreadyScheduledIntervalTaskGroups = new ArrayList<>();
             for (IntervalTaskGroupAppliedQuarterly iTGAQ : qITGAQs) {
                 alreadyScheduledIntervalTaskGroups.add(iTGAQ.getIntervalTaskGroup());

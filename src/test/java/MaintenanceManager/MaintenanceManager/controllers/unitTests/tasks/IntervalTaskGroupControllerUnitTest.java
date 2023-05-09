@@ -3,7 +3,6 @@ import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.IntervalTaskGroupController;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTask;
 import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
-import MaintenanceManager.MaintenanceManager.models.tasks.MaintenanceTask;
 import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
@@ -101,17 +100,45 @@ public class IntervalTaskGroupControllerUnitTest {
             .taskGroupOwner(testUser)
             .build();
 
+    IntervalTaskGroup testIntervalTaskGroup2 = IntervalTaskGroup.builder()
+            .id(2L)
+            .taskGroupName("Test Interval Task Group 2")
+            .intervalInDays(3)
+            .taskGroupOwner(testUser)
+            .build();
+
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserIntervalTaskGroups() throws Exception {
         List<IntervalTask> testIntervalTasks = new ArrayList<>();
+        List<IntervalTaskGroup> testIntervalTaskGroups = new ArrayList<>();
         testIntervalTasks.add(testIntervalTask);
         testIntervalTasks.add(testIntervalTask2);
         testIntervalTaskGroup.setIntervalTasks(testIntervalTasks);
+        testIntervalTaskGroups.add(testIntervalTaskGroup);
+        testIntervalTaskGroups.add(testIntervalTaskGroup2);
         when(userService.loadUserByUsername(anyString()))
                 .thenReturn(testUser);
-       // when(intervalTaskGroupService.getAllUsersIntervalTaskGroups(
-       //         anyString()))
-       //         .thenReturn(testIntervalTaskGroup);
+        when(intervalTaskGroupService.getAllUsersIntervalTaskGroups(
+                anyString()))
+                .thenReturn(testIntervalTaskGroups);
+        mockMvc
+                .perform(get("/interval-task-groups"))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                // these are the expected model attributes
+                .andExpect(model().attributeExists("intervalTaskGroups"))
+                .andExpect(model().attributeExists("intervalTaskQuarterAndYear"))
+                .andExpect(model().attributeExists("user"))
+                // these substrings are the titles of the task groups/tasks created above,
+                // so it makes sure that the expected objects are
+                // displayed on the page
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task Group 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task Group 2")))
+                .andExpect(view().name("tasks/interval-task-groups"));
     }
 }

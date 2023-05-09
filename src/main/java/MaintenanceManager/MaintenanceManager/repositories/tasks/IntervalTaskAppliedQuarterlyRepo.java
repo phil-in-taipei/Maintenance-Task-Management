@@ -18,5 +18,9 @@ public interface IntervalTaskAppliedQuarterlyRepo
         findAllByQuarterAndYearAndIntervalTaskGroup_TaskGroupOwnerId(
             QuarterlySchedulingEnum quarter, Integer year, Long userId);
 
+    List<IntervalTaskGroupAppliedQuarterly>
+    findAllByQuarterAndYearAndIntervalTaskGroup_TaskGroupOwnerUsername(
+            QuarterlySchedulingEnum quarter, Integer year, String username);
+
     List<IntervalTaskGroupAppliedQuarterly> findAllByIntervalTaskGroupId(Long id);
 }
