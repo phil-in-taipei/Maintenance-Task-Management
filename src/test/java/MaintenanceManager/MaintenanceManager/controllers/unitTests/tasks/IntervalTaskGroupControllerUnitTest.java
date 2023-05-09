@@ -1,8 +1,7 @@
 package MaintenanceManager.MaintenanceManager.controllers.unitTests.tasks;
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.IntervalTaskGroupController;
-import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTask;
-import MaintenanceManager.MaintenanceManager.models.tasks.IntervalTaskGroup;
+import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
@@ -23,7 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,8 +55,6 @@ public class IntervalTaskGroupControllerUnitTest {
     @MockBean
     UserDetailsServiceImplementation userService;
 
-
-
     UserMeta userMeta = UserMeta.builder()
             .id(1L)
             .email("testuser@gmx.com")
@@ -66,8 +62,10 @@ public class IntervalTaskGroupControllerUnitTest {
             .givenName("User")
             .age(50)
             .build();
-    Authority authority1 = Authority.builder().authority(AuthorityEnum.ROLE_USER).build();
-    Authority authority2 = Authority.builder().authority(AuthorityEnum.ROLE_MAINTENANCE).build();
+    Authority authority1 = Authority.builder().authority(
+            AuthorityEnum.ROLE_USER).build();
+    Authority authority2 = Authority.builder().authority(
+            AuthorityEnum.ROLE_MAINTENANCE).build();
     List<Authority> authorities = Arrays.asList(authority1, authority2);
     UserPrincipal testUser = UserPrincipal.builder()
             .id(1L)
@@ -107,6 +105,22 @@ public class IntervalTaskGroupControllerUnitTest {
             .taskGroupOwner(testUser)
             .build();
 
+    IntervalTaskGroupAppliedQuarterly testITGAQ1 = IntervalTaskGroupAppliedQuarterly
+            .builder()
+            .id(1L)
+            .intervalTaskGroup(testIntervalTaskGroup)
+            .year(2023)
+            .quarter(QuarterlySchedulingEnum.Q2)
+            .build();
+
+    IntervalTaskGroupAppliedQuarterly testITGAQ2 = IntervalTaskGroupAppliedQuarterly
+            .builder()
+            .id(2L)
+            .intervalTaskGroup(testIntervalTaskGroup2)
+            .year(2023)
+            .quarter(QuarterlySchedulingEnum.Q2)
+            .build();
+
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserIntervalTaskGroups() throws Exception {
@@ -132,13 +146,43 @@ public class IntervalTaskGroupControllerUnitTest {
                 .andExpect(model().attributeExists("intervalTaskGroups"))
                 .andExpect(model().attributeExists("intervalTaskQuarterAndYear"))
                 .andExpect(model().attributeExists("user"))
-                // these substrings are the titles of the task groups/tasks created above,
-                // so it makes sure that the expected objects are
-                // displayed on the page
+                // these substrings are the titles of the task groups and quarterly/years
+                // applications created above, so it makes sure that the expected
+                // objects are displayed on the page
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString("Test Interval Task Group 1")))
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString("Test Interval Task Group 2")))
                 .andExpect(view().name("tasks/interval-task-groups"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowAllUserQuarterlyIntervalTaskGroups() throws Exception {
+        List<IntervalTaskGroupAppliedQuarterly> usersITGAQs = new ArrayList<>();
+        usersITGAQs.add(testITGAQ1);
+        usersITGAQs.add(testITGAQ2);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(intervalTaskGroupService.getAllUsersIntervalTaskGroupsAppliedQuarterly(
+                anyString()))
+                .thenReturn(usersITGAQs);
+        mockMvc
+                .perform(get("/quarterly-interval-task-groups-scheduled"))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                // these are the expected model attributes
+                .andExpect(model().attributeExists("qITG"))
+                .andExpect(model().attributeExists("user"))
+                // this substring is the title of the task created above
+                // method below, so it makes sure that the expected object is
+                // displayed on the page
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task Group 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task Group 2")))
+                .andExpect(view().name(
+                        "tasks/quarterly-interval-task-groups-scheduled"));
     }
 }

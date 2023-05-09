@@ -102,10 +102,13 @@ public class IntervalTaskGroupService {
     @Loggable
     @MethodPerformance
     public List<IntervalTaskGroupAppliedQuarterly>
-        getAllUsersIntervalTaskGroupsAppliedQuarterly(Long userId) {
+        getAllUsersIntervalTaskGroupsAppliedQuarterly(String username) { // Long userId
         return intervalTaskAppliedQuarterlyRepo
-                .findAllByIntervalTaskGroup_TaskGroupOwnerIdOrderByYearAscQuarterAsc(
-                        userId);
+                .findAllByIntervalTaskGroup_TaskGroupOwnerUsernameOrderByYearAscQuarterAsc(
+                        username);
+        //return intervalTaskAppliedQuarterlyRepo
+        //        .findAllByIntervalTaskGroup_TaskGroupOwnerIdOrderByYearAscQuarterAsc(
+        //                userId);
     }
 
     // gets  a record of all interval task groups which a

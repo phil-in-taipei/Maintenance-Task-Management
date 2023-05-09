@@ -231,10 +231,12 @@ public class IntervalTaskGroupController {
     @GetMapping("/quarterly-interval-task-groups-scheduled")
     public String showAllUserQuarterlyIntervalTaskGroups(
             Authentication authentication, Model model) {
-
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<IntervalTaskGroupAppliedQuarterly> qITG =
-                intervalTaskGroupService.getAllUsersIntervalTaskGroupsAppliedQuarterly(user.getId());
+                intervalTaskGroupService
+                        .getAllUsersIntervalTaskGroupsAppliedQuarterly(
+                                user.getUsername()); //user.getId()
         model.addAttribute("qITG", qITG);
         model.addAttribute("user", user);
         return "tasks/quarterly-interval-task-groups-scheduled";
