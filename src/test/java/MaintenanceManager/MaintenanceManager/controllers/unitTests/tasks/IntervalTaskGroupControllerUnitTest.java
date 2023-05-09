@@ -185,4 +185,38 @@ public class IntervalTaskGroupControllerUnitTest {
                 .andExpect(view().name(
                         "tasks/quarterly-interval-task-groups-scheduled"));
     }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowIntervalTaskGroup() throws Exception{
+        List<IntervalTask> testIntervalTasks = new ArrayList<>();
+        testIntervalTasks.add(testIntervalTask);
+        testIntervalTasks.add(testIntervalTask2);
+        testIntervalTaskGroup.setIntervalTasks(testIntervalTasks);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(intervalTaskGroupService.getIntervalTaskGroup(
+                anyLong()))
+                .thenReturn(testIntervalTaskGroup);
+        mockMvc
+                .perform(get("/interval-task-group/"
+                        + testIntervalTaskGroup.getId()))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("intervalTaskGroup"))
+                // these substrings are the titles of the
+                // tasks and interval task group created above
+                // It makes sure that the expected objects
+                // displayed on the page
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task Group 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task 1")))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task 2")))
+                .andExpect(view().name("tasks/interval-task-group"));
+    }
 }

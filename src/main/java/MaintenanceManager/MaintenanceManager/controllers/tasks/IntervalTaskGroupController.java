@@ -208,7 +208,8 @@ public class IntervalTaskGroupController {
     public ModelAndView showIntervalTaskGroup(
             @PathVariable(name = "taskGroupId") Long taskGroupId,
             Authentication authentication) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         ModelAndView mav = new ModelAndView("tasks/interval-task-group");
         IntervalTaskGroup intervalTaskGroup =
                 intervalTaskGroupService.getIntervalTaskGroup(taskGroupId);
