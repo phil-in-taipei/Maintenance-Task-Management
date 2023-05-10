@@ -20,6 +20,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
@@ -30,8 +31,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(IntervalTaskGroupController.class)
@@ -120,6 +120,49 @@ public class IntervalTaskGroupControllerUnitTest {
             .year(2023)
             .quarter(QuarterlySchedulingEnum.Q2)
             .build();
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTask() throws Exception {
+        when(intervalTaskGroupService
+                .getIntervalTask(anyLong()))
+                .thenReturn(testIntervalTask);
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(testIntervalTaskGroup);
+        mockMvc.
+                perform(request(HttpMethod.GET, "/delete-interval-task/"
+                        + testIntervalTask.getId() + "/" + testIntervalTaskGroup.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/interval-task-group/"
+                        + testIntervalTaskGroup.getId()));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTaskFailure() throws Exception {
+        Long nonExistentIntervalTaskID= 2829L;
+        Long nonExistentIntervalTaskGroupID = 333L;
+        String message1 = "Cannot delete, ";
+        String message2 = " does not exist.";
+        when(intervalTaskGroupService
+                .getIntervalTask(anyLong()))
+                .thenReturn(null);
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET, "/delete-interval-task/"
+                        + testIntervalTask.getId() + "/" + testIntervalTaskGroup.getId()))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message1)))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message2)))
+                .andExpect(view().name("error/error"));
+    }
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
