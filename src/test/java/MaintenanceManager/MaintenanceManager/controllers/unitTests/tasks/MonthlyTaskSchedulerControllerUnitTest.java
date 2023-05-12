@@ -15,15 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
+import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +34,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -238,5 +242,78 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString("Test Monthly Task Scheduler 2")))
                 .andExpect(view().name("tasks/quarterly-monthly-tasks-scheduled"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowApplyMonthlySchedulerFormPage() throws Exception {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        List<MonthlyTaskScheduler> usersMonthlyTaskSchedulers = new ArrayList<>();
+        usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(monthlyTaskSchedulingService
+                .getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
+                        anyString(),
+                        eq(QuarterlySchedulingEnum.valueOf(quarter)),
+                        eq(thisYear)
+                )).thenReturn(usersMonthlyTaskSchedulers);
+
+        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
+                post("/apply-monthly-schedulers")
+                        .with(csrf())
+                        .param("year", String.valueOf(thisYear))
+                        .param("quarter", quarter);
+        mockMvc
+                .perform(applyMonthlyTaskScheduler)
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("monthlyTasks"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("quarter"))
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("qMonthlyTask"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Monthly Task Scheduler 1"))) //"None Available"
+                .andExpect(view().name("tasks/apply-monthly-schedulers"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowApplyMonthlySchedulerFormPageNonAvailable() throws Exception {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q3";
+        // this will be an empty array
+        List<MonthlyTaskScheduler> usersMonthlyTaskSchedulers = new ArrayList<>();
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(monthlyTaskSchedulingService
+                .getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
+                        anyString(),
+                        eq(QuarterlySchedulingEnum.valueOf(quarter)),
+                        eq(thisYear)
+                )).thenReturn(usersMonthlyTaskSchedulers); // returns empty array (not null!)
+        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
+                post("/apply-monthly-schedulers")
+                        .with(csrf())
+                        .param("year", String.valueOf(thisYear))
+                        .param("quarter", quarter);
+        mockMvc
+                .perform(applyMonthlyTaskScheduler)
+                .andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("monthlyTasks"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("quarter"))
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("qMonthlyTask"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("None Available")))
+                .andExpect(view().name("tasks/apply-monthly-schedulers"));
     }
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -204,13 +206,11 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
     public void testShowApplyMonthlySchedulerFormPage() throws Exception {
         int thisYear = LocalDate.now().getYear();
         String quarter = "Q2";
-        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
-                post("/apply-monthly-schedulers")
-                        .param("year", String.valueOf(thisYear))
-                        .param("quarter", quarter);
-
         mockMvc
-                .perform(applyMonthlyTaskScheduler)
+                .perform(request(HttpMethod.GET,
+                "/apply-monthly-schedulers")
+                        .param("year", String.valueOf(thisYear))
+                        .param("quarter", quarter))
                 //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))

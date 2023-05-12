@@ -31,8 +31,8 @@ public class MonthlyTaskSchedulerController {
             @ModelAttribute("monthlyTaskQuarterAndYear")
             SearchQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
-        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
-        UserDetails user = (UserDetails) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         System.out.println("This is the quarter: " + QuarterlySchedulingEnum.valueOf(
                 monthlyTaskQuarterAndYear.getQuarter()));
         System.out.println("This is the year: " +
