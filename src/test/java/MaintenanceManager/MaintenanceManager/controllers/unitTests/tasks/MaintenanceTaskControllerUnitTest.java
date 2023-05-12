@@ -142,6 +142,26 @@ public class MaintenanceTaskControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewTask() throws Exception {
+        LocalDate today = LocalDate.now();
+        String todayString = LocalDate.now().toString();
+        MaintenanceTask testTask = new MaintenanceTask("Test Task 1", today, testUser);
+        testTask.setId(1L);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(maintenanceTaskService.saveTask(any(MaintenanceTask.class)))
+                .thenReturn(testTask);
+        MockHttpServletRequestBuilder createTask = post("/tasks")
+                .with(csrf())
+                .param("date", todayString)
+                .param("taskName", "Test task 1");
+        mockMvc.perform(createTask)
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tasks-by-month"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserTasksByMonth() throws Exception {
         LocalDate today = LocalDate.now();
         int thisMonthInt = today.getMonthValue();
