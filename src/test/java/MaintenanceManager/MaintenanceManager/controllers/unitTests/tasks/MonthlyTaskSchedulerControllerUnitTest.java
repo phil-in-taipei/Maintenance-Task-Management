@@ -186,6 +186,26 @@ public class MonthlyTaskSchedulerControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewMonthlyTaskScheduler() throws Exception {
+        int dayOfMonth = 1;
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(monthlyTaskSchedulingService
+                .saveMonthlyTaskScheduler(any(MonthlyTaskScheduler.class)))
+                .thenReturn(testMonthlyTaskScheduler);
+        MockHttpServletRequestBuilder createTask = post("/monthly-tasks")
+                .with(csrf())
+                .param("dayOfMonth", String.valueOf(dayOfMonth))
+                .param("monthlyTaskName", "Test Monthly Task Scheduler 1");
+        mockMvc.perform(createTask)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/monthly-tasks"));
+    }
+
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowAllUserMonthlyTasks() throws Exception {
         List<MonthlyTaskScheduler> usersMonthlyTaskSchedulers = new ArrayList<>();
         usersMonthlyTaskSchedulers.add(testMonthlyTaskScheduler);
@@ -267,7 +287,7 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                         .param("quarter", quarter);
         mockMvc
                 .perform(applyMonthlyTaskScheduler)
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())
@@ -283,7 +303,7 @@ public class MonthlyTaskSchedulerControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
-    public void testShowApplyMonthlySchedulerFormPageNonAvailable() throws Exception {
+    public void testShowApplyMonthlySchedulerFormPageNoneAvailable() throws Exception {
         int thisYear = LocalDate.now().getYear();
         String quarter = "Q3";
         // this will be an empty array
@@ -315,5 +335,18 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString("None Available")))
                 .andExpect(view().name("tasks/apply-monthly-schedulers"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowCreateMonthlyTaskFormPage() throws Exception {
+        mockMvc
+                .perform(get("/create-monthly-task-scheduler"))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("monthlyTaskScheduler"))
+                .andExpect(view().name("tasks/create-monthly-task-scheduler"));
     }
 }

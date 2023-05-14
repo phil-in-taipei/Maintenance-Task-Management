@@ -104,7 +104,8 @@ public class MonthlyTaskSchedulerController {
             MonthlyTaskScheduler monthlyTaskScheduler, Model model,
             Authentication authentication) {
         try {
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
             monthlyTaskScheduler.setUser(user);
             monthlyTaskSchedulingService.saveMonthlyTaskScheduler(monthlyTaskScheduler);
         } catch (IllegalArgumentException e) {
@@ -121,7 +122,6 @@ public class MonthlyTaskSchedulerController {
     @GetMapping("/monthly-tasks")
     public String showAllUserMonthlyTasks(
             Authentication authentication, Model model) {
-        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<MonthlyTaskScheduler> monthlyTasks =
@@ -140,7 +140,6 @@ public class MonthlyTaskSchedulerController {
     @GetMapping("/quarterly-monthly-tasks-scheduled")
     public String showAllUserQuarterlyMonthlyTasks(
             Authentication authentication, Model model) {
-        //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
         List<MonthlyTaskAppliedQuarterly> qMonthlyTasks =
