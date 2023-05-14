@@ -57,6 +57,39 @@ public class MaintenanceTaskController {
         return "redirect:/tasks-by-month";
     }
 
+    @PostMapping("/submit-reschedule-task-form/{taskId}")
+    public String rescheduleTask(
+            @PathVariable(name = "taskId") Long taskId,
+            @ModelAttribute("rescheduledTask")
+            MaintenanceTaskReschedule taskRescheduleForm,
+            Model model) {
+        MaintenanceTask updatedTask = maintenanceTaskService.getMaintenanceTask(
+                taskId);
+        if (updatedTask == null) {
+            model.addAttribute("message",
+                    "Cannot update, task does not exist!");
+            return "error/error";
+        } else {
+            try {
+                LocalDate newDate = LocalDate.parse(taskRescheduleForm.getDate());
+                updatedTask.setDate(newDate);
+                updatedTask.setStatus(TaskStatusEnum.DEFERRED);
+                updatedTask.setComments(taskRescheduleForm.getComments());
+                updatedTask.setUpdatedDateTime(LocalDateTime.now());
+                updatedTask.setTimesModified(updatedTask.getTimesModified() + 1);
+                maintenanceTaskService.saveTask(updatedTask);
+            } catch (IllegalArgumentException e) {
+                model.addAttribute(
+                        "message",
+                        "Could not update task, "
+                                + e.getMessage());
+                return "error/error";
+            }
+        }
+        return "redirect:/tasks-by-month";
+    }
+
+
     @GetMapping("/task-detail/{taskId}")
     public ModelAndView showTaskDetailPage(@PathVariable(name = "taskId") Long taskId) {
         ModelAndView mav = new ModelAndView("tasks/task-detail");
@@ -82,7 +115,6 @@ public class MaintenanceTaskController {
             Authentication authentication) {
         try {
             LocalDate date = LocalDate.parse(maintenanceTaskForm.getDate());
-            //UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
             MaintenanceTask maintenanceTask = new MaintenanceTask(
@@ -150,38 +182,5 @@ public class MaintenanceTaskController {
         model.addAttribute("date", queryDate);
         model.addAttribute("user", userDetails); //user
         return "tasks/tasks-by-date";
-    }
-
-    @PostMapping("/submit-reschedule-task-form/{taskId}")
-    public String rescheduleTask(
-            @PathVariable(name = "taskId") Long taskId,
-            @ModelAttribute("rescheduledTask")
-            MaintenanceTaskReschedule taskRescheduleForm,
-            Model model) {
-
-        MaintenanceTask updatedTask = maintenanceTaskService.getMaintenanceTask(
-                taskId);
-        if (updatedTask == null) {
-            model.addAttribute("message",
-                    "Cannot update, task does not exist!");
-            return "error/error";
-        } else {
-            try {
-                LocalDate newDate = LocalDate.parse(taskRescheduleForm.getDate());
-                updatedTask.setDate(newDate);
-                updatedTask.setStatus(TaskStatusEnum.DEFERRED);
-                updatedTask.setComments(taskRescheduleForm.getComments());
-                updatedTask.setUpdatedDateTime(LocalDateTime.now());
-                updatedTask.setTimesModified(updatedTask.getTimesModified() + 1);
-                maintenanceTaskService.saveTask(updatedTask);
-            } catch (IllegalArgumentException e) {
-                model.addAttribute(
-                        "message",
-                        "Could not update task, "
-                                + e.getMessage());
-                return "error/error";
-            }
-        }
-        return "redirect:/tasks-by-month";
     }
 }

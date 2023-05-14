@@ -129,7 +129,7 @@ public class MaintenanceTaskControllerEndpointTest {
     }
 
 
-    // this posts a task, which will then be viewed in the task by date and task by month tests
+    // this posts a task, which will then be viewed in the task by month template. Tests
     // the date of the task is today, the repo is cleared (maintenance_test database schema)
     // in the MaintenanceManagerApplicationTest class whenever the test profile is active
     // it should be the only MaintenanceTask that can be queried and is always on the current

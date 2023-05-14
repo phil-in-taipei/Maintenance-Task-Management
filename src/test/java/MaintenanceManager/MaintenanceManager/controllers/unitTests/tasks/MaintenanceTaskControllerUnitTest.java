@@ -26,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -84,23 +85,26 @@ public class MaintenanceTaskControllerUnitTest {
     MaintenanceTask testTask = MaintenanceTask.builder()
             .id(1L)
             .taskName("Test Task 1")
-            .status(TaskStatusEnum.COMPLETED)
+            .status(TaskStatusEnum.PENDING)
             .date(LocalDate.now())
+            .timesModified(1)
             .user(testUser)
             .build();
 
     MaintenanceTask testTask2 = MaintenanceTask.builder()
             .id(2L)
             .taskName("Test Task 2")
-            .status(TaskStatusEnum.COMPLETED)
+            .status(TaskStatusEnum.PENDING)
             .date(LocalDate.now())
+            .timesModified(1)
             .user(testUser)
             .build();
 
+
+    // test changing task status to 'completed'.
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testConfirmTaskCompletion() throws Exception {
-
         when(maintenanceTaskService.getMaintenanceTask(anyLong()))
                 .thenReturn(testTask);
         mockMvc.
@@ -109,6 +113,7 @@ public class MaintenanceTaskControllerUnitTest {
                 .andExpect(redirectedUrl("/tasks-by-month"));
     }
 
+    // test successfully deleting task with an existing id
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteTask() throws Exception {
@@ -121,6 +126,8 @@ public class MaintenanceTaskControllerUnitTest {
                 .andExpect(redirectedUrl("/tasks-by-month"));
     }
 
+    // test deleting task with a non-existent id, so that it renders an error page
+    // with a message.
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteTaskFailure() throws Exception {
@@ -140,13 +147,61 @@ public class MaintenanceTaskControllerUnitTest {
                 .andExpect(view().name("error/error"));
     }
 
+    // test submitting form to reschedule task. The status, comments, scheduled time,
+    // and number of times modified fields are all updated
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testRescheduleTask() throws Exception {
+        when(maintenanceTaskService.getMaintenanceTask(anyLong()))
+                .thenReturn(testTask);
+        testTask.setDate(LocalDate.now().plusDays(1));
+        testTask.setComments("Test rescheduling of task");
+        testTask.setStatus(TaskStatusEnum.DEFERRED);
+        testTask.setUpdatedDateTime(LocalDateTime.now());
+        testTask.setTimesModified(testTask.getTimesModified() + 1);
+        when(maintenanceTaskService.saveTask(any(MaintenanceTask.class)))
+                .thenReturn(testTask);
+        String tomorrow = LocalDate.now().plusDays(1).toString();
+        MockHttpServletRequestBuilder rescheduleTask = post(
+                "/submit-reschedule-task-form/" + testTask.getId())
+                .with(csrf())
+                .param("date", tomorrow)
+                .param("comments", "Test task reschedule");
+        mockMvc.perform(rescheduleTask)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/tasks-by-month"));
+    }
+
+    // test rescheduling maintenance task with the incorrect id, so that
+    // the query fails and an error page is rendered
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testRescheduleTaskError() throws Exception {
+        when(maintenanceTaskService.getMaintenanceTask(anyLong()))
+                .thenReturn(null);
+        Long correctIDPlusOne = testTask.getId() + 1;
+        String message = "Cannot update, task does not exist!";
+        String tomorrow = LocalDate.now().plusDays(1).toString();
+        MockHttpServletRequestBuilder rescheduleTask = post(
+                "/submit-reschedule-task-form/" + correctIDPlusOne)
+                .with(csrf())
+                .param("date", tomorrow)
+                .param("comments", "Test rescheduling of task");
+        mockMvc.perform(rescheduleTask)
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    // this posts a task, which will then be viewed in the task by month template
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testSaveNewTask() throws Exception {
-        LocalDate today = LocalDate.now();
         String todayString = LocalDate.now().toString();
-        MaintenanceTask testTask = new MaintenanceTask("Test Task 1", today, testUser);
-        testTask.setId(1L);
         when(userService.loadUserByUsername(anyString()))
                 .thenReturn(testUser);
         when(maintenanceTaskService.saveTask(any(MaintenanceTask.class)))
@@ -159,6 +214,7 @@ public class MaintenanceTaskControllerUnitTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/tasks-by-month"));
     }
+
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
@@ -206,6 +262,20 @@ public class MaintenanceTaskControllerUnitTest {
                 .andExpect(view().name("tasks/tasks-by-month"));
     }
 
+    // test display form to create a new maintenance task
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowSubmitTaskFormPage() throws Exception {
+        mockMvc
+                .perform(get("/create-single-task"))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("maintenanceTask"))
+                .andExpect(view().name("tasks/create-single-task"));;
+    }
+
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowTaskDetailPage() throws Exception {
@@ -231,6 +301,8 @@ public class MaintenanceTaskControllerUnitTest {
                 .andExpect(view().name("tasks/task-detail"));
     }
 
+    // this will mock query of a non-existent object (id of the only MaintenanceTask in the
+    // database plus one), so that an error page will be displayed
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowTaskDetailErrorPage() throws Exception {
