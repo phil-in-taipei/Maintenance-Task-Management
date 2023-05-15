@@ -2,6 +2,7 @@ package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyClassAppliedQuarterlyForm;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.MonthlyTaskSchedulingService;
@@ -51,7 +52,8 @@ public class MonthlyTaskSchedulerController {
         model.addAttribute("user", user);
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
-        MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
+        //MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
+        MonthlyClassAppliedQuarterlyForm qMonthlyTask = new MonthlyClassAppliedQuarterlyForm();
         model.addAttribute("qMonthlyTask", qMonthlyTask);
         return "tasks/apply-monthly-schedulers";
     }
@@ -155,11 +157,15 @@ public class MonthlyTaskSchedulerController {
     @PostMapping("/submit-quarterly-monthly-tasks-scheduled/{quarter}/{year}")
     public String saveNewQuarterlyMonthlyTask(
             @ModelAttribute("qMonthlyTask")
-            MonthlyTaskAppliedQuarterly qMonthlyTask, Model model,
+            MonthlyClassAppliedQuarterlyForm qMonthlyTaskForm, Model model, //MonthlyTaskAppliedQuarterly
             @PathVariable(name = "quarter") String quarter,
             @PathVariable(name = "year") Integer year,
             Authentication authentication) {
         try {
+            MonthlyTaskScheduler monthlyTask = monthlyTaskSchedulingService.getMonthlyTaskScheduler(
+                    qMonthlyTaskForm.getMonthlyTaskSchedulerId());
+            MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
+            qMonthlyTask.setMonthlyTaskScheduler(monthlyTask);
             qMonthlyTask.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));
             qMonthlyTask.setYear(year);
             monthlyTaskSchedulingService.saveMonthlyTaskAppliedQuarterly(qMonthlyTask);
@@ -168,7 +174,7 @@ public class MonthlyTaskSchedulerController {
                     "message",
                     "Could not save monthly task scheduler, "
                             + e.getMessage());
-            return "tasks/error";
+            return "error/error";
         }
         return "redirect:/quarterly-monthly-tasks-scheduled";
     }

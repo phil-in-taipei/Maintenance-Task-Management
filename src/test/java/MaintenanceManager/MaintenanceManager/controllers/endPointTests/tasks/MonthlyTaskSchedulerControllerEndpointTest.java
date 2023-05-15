@@ -148,7 +148,7 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
         MockHttpServletRequestBuilder createMonthlyTaskScheduler =
                 post("/submit-quarterly-monthly-tasks-scheduled/"
                 + quarter + "/" + thisYear +"/")
-                .param("monthlyTaskScheduler", testMonthlyTaskScheduler.getId().toString());
+                .param("monthlyTaskSchedulerId", testMonthlyTaskScheduler.getId().toString());
         mockMvc.perform(createMonthlyTaskScheduler)
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
@@ -206,12 +206,13 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
     public void testShowApplyMonthlySchedulerFormPage() throws Exception {
         int thisYear = LocalDate.now().getYear();
         String quarter = "Q2";
-        mockMvc
-                .perform(request(HttpMethod.GET,
-                "/apply-monthly-schedulers")
+        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
+                post("/apply-monthly-schedulers")
                         .param("year", String.valueOf(thisYear))
-                        .param("quarter", quarter))
-                //.andDo(print())
+                        .param("quarter", quarter);
+        mockMvc
+                .perform(applyMonthlyTaskScheduler)
+                .andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())

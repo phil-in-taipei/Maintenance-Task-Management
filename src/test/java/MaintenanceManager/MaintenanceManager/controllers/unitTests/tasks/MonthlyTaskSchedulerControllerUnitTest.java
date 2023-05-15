@@ -127,6 +127,8 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(redirectedUrl("/monthly-tasks"));
     }
 
+    // test to delete the MonthlyTaskScheduler for a
+    // non-existent ID. This should show the error page
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteMonthlyMaintenanceTaskFailure() throws Exception {
@@ -163,6 +165,8 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(redirectedUrl("/quarterly-monthly-tasks-scheduled"));
     }
 
+    // test to delete the MonthlyTaskAppliedQuarterly for
+    // a non-existent ID. This should show the error page
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteMonthlyTaskAppliedQuarterlyFailure() throws Exception {
@@ -203,6 +207,30 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(redirectedUrl("/monthly-tasks"));
     }
 
+    // this will test saving a monthly task scheduler applied quarterly.
+    // It will apply the monthly task scheduler created above to the first
+    // quarter of the current year
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewQuarterlyMonthlyTask() throws Exception  {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        when(monthlyTaskSchedulingService
+                .getMonthlyTaskScheduler(anyLong()))
+                .thenReturn(testMonthlyTaskScheduler);
+        when(monthlyTaskSchedulingService
+                .saveMonthlyTaskAppliedQuarterly(any(MonthlyTaskAppliedQuarterly.class)))
+                .thenReturn(testMonthlyTaskAppliedQuarterly);
+        MockHttpServletRequestBuilder createMonthlyTaskScheduler =
+                post("/submit-quarterly-monthly-tasks-scheduled/"
+                        + quarter + "/" + thisYear +"/")
+                        .with(csrf())
+                        .param("monthlyTaskSchedulerId", testMonthlyTaskScheduler.getId().toString());
+        mockMvc.perform(createMonthlyTaskScheduler)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/quarterly-monthly-tasks-scheduled"));
+    }
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
@@ -264,6 +292,9 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(view().name("tasks/quarterly-monthly-tasks-scheduled"));
     }
 
+    // tests that form displays for monthly schedulers to be applied to a specific quarter/year
+    // In this case, it is the current year and quarter 2, so the "Test Monthly Task Scheduler 1" should
+    // display as one of the options of a scheduler which can be applied in the template selector
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowApplyMonthlySchedulerFormPage() throws Exception {
@@ -297,10 +328,13 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 .andExpect(model().attributeExists("year"))
                 .andExpect(model().attributeExists("qMonthlyTask"))
                 .andExpect(MockMvcResultMatchers.content().string(
-                        containsString("Test Monthly Task Scheduler 1"))) //"None Available"
+                        containsString("Test Monthly Task Scheduler 1")))
                 .andExpect(view().name("tasks/apply-monthly-schedulers"));
     }
 
+    // tests that no monthly schedulers can be selected for Q1 of the current year.
+    // This would be because all of a users' monthly schedulers have already been applied
+    // to the quarter/year
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowApplyMonthlySchedulerFormPageNoneAvailable() throws Exception {
@@ -323,7 +357,7 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                         .param("quarter", quarter);
         mockMvc
                 .perform(applyMonthlyTaskScheduler)
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())
