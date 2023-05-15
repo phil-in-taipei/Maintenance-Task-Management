@@ -97,7 +97,8 @@ public class WeeklyTaskSchedulerController {
             WeeklyTaskScheduler weeklyTaskScheduler, Model model,
             Authentication authentication) {
         try {
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
             weeklyTaskScheduler.setUser(user);
             weeklyTaskSchedulingService.saveWeeklyTaskScheduler(weeklyTaskScheduler);
         } catch (IllegalArgumentException e) {

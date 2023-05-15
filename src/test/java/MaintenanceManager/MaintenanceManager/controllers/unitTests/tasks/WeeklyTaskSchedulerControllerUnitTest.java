@@ -2,6 +2,7 @@ package MaintenanceManager.MaintenanceManager.controllers.unitTests.tasks;
 
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.WeeklyTaskSchedulerController;
+import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
 import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskScheduler;
@@ -23,6 +24,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.DayOfWeek;
@@ -31,11 +33,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.request;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(WeeklyTaskSchedulerController.class)
@@ -180,6 +181,25 @@ public class WeeklyTaskSchedulerControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString(message)))
                 .andExpect(view().name("error/error"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewWeeklyTaskScheduler() throws Exception {
+        DayOfWeek dayOfWeek = DayOfWeek.MONDAY;
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(weeklyTaskSchedulingService
+                .saveWeeklyTaskScheduler(any(WeeklyTaskScheduler.class)))
+                .thenReturn(testWeeklyTaskScheduler1);
+        MockHttpServletRequestBuilder createTask = post("/weekly-tasks")
+                .with(csrf())
+                .param("dayOfWeek", String.valueOf(dayOfWeek))
+                .param("weeklyTaskName", "Test Weekly Task Scheduler 1");
+        mockMvc.perform(createTask)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/weekly-tasks"));
     }
 
     @Test
