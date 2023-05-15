@@ -138,7 +138,8 @@ public class IntervalTaskGroupController {
             IntervalTaskGroup intervalTaskGroup, Model model,
             Authentication authentication) {
         try {
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
             intervalTaskGroup.setTaskGroupOwner(user);
             intervalTaskGroupService.saveIntervalTaskGroup(intervalTaskGroup);
         } catch (IllegalArgumentException e) {

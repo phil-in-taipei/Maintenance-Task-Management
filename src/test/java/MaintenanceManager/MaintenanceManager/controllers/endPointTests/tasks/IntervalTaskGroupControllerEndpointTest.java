@@ -200,7 +200,6 @@ public class IntervalTaskGroupControllerEndpointTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString(message)))
                 .andExpect(view().name("error/error"));
-
     }
 
     // this posts an interval task group, which will then be used in the other endpoint test

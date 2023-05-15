@@ -23,14 +23,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -234,6 +235,78 @@ public class IntervalTaskGroupControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString(message)))
                 .andExpect(view().name("error/error"));
+    }
+
+    // test to save an interval task, which will be a member of an interval task
+    // group created above. The id of the interval task group will be used as the
+    // path variable in the post request
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewIntervalTask() throws Exception {
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(testIntervalTaskGroup);
+        List<IntervalTask> intervalTasks = new ArrayList<>();
+        intervalTasks.add(testIntervalTask);
+        testIntervalTaskGroup.setIntervalTasks(intervalTasks);
+        when(intervalTaskGroupService
+                .saveIntervalTaskGroup(any(IntervalTaskGroup.class)))
+                .thenReturn(testIntervalTaskGroup);
+        MockHttpServletRequestBuilder createIntervalTask = post(
+                "/interval-task-group/" + testIntervalTaskGroup.getId())
+                .with(csrf())
+                .param("noRainOnly", String.valueOf(false))
+                .param("intervalTaskName", "Test Interval Task 1");
+        mockMvc.perform(createIntervalTask)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/interval-task-groups"));
+    }
+
+    // test to save an interval task, which will be a member of a non-existent
+    // interval task group. Because the path variable is the id of a group that does
+    // not exist, saving should fail, and it should return an error page
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewIntervalTaskFailure() throws Exception {
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(null);
+        Long nonExistentIntervalTaskGroupID = 2829L;
+        String message = "Could not save interval task, ";
+        MockHttpServletRequestBuilder createIntervalTask = post(
+                "/interval-task-group/" + nonExistentIntervalTaskGroupID)
+                .with(csrf())
+                .param("noRainOnly", String.valueOf(false))
+                .param("intervalTaskName", "Test Interval Task 1");
+        mockMvc.perform(createIntervalTask)
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewIntervalTaskGroup() throws Exception {
+        int intervalInDays = 3;
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(intervalTaskGroupService
+                .saveIntervalTaskGroup(any(IntervalTaskGroup.class)))
+                .thenReturn(testIntervalTaskGroup);
+        MockHttpServletRequestBuilder createTask = post("/interval-task-groups")
+                .with(csrf())
+                .param("intervalInDays", String.valueOf(intervalInDays))
+                .param("taskGroupName", "Test Interval Task Group 1");
+        mockMvc.perform(createTask)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/interval-task-groups"));
     }
 
     @Test
