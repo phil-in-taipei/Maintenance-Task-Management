@@ -32,9 +32,10 @@ public class IntervalTaskGroupController {
             @ModelAttribute("monthlyTaskQuarterAndYear")
             SearchQuarterAndYear monthlyTaskQuarterAndYear,
             Model model, Authentication authentication) {
-        UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
 
-      intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getUsername()); //user.getId()
+        intervalTaskGroupService.getAllUsersIntervalTaskGroups(user.getUsername()); //user.getId()
         List<IntervalTaskGroup> availableIntervalTaskGroups =
                 intervalTaskGroupService
                         .getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
@@ -257,11 +258,8 @@ public class IntervalTaskGroupController {
             @ModelAttribute("qITG")
             RecurringTaskAppliedQuarterlyForm qITGForm, Model model, //IntervalTaskGroupAppliedQuarterly
             @PathVariable(name = "quarter") String quarter,
-            @PathVariable(name = "year") Integer year,
-            Authentication authentication) {
+            @PathVariable(name = "year") Integer year) {
         try {
-            //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            //UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
             IntervalTaskGroup intervalTaskGroup = intervalTaskGroupService.getIntervalTaskGroup(
                     qITGForm.getRecurringTaskSchedulerId()
             );

@@ -294,13 +294,13 @@ public class IntervalTaskGroupControllerEndpointTest {
     public void showApplyITGSchedulerFormPage() throws Exception {
         int thisYear = LocalDate.now().getYear();
         String quarter = "Q2";
-        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
+        MockHttpServletRequestBuilder applyIntervalTaskGroup =
                 post("/apply-interval-task-group-schedulers")
                         .param("year", String.valueOf(thisYear))
                         .param("quarter", quarter);
 
         mockMvc
-                .perform(applyMonthlyTaskScheduler)
+                .perform(applyIntervalTaskGroup)
                 //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
@@ -321,7 +321,7 @@ public class IntervalTaskGroupControllerEndpointTest {
     @Test
     @Order(9)
     @WithUserDetails("Test Maintenance User1")
-    public void showApplyITGSchedulerFormPageNonAvailable() throws Exception {
+    public void showApplyITGSchedulerFormPageNoneAvailable() throws Exception {
         int thisYear = LocalDate.now().getYear();
         String quarter = "Q1";
         MockHttpServletRequestBuilder applyMonthlyTaskScheduler =

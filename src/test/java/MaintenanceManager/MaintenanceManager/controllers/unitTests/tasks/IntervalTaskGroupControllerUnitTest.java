@@ -142,32 +142,6 @@ public class IntervalTaskGroupControllerUnitTest {
 
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
-    public void testDeleteIntervalTaskFailure() throws Exception {
-        Long nonExistentIntervalTaskID= 2829L;
-        Long nonExistentIntervalTaskGroupID = 333L;
-        String message1 = "Cannot delete, ";
-        String message2 = " does not exist.";
-        when(intervalTaskGroupService
-                .getIntervalTask(anyLong()))
-                .thenReturn(null);
-        when(intervalTaskGroupService
-                .getIntervalTaskGroup(anyLong()))
-                .thenReturn(null);
-        mockMvc.
-                perform(request(HttpMethod.GET, "/delete-interval-task/"
-                        + testIntervalTask.getId() + "/" + testIntervalTaskGroup.getId()))
-                .andExpect(MockMvcResultMatchers.content()
-                        .contentType("text/html;charset=UTF-8"))
-                .andExpect(model().attributeExists("message"))
-                .andExpect(MockMvcResultMatchers.content().string(
-                        containsString(message1)))
-                .andExpect(MockMvcResultMatchers.content().string(
-                        containsString(message2)))
-                .andExpect(view().name("error/error"));
-    }
-
-    @Test
-    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteIntervalTaskGroup() throws Exception {
         when(intervalTaskGroupService
                 .getIntervalTaskGroup(anyLong()))
@@ -178,28 +152,6 @@ public class IntervalTaskGroupControllerUnitTest {
                 //.andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/interval-task-groups"));
-    }
-
-    @Test
-    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
-    public void testDeleteIntervalTaskGroupFailure() throws Exception {
-        Long nonExistentID = 12920L;
-        String message = "Cannot delete, interval task group with id: "
-                + nonExistentID + " does not exist";
-        when(intervalTaskGroupService
-                .getIntervalTaskGroup(anyLong()))
-                .thenReturn(null);
-        mockMvc.
-                perform(request(HttpMethod.GET,
-                        "/delete-interval-task-group/"
-                                + nonExistentID))
-                //.andDo(print())
-                .andExpect(MockMvcResultMatchers.content()
-                        .contentType("text/html;charset=UTF-8"))
-                .andExpect(model().attributeExists("message"))
-                .andExpect(MockMvcResultMatchers.content().string(
-                        containsString(message)))
-                .andExpect(view().name("error/error"));
     }
 
     @Test
@@ -217,6 +169,8 @@ public class IntervalTaskGroupControllerUnitTest {
                         "/quarterly-interval-task-groups-scheduled"));
     }
 
+    // test deletion of IntervalTaskGroupAppliedQuarterly, for a non-existent ID
+    // this should show the error page with a message
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testDeleteIntervalTaskGroupAppliedQuarterlyFailure() throws Exception {
@@ -230,6 +184,58 @@ public class IntervalTaskGroupControllerUnitTest {
                 perform(request(HttpMethod.GET,
                         "/delete-interval-task-group-applied-quarterly/"
                                 + nonExistentID))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    // test deletion of IntervalTask for a non-existent ID
+    // this should show the error page with a message
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTaskFailure() throws Exception {
+        Long nonExistentIntervalTaskID= 2829L;
+        Long nonExistentIntervalTaskGroupID = 333L;
+        String message1 = "Cannot delete, ";
+        String message2 = " does not exist.";
+        when(intervalTaskGroupService
+                .getIntervalTask(anyLong()))
+                .thenReturn(null);
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET, "/delete-interval-task/"
+                        + nonExistentIntervalTaskID + "/" + nonExistentIntervalTaskGroupID))
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message1)))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message2)))
+                .andExpect(view().name("error/error"));
+    }
+
+    // test deletion of  IntervalTaskGroup, for a non-existent ID
+    // this should show the error page with message
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testDeleteIntervalTaskGroupFailure() throws Exception {
+        Long nonExistentID = 12920L;
+        String message = "Cannot delete, interval task group with id: "
+                + nonExistentID + " does not exist";
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(null);
+        mockMvc.
+                perform(request(HttpMethod.GET,
+                        "/delete-interval-task-group/"
+                                + nonExistentID))
+                //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(model().attributeExists("message"))
@@ -310,6 +316,8 @@ public class IntervalTaskGroupControllerUnitTest {
                 .andExpect(redirectedUrl("/interval-task-groups"));
     }
 
+    // this will test saving an interval task group applied quarterly. It will apply the interval
+    // task group created above and apply it to the first quarter of the current year
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testSaveNewQuarterlyIntervalTaskGroup() throws Exception  {
@@ -400,6 +408,90 @@ public class IntervalTaskGroupControllerUnitTest {
                         "tasks/quarterly-interval-task-groups-scheduled"));
     }
 
+    // tests that the form for the interval task group to be applied to a
+    // specific quarter/year in this case, it is the current year and quarter 2,
+    // so the "Test interval task group" should display as one of the options of
+    // an ITG which can be applied in the template selector
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void showApplyITGSchedulerFormPage() throws Exception {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q2";
+        List<IntervalTaskGroup> usersIntervalTaskGroups = new ArrayList<>();
+        usersIntervalTaskGroups.add(testIntervalTaskGroup);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(intervalTaskGroupService
+                .getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
+                        anyString(),
+                        eq(QuarterlySchedulingEnum.valueOf(quarter)),
+                        eq(thisYear)
+                )).thenReturn(usersIntervalTaskGroups);
+        MockHttpServletRequestBuilder applyIntervalTaskGroup =
+                post("/apply-interval-task-group-schedulers")
+                        .with(csrf())
+                        .param("year", String.valueOf(thisYear))
+                        .param("quarter", quarter);
+
+        mockMvc
+                .perform(applyIntervalTaskGroup)
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("intervalTaskGroups"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("quarter"))
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("qITG"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("Test Interval Task Group 1")))
+                .andExpect(view().name(
+                        "tasks/apply-interval-task-group-schedulers"));
+    }
+
+    // tests that no interval task groups can be selected for Q1 of the current year
+    // because users' interval task groups have already been selected for that time period
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void showApplyITGSchedulerFormPageNoneAvailable() throws Exception {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        // returns an empty array to mock no Interval Task Groups being available for
+        // Q1 of this year
+        List<IntervalTaskGroup> usersIntervalTaskGroups = new ArrayList<>();
+        //usersIntervalTaskGroups.add(testIntervalTaskGroup);
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(intervalTaskGroupService
+                .getAllUsersIntervalTaskGroupsAvailableForQuarterAndYear(
+                        anyString(),
+                        eq(QuarterlySchedulingEnum.valueOf(quarter)),
+                        eq(thisYear)
+                )).thenReturn(usersIntervalTaskGroups);
+        MockHttpServletRequestBuilder applyMonthlyTaskScheduler =
+                post("/apply-interval-task-group-schedulers")
+                        .with(csrf())
+                        .param("year", String.valueOf(thisYear))
+                        .param("quarter", quarter);
+
+        mockMvc
+                .perform(applyMonthlyTaskScheduler)
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("intervalTaskGroups"))
+                .andExpect(model().attributeExists("user"))
+                .andExpect(model().attributeExists("quarter"))
+                .andExpect(model().attributeExists("year"))
+                .andExpect(model().attributeExists("qITG"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString("None Available")))
+                .andExpect(view().name(
+                        "tasks/apply-interval-task-group-schedulers"));
+    }
+
     @Test
     @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
     public void testShowIntervalTaskGroup() throws Exception{
@@ -432,5 +524,44 @@ public class IntervalTaskGroupControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString("Test Interval Task 2")))
                 .andExpect(view().name("tasks/interval-task-group"));
+    }
+
+    // test that passing path variable for a non-existent interval task group id
+    // causes an error page to be rendered with the correct message
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowIntervalTaskGroupFailure() throws Exception{
+        when(userService.loadUserByUsername(anyString()))
+                .thenReturn(testUser);
+        when(intervalTaskGroupService.getIntervalTaskGroup(
+                anyLong()))
+                .thenReturn(null);
+        Long nonExistentIntervalTaskGroupID = 2829L;
+        String message = "Interval Task Group with id "
+                + nonExistentIntervalTaskGroupID + " does not exist.";
+        mockMvc
+                .perform(get("/interval-task-group/"
+                        + nonExistentIntervalTaskGroupID))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(model().attributeExists("message"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsString(message)))
+                .andExpect(view().name("error/error"));
+    }
+
+    // test display of form to create a new interval task group
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testShowCreateIntervalTaskGroupFormPage() throws Exception {
+        mockMvc
+                .perform(get("/create-interval-task-group"))
+                //.andDo(print())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType("text/html;charset=UTF-8"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("intervalTaskGroup"))
+                .andExpect(view().name("tasks/create-interval-task-group"));
     }
 }
