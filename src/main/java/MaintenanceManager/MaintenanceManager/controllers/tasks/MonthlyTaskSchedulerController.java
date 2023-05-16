@@ -2,7 +2,7 @@ package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskAppliedQuarterly;
 import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
 import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
-import MaintenanceManager.MaintenanceManager.models.tasks.forms.MonthlyClassAppliedQuarterlyForm;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.RecurringTaskAppliedQuarterlyForm;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.MonthlyTaskSchedulingService;
@@ -34,16 +34,11 @@ public class MonthlyTaskSchedulerController {
             Model model, Authentication authentication) {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
-        System.out.println("This is the quarter: " + QuarterlySchedulingEnum.valueOf(
-                monthlyTaskQuarterAndYear.getQuarter()));
-        System.out.println("This is the year: " +
-                monthlyTaskQuarterAndYear.getYear());
-
         List<MonthlyTaskScheduler> availableMonthlyTasks =
                 monthlyTaskSchedulingService
                         .getAllUsersMonthlyTaskSchedulersAvailableForQuarterAndYear(
                                user.getUsername(),
-                                QuarterlySchedulingEnum.valueOf( // user.getId()
+                                QuarterlySchedulingEnum.valueOf(
                                         monthlyTaskQuarterAndYear.getQuarter()),
                                         monthlyTaskQuarterAndYear.getYear()
                         );
@@ -53,7 +48,7 @@ public class MonthlyTaskSchedulerController {
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
         //MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
-        MonthlyClassAppliedQuarterlyForm qMonthlyTask = new MonthlyClassAppliedQuarterlyForm();
+        RecurringTaskAppliedQuarterlyForm qMonthlyTask = new RecurringTaskAppliedQuarterlyForm();
         model.addAttribute("qMonthlyTask", qMonthlyTask);
         return "tasks/apply-monthly-schedulers";
     }
@@ -157,13 +152,13 @@ public class MonthlyTaskSchedulerController {
     @PostMapping("/submit-quarterly-monthly-tasks-scheduled/{quarter}/{year}")
     public String saveNewQuarterlyMonthlyTask(
             @ModelAttribute("qMonthlyTask")
-            MonthlyClassAppliedQuarterlyForm qMonthlyTaskForm, Model model, //MonthlyTaskAppliedQuarterly
+            RecurringTaskAppliedQuarterlyForm qMonthlyTaskForm, Model model,
             @PathVariable(name = "quarter") String quarter,
             @PathVariable(name = "year") Integer year,
             Authentication authentication) {
         try {
             MonthlyTaskScheduler monthlyTask = monthlyTaskSchedulingService.getMonthlyTaskScheduler(
-                    qMonthlyTaskForm.getMonthlyTaskSchedulerId());
+                    qMonthlyTaskForm.getRecurringTaskSchedulerId());
             MonthlyTaskAppliedQuarterly qMonthlyTask = new MonthlyTaskAppliedQuarterly();
             qMonthlyTask.setMonthlyTaskScheduler(monthlyTask);
             qMonthlyTask.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));

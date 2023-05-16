@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.RecurringTaskAppliedQuarterlyForm;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.WeeklyTaskSchedulingService;
@@ -45,7 +46,8 @@ public class WeeklyTaskSchedulerController {
         model.addAttribute("user", user);
         model.addAttribute("quarter", weeklyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", weeklyTaskQuarterAndYear.getYear());
-        WeeklyTaskAppliedQuarterly qWeeklyTask = new WeeklyTaskAppliedQuarterly();
+        //WeeklyTaskAppliedQuarterly qWeeklyTask = new WeeklyTaskAppliedQuarterly();
+        RecurringTaskAppliedQuarterlyForm qWeeklyTask = new RecurringTaskAppliedQuarterlyForm();
         model.addAttribute("qWeeklyTask", qWeeklyTask);
         return "tasks/apply-weekly-schedulers";
     }
@@ -146,10 +148,15 @@ public class WeeklyTaskSchedulerController {
     @PostMapping("/submit-quarterly-weekly-tasks-scheduled/{quarter}/{year}")
     public String saveNewQuarterlyWeeklyTask(
             @ModelAttribute("qWeeklyTask")
-            WeeklyTaskAppliedQuarterly qWeeklyTask, Model model,
+            RecurringTaskAppliedQuarterlyForm qWeeklyTaskForm, Model model, // WeeklyTaskAppliedQuarterly
             @PathVariable(name = "quarter") String quarter,
             @PathVariable(name = "year") Integer year) {
         try {
+            WeeklyTaskScheduler weeklyTaskScheduler = weeklyTaskSchedulingService.getWeeklyTaskScheduler(
+                    qWeeklyTaskForm.getRecurringTaskSchedulerId()
+            );
+            WeeklyTaskAppliedQuarterly qWeeklyTask = new WeeklyTaskAppliedQuarterly();
+            qWeeklyTask.setWeeklyTaskScheduler(weeklyTaskScheduler);
             qWeeklyTask.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));
             qWeeklyTask.setYear(year);
             weeklyTaskSchedulingService.saveWeeklyTaskAppliedQuarterly(qWeeklyTask);

@@ -6,14 +6,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MonthlyClassAppliedQuarterlyForm {
+public class RecurringTaskAppliedQuarterlyForm {
     
-    Long monthlyTaskSchedulerId;
+    Long recurringTaskSchedulerId;
 
     @Override
     public String toString() {
-        return "MonthlyClassAppliedQuarterlyForm{" +
-                "monthlyTaskSchedulerId=" + monthlyTaskSchedulerId +
+        return "RecurringTaskAppliedQuarterlyForm{" +
+                "monthlyTaskSchedulerId=" + recurringTaskSchedulerId +
                 '}';
     }
 }

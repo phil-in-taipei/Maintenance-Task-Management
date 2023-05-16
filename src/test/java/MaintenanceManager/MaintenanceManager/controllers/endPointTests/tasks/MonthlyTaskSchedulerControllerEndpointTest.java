@@ -148,9 +148,9 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
         MockHttpServletRequestBuilder createMonthlyTaskScheduler =
                 post("/submit-quarterly-monthly-tasks-scheduled/"
                 + quarter + "/" + thisYear +"/")
-                .param("monthlyTaskSchedulerId", testMonthlyTaskScheduler.getId().toString());
+                .param("recurringTaskSchedulerId", testMonthlyTaskScheduler.getId().toString());
         mockMvc.perform(createMonthlyTaskScheduler)
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/quarterly-monthly-tasks-scheduled"));
     }
@@ -212,7 +212,7 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
                         .param("quarter", quarter);
         mockMvc
                 .perform(applyMonthlyTaskScheduler)
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())
@@ -241,7 +241,7 @@ public class MonthlyTaskSchedulerControllerEndpointTest {
 
         mockMvc
                 .perform(applyMonthlyTaskScheduler)
-                .andDo(print())
+                //.andDo(print())
                 .andExpect(MockMvcResultMatchers.content()
                         .contentType("text/html;charset=UTF-8"))
                 .andExpect(status().is2xxSuccessful())

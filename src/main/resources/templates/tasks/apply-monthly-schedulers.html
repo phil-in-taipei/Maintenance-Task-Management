@@ -34,7 +34,7 @@
             <div class="form-control bg-light">
               <label>Monthly Task</label>
               <div class="bg-light">
-                <select class="form-select" th:name="monthlyTaskSchedulerId">
+                <select class="form-select" th:name="recurringTaskSchedulerId">
                   <option th:if="${monthlyTasks.isEmpty()}">None Available</option>
                   <option th:each="task : ${monthlyTasks}" th:value="${task.id}" th:text="${task.templateSelector()}"></option>
                 </select>

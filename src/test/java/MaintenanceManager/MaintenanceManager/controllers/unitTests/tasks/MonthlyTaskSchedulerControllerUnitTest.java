@@ -225,7 +225,7 @@ public class MonthlyTaskSchedulerControllerUnitTest {
                 post("/submit-quarterly-monthly-tasks-scheduled/"
                         + quarter + "/" + thisYear +"/")
                         .with(csrf())
-                        .param("monthlyTaskSchedulerId", testMonthlyTaskScheduler.getId().toString());
+                        .param("recurringTaskSchedulerId", testMonthlyTaskScheduler.getId().toString());
         mockMvc.perform(createMonthlyTaskScheduler)
                 //.andDo(print())
                 .andExpect(status().is3xxRedirection())

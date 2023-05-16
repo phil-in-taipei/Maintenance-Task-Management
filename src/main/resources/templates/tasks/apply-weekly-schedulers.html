@@ -36,7 +36,7 @@
                         <div class="form-control">
                             <label>Weekly Task</label>
                             <div>
-                                <select class="form-select" th:name="weeklyTaskScheduler">
+                                <select class="form-select" th:name="recurringTaskSchedulerId">
                                     <option th:if="${weeklyTasks.isEmpty()}">None Available</option>
                                     <option th:each="task : ${weeklyTasks}" th:value="${task.id}" th:text="${task.templateSelector()}"></option>
                                 </select>
