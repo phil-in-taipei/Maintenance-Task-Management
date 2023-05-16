@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -307,6 +308,31 @@ public class IntervalTaskGroupControllerUnitTest {
                 //.andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/interval-task-groups"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewQuarterlyIntervalTaskGroup() throws Exception  {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        when(intervalTaskGroupService
+                .getIntervalTaskGroup(anyLong()))
+                .thenReturn(testIntervalTaskGroup);
+        when(intervalTaskGroupService
+                .saveIntervalTaskGroupAppliedQuarterly(
+                        any(IntervalTaskGroupAppliedQuarterly.class)))
+                .thenReturn(testITGAQ1);
+        MockHttpServletRequestBuilder createQITG =
+                post("/submit-quarterly-interval-task-group-scheduled/"
+                        + quarter + "/" + thisYear +"/")
+                        .with(csrf())
+                        .param("recurringTaskSchedulerId",
+                                testIntervalTaskGroup.getId().toString());
+        mockMvc.perform(createQITG)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(
+                        "/quarterly-interval-task-groups-scheduled"));
     }
 
     @Test

@@ -1,5 +1,6 @@
 package MaintenanceManager.MaintenanceManager.controllers.tasks;
 import MaintenanceManager.MaintenanceManager.models.tasks.*;
+import MaintenanceManager.MaintenanceManager.models.tasks.forms.RecurringTaskAppliedQuarterlyForm;
 import MaintenanceManager.MaintenanceManager.models.tasks.forms.SearchQuarterAndYear;
 import MaintenanceManager.MaintenanceManager.models.user.UserPrincipal;
 import MaintenanceManager.MaintenanceManager.services.tasks.IntervalTaskGroupService;
@@ -46,7 +47,8 @@ public class IntervalTaskGroupController {
         model.addAttribute("user", user);
         model.addAttribute("quarter", monthlyTaskQuarterAndYear.getQuarter());
         model.addAttribute("year", monthlyTaskQuarterAndYear.getYear());
-        IntervalTaskGroupAppliedQuarterly qITG = new IntervalTaskGroupAppliedQuarterly();
+        //IntervalTaskGroupAppliedQuarterly qITG = new IntervalTaskGroupAppliedQuarterly();
+        RecurringTaskAppliedQuarterlyForm qITG = new RecurringTaskAppliedQuarterlyForm();
         model.addAttribute("qITG", qITG);
         return "tasks/apply-interval-task-group-schedulers";
     }
@@ -253,12 +255,18 @@ public class IntervalTaskGroupController {
     @PostMapping("/submit-quarterly-interval-task-group-scheduled/{quarter}/{year}")
     public String saveNewQuarterlyIntervalTaskGroup(
             @ModelAttribute("qITG")
-            IntervalTaskGroupAppliedQuarterly qITG, Model model,
+            RecurringTaskAppliedQuarterlyForm qITGForm, Model model, //IntervalTaskGroupAppliedQuarterly
             @PathVariable(name = "quarter") String quarter,
             @PathVariable(name = "year") Integer year,
             Authentication authentication) {
         try {
-            UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
+            //UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            //UserPrincipal user = userService.loadUserByUsername(userDetails.getUsername());
+            IntervalTaskGroup intervalTaskGroup = intervalTaskGroupService.getIntervalTaskGroup(
+                    qITGForm.getRecurringTaskSchedulerId()
+            );
+            IntervalTaskGroupAppliedQuarterly qITG = new IntervalTaskGroupAppliedQuarterly();
+            qITG.setIntervalTaskGroup(intervalTaskGroup);
             qITG.setQuarter(QuarterlySchedulingEnum.valueOf(quarter));
             qITG.setYear(year);
             intervalTaskGroupService.saveIntervalTaskGroupAppliedQuarterly(qITG);

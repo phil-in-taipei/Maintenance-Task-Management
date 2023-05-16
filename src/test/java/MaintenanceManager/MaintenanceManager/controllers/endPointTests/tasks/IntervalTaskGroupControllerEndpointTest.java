@@ -225,14 +225,14 @@ public class IntervalTaskGroupControllerEndpointTest {
     @Test
     @Order(4)
     @WithUserDetails("Test Maintenance User1")
-    public void saveNewQuarterlyIntervalTaskGroup() throws Exception  {
+    public void testSaveNewQuarterlyIntervalTaskGroup() throws Exception  {
         IntervalTaskGroup testIntervalTaskGroup = intervalTaskGroupRepo.findAll().get(0);
         int thisYear = LocalDate.now().getYear();
         String quarter = "Q1";
         MockHttpServletRequestBuilder createQITG =
                 post("/submit-quarterly-interval-task-group-scheduled/"
                         + quarter + "/" + thisYear +"/")
-                        .param("intervalTaskGroup",
+                        .param("recurringTaskSchedulerId",
                                 testIntervalTaskGroup.getId().toString());
         mockMvc.perform(createQITG)
                 //.andDo(print())

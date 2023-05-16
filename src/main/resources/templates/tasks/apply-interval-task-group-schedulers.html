@@ -30,12 +30,12 @@
                         <br />
                     <form class="form" action="#"
                           th:action="@{'/submit-quarterly-interval-task-group-scheduled/' + ${quarter} + '/' + ${year}}"
-                          method="post" th:object="${qWeeklyTask}">
+                          method="post" th:object="${qITGForm}">
                         <hr />
                         <div class="form-control">
                             <label>Interval Task Groups</label>
                             <div>
-                                <select class="form-select" th:name="intervalTaskGroup">
+                                <select class="form-select" th:name="recurringTaskSchedulerId">
                                     <option th:if="${intervalTaskGroups.isEmpty()}">None Available</option>
                                     <option th:each="task : ${intervalTaskGroups}" th:value="${task.id}" th:text="${task.templateSelector()}"></option>
                                 </select>
