@@ -125,7 +125,8 @@ public class WeeklyTaskSchedulerControllerEndpointTest {
         MockHttpServletRequestBuilder createWeeklyTaskScheduler =
                 post("/submit-quarterly-weekly-tasks-scheduled/"
                         + quarter + "/" + thisYear +"/")
-                        .param("weeklyTaskScheduler", testWeeklyTaskScheduler.getId().toString());
+                        .param("recurringTaskSchedulerId",
+                                testWeeklyTaskScheduler.getId().toString());
         mockMvc.perform(createWeeklyTaskScheduler)
                 //.andDo(print())
                 .andExpect(status().is3xxRedirection())

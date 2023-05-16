@@ -2,10 +2,7 @@ package MaintenanceManager.MaintenanceManager.controllers.unitTests.tasks;
 
 import MaintenanceManager.MaintenanceManager.MaintenanceManagerApplication;
 import MaintenanceManager.MaintenanceManager.controllers.tasks.WeeklyTaskSchedulerController;
-import MaintenanceManager.MaintenanceManager.models.tasks.MonthlyTaskScheduler;
-import MaintenanceManager.MaintenanceManager.models.tasks.QuarterlySchedulingEnum;
-import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskAppliedQuarterly;
-import MaintenanceManager.MaintenanceManager.models.tasks.WeeklyTaskScheduler;
+import MaintenanceManager.MaintenanceManager.models.tasks.*;
 import MaintenanceManager.MaintenanceManager.models.user.Authority;
 import MaintenanceManager.MaintenanceManager.models.user.AuthorityEnum;
 import MaintenanceManager.MaintenanceManager.models.user.UserMeta;
@@ -28,6 +25,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -181,6 +179,29 @@ public class WeeklyTaskSchedulerControllerUnitTest {
                 .andExpect(MockMvcResultMatchers.content().string(
                         containsString(message)))
                 .andExpect(view().name("error/error"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER", "MAINTENANCE"}, username = "testuser")
+    public void testSaveNewQuarterlyWeeklyTask() throws Exception  {
+        int thisYear = LocalDate.now().getYear();
+        String quarter = "Q1";
+        when(weeklyTaskSchedulingService
+                .getWeeklyTaskScheduler(anyLong()))
+                .thenReturn(testWeeklyTaskScheduler1);
+        when(weeklyTaskSchedulingService
+                .saveWeeklyTaskAppliedQuarterly(any(WeeklyTaskAppliedQuarterly.class)))
+                .thenReturn(testWeeklyTaskAppliedQuarterly1);
+        MockHttpServletRequestBuilder createWeeklyTaskScheduler =
+                post("/submit-quarterly-weekly-tasks-scheduled/"
+                        + quarter + "/" + thisYear +"/")
+                        .with(csrf())
+                        .param("recurringTaskSchedulerId",
+                                testWeeklyTaskScheduler1.getId().toString());
+        mockMvc.perform(createWeeklyTaskScheduler)
+                //.andDo(print())
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/quarterly-weekly-tasks-scheduled"));
     }
 
     @Test
