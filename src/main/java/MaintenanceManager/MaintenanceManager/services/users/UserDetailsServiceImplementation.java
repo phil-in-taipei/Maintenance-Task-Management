@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -30,6 +31,13 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
 
     @Autowired
     UserMetaRepo userMetaRepo;
+
+    @Loggable
+    @MethodPerformance
+    public boolean confirmPasswordsMatch(UserRegistration userRegistration) {
+        return Objects.equals(userRegistration.getPassword(),
+                userRegistration.getPasswordConfirmation());
+    }
 
     @Loggable
     @MethodPerformance
@@ -95,5 +103,16 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         return userPrincipalRepo.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("User not found with username or email : " + username)
         );
+    }
+
+    @Loggable
+    @MethodPerformance
+    public boolean usernameAlreadyExists(String username) {
+        try {
+            UserPrincipal existentUser = loadUserByUsername(username);
+            return true;
+        } catch (UsernameNotFoundException e) {
+            return false;
+        }
     }
 }

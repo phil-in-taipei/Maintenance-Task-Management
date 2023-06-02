@@ -11,6 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
+
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,7 +62,7 @@ public class RegistrationControllerEndpointTest {
     // and password confirmation do not match
     @Test
     @Order(2)
-    public void testSubmitRegisterFormFailure() throws Exception {
+    public void testSubmitRegisterFormPasswordFailure() throws Exception {
         MockHttpServletRequestBuilder testLogin = post(
                 "/register")
                 .param("surname", "Test")
@@ -79,17 +81,37 @@ public class RegistrationControllerEndpointTest {
                 .andExpect(view().name("auth/register-failure"));
     }
 
-    // note: this will be commented out until the database models are modified
-    // to allow for safe deletion of users with proper cascading (underway in new
-    // Expenses Tracker project, and will later be applied in this project)
-    // Otherwise repeatedly running this method will create an excess of users in
-    // the test db. Also, each time this is run, the username must be changed
-    // unless there is a deletion endpoint and corresponding test that cleans up after
-    // creating the user in this test
 
-    /*
+    // this will attempt to register a new user and fail because the
+    // username is the same as a username already created in
+    // ExpensesTrackerApplicationTest
     @Test
     @Order(3)
+    @Transactional
+    public void testSubmitRegisterFormUsernameUniqueFailure() throws Exception {
+        MockHttpServletRequestBuilder testLogin = post(
+                "/register")
+                .param("surname", "Test")
+                .param("givenName", "User1")
+                .param("email", "test@gmx.com")
+                .param("age", "37")
+                .param("username", "Test Expenses Manager User1")
+                .param("password", "testpassword")
+                .param("passwordConfirmation", "testpassword");
+        mockMvc.perform(testLogin)
+                //.andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(model().attributeExists("errorMsg"))
+                .andExpect(MockMvcResultMatchers.content().string(
+                        containsStringIgnoringCase(
+                                "already been taken. Please select another username")))
+                .andExpect(view().name("auth/register-failure"));
+    }
+
+
+    @Test
+    @Order(4)
+    @Transactional
     public void testSubmitRegisterFormSuccess() throws Exception {
         MockHttpServletRequestBuilder testLogin = post(
                 "/register")
@@ -97,7 +119,7 @@ public class RegistrationControllerEndpointTest {
                 .param("givenName", "User2")
                 .param("email", "test@gmx.com")
                 .param("age", "37")
-                .param("username", "Test Maintenance User2")
+                .param("username", "Test Expenses Manager User2")
                 .param("password", "testpassword")
                 .param("passwordConfirmation", "testpassword");
         mockMvc.perform(testLogin)
@@ -105,7 +127,7 @@ public class RegistrationControllerEndpointTest {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(model().attributeExists("user"))
                 .andExpect(MockMvcResultMatchers.content().string(
-                        containsStringIgnoringCase("Test Maintenance User2")))
+                        containsStringIgnoringCase("Test Expenses Manager User2")))
                 .andExpect(view().name("auth/register-success"));
-    } */
+    }
 }

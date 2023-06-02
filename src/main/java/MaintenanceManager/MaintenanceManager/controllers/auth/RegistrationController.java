@@ -35,9 +35,17 @@ public class RegistrationController {
             Model model) {
         // verifies that the passwords match prior to registration;
         // otherwise, redirects to registration failure page
-        if (!Objects.equals(userRegistration.getPassword(),
-                userRegistration.getPasswordConfirmation())) {
+        if (!userDetailsService.confirmPasswordsMatch(userRegistration)) {
             model.addAttribute("errorMsg", "The passwords do not match!");
+            return "auth/register-failure";
+        }
+        // verifies that a user with the username doesn't already exist
+        // prior to registration; otherwise, redirects to registration failure page
+        if (userDetailsService.usernameAlreadyExists(userRegistration.getUsername())) {
+            model.addAttribute("errorMsg",
+                    "The username, " +
+                            userRegistration.getUsername() +
+                            ", has already been taken. Please select another username");
             return "auth/register-failure";
         }
         UserPrincipal createdUser = userDetailsService.createNewMaintenanceUser(userRegistration);
