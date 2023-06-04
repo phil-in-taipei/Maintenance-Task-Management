@@ -32,6 +32,8 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
     @Autowired
     UserMetaRepo userMetaRepo;
 
+    // this is used during registration to confirm that the
+    // two passwords submitted are the same
     @Loggable
     @MethodPerformance
     public boolean confirmPasswordsMatch(UserRegistration userRegistration) {
@@ -105,6 +107,8 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         );
     }
 
+    // this is to test whether or not a username is available during registration
+    // to prevent database error due to unique constraint violation
     @Loggable
     @MethodPerformance
     public boolean usernameAlreadyExists(String username) {

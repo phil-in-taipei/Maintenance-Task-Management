@@ -1,14 +1,14 @@
 package MaintenanceManager.MaintenanceManager.models.user;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 // this class is a mixture of fields from UserMeta and UserPrincipal
 // it will be used to submit the registration form and then the data in the fields
 // will be extracted to build a UserPrincipal class and a corresponding UserMeta relation class
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class UserRegistration {
 
